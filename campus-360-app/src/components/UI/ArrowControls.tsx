@@ -35,71 +35,72 @@ export const ArrowControls = () => {
     }
   };
 
-  const btnBase = "p-3 rounded-xl bg-slate-900/80 backdrop-blur-xl border border-white/10 text-white/80 hover:text-white hover:bg-slate-800/90 hover:border-white/20 transition-all duration-200 active:scale-95";
-  const btnPrimary = "p-3.5 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 active:scale-95 shadow-lg shadow-blue-500/25";
+    const btnBase = "p-3 rounded-2xl bg-white/5 backdrop-blur-2xl border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 active:scale-95 group";
+    const btnPrimary = "p-3.5 rounded-2xl bg-blue-600 text-white hover:bg-blue-500 transition-all duration-300 active:scale-95 shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:shadow-[0_0_30px_rgba(37,99,235,0.4)]";
 
-  return (
-    <>
-      {/* Bottom Center - Main Controls */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 p-2 rounded-2xl bg-slate-900/70 backdrop-blur-xl border border-white/10"
-      >
-        {/* Previous */}
-        <button onClick={previousImage} className={btnBase} aria-label="Previous view">
-          <ChevronLeft size={20} />
-        </button>
-
-        {/* Play/Pause */}
-        <button
-          onClick={() => setAutoRotation(!isAutoRotating)}
-          className={btnPrimary}
-          aria-label={isAutoRotating ? 'Pause auto-rotate' : 'Start auto-rotate'}
+    return (
+      <>
+        {/* Bottom Center - Main Controls */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 p-2 rounded-[24px] bg-white/5 backdrop-blur-3xl border border-white/10"
         >
-          {isAutoRotating ? <Pause size={20} /> : <Play size={20} />}
-        </button>
-
-        {/* Next */}
-        <button onClick={nextImage} className={btnBase} aria-label="Next view">
-          <ChevronRight size={20} />
-        </button>
-      </motion.div>
-
-      {/* Bottom Right - Utility Controls */}
-      <motion.div 
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.3 }}
-        className="fixed bottom-6 right-4 z-40 flex flex-col gap-2"
-      >
-        <button onClick={() => zoomCamera('in')} className={btnBase} aria-label="Zoom in">
-          <ZoomIn size={18} />
-        </button>
-        <button onClick={() => zoomCamera('out')} className={btnBase} aria-label="Zoom out">
-          <ZoomOut size={18} />
-        </button>
-        <button onClick={toggleFullscreen} className={btnBase} aria-label="Toggle fullscreen">
-          {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
-        </button>
-      </motion.div>
-
-      {/* Bottom Left - Info Button */}
-      <motion.div 
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.3 }}
-        className="fixed bottom-6 left-4 z-40"
-      >
-        <button 
-          onClick={() => setShowInfo(true)} 
-          className={btnBase}
-          aria-label="Show controls info"
+          {/* Previous */}
+          <button onClick={previousImage} className={btnBase} aria-label="Previous view">
+            <ChevronLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
+          </button>
+  
+          {/* Play/Pause */}
+          <button
+            onClick={() => setAutoRotation(!isAutoRotating)}
+            className={btnPrimary}
+            aria-label={isAutoRotating ? 'Pause auto-rotate' : 'Start auto-rotate'}
+          >
+            {isAutoRotating ? <Pause size={20} className="fill-current" /> : <Play size={20} className="fill-current" />}
+          </button>
+  
+          {/* Next */}
+          <button onClick={nextImage} className={btnBase} aria-label="Next view">
+            <ChevronRight size={20} className="group-hover:translate-x-0.5 transition-transform" />
+          </button>
+        </motion.div>
+  
+        {/* Bottom Right - Utility Controls */}
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="fixed bottom-8 right-8 z-40 flex flex-col gap-3"
         >
-          <Info size={18} />
-        </button>
-      </motion.div>
+          <button onClick={() => zoomCamera('in')} className={btnBase} aria-label="Zoom in">
+            <ZoomIn size={18} />
+          </button>
+          <button onClick={() => zoomCamera('out')} className={btnBase} aria-label="Zoom out">
+            <ZoomOut size={18} />
+          </button>
+          <div className="w-full h-px bg-white/10 my-1" />
+          <button onClick={toggleFullscreen} className={btnBase} aria-label="Toggle fullscreen">
+            {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
+          </button>
+        </motion.div>
+  
+        {/* Bottom Left - Info Button */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="fixed bottom-8 left-8 z-40"
+        >
+          <button 
+            onClick={() => setShowInfo(true)} 
+            className={btnBase}
+            aria-label="Show controls info"
+          >
+            <Info size={18} />
+          </button>
+        </motion.div>
 
       {/* Info Modal */}
       <AnimatePresence>

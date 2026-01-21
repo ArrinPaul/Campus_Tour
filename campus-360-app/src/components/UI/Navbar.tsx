@@ -37,25 +37,30 @@ export const Navbar = () => {
             </span>
           </motion.div>
 
-          {/* Desktop: Location Selector */}
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="hidden md:block relative"
-          >
-            <button
-              onClick={() => setLocationsOpen(!isLocationsOpen)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-200"
+            {/* Desktop: Location Selector */}
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="hidden md:block relative"
             >
-              <MapPin size={16} className="text-blue-400" />
-              <span className="text-sm font-medium text-white/90">
-                {manifest?.blocks?.find((b: Block) => b.id === currentBlockId)?.name || 'Select Location'}
-              </span>
-              <ChevronDown 
-                size={14} 
-                className={`text-white/50 transition-transform duration-200 ${isLocationsOpen ? 'rotate-180' : ''}`}
-              />
-            </button>
+              <button
+                onClick={() => setLocationsOpen(!isLocationsOpen)}
+                className="flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300 group"
+              >
+                <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
+                  <MapPin size={16} className="text-blue-400" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="text-[10px] uppercase tracking-[0.15em] text-white/40 font-bold leading-none mb-1">Current Location</span>
+                  <span className="text-sm font-semibold text-white/90 leading-none">
+                    {manifest?.blocks?.find((b: Block) => b.id === currentBlockId)?.name || 'Select Location'}
+                  </span>
+                </div>
+                <ChevronDown 
+                  size={14} 
+                  className={`ml-2 text-white/30 transition-transform duration-300 ${isLocationsOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
 
             <AnimatePresence>
               {isLocationsOpen && (

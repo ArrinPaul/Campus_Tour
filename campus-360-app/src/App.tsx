@@ -7,10 +7,20 @@ import { Loader } from './components/UI/Loader';
 import { Navbar } from './components/UI/Navbar';
 import { ArrowControls } from './components/UI/ArrowControls';
 import { LocationBar } from './components/UI/LocationBar';
+import { Landing } from './components/UI/Landing';
 import { useTourState } from './hooks/useTourState';
+import { AnimatePresence, motion } from 'framer-motion';
 
 function App() {
-  const { setManifest, setBlock, setImage, setIdle, currentBlockId, currentImageId } = useTourState();
+  const { 
+    setManifest, 
+    setBlock, 
+    setImage, 
+    setIdle, 
+    currentBlockId, 
+    currentImageId,
+    isTourStarted 
+  } = useTourState();
 
   // Load manifest on mount
   useEffect(() => {
@@ -71,20 +81,40 @@ function App() {
 
   return (
     <div className="w-screen h-screen bg-black relative overflow-hidden">
-      {/* 3D Canvas - Full Screen */}
-      <Canvas camera={{ fov: 75, position: [0, 0, 0.1] }}>
-        <Suspense fallback={null}>
-          <Scene />
-          <Controls />
-        </Suspense>
-      </Canvas>
+      <AnimatePresence mode="wait">
+        {!isTourStarted ? (
+          <motion.div
+            key="landing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <Landing />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="tour"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="w-full h-full"
+          >
+            {/* 3D Canvas - Full Screen */}
+            <Canvas camera={{ fov: 75, position: [0, 0, 0.1] }}>
+              <Suspense fallback={null}>
+                <Scene />
+                <Controls />
+              </Suspense>
+            </Canvas>
 
-      {/* UI Layer */}
-      <Loader />
-      <Navbar />
-      <LocationBar />
-      <Overlay />
-      <ArrowControls />
+            {/* UI Layer */}
+            <Loader />
+            <Navbar />
+            <LocationBar />
+            <ArrowControls />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -36,26 +36,26 @@ export const LocationBar: React.FC = () => {
   };
 
   return (
-    <motion.div 
-      ref={dropdownRef}
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1 }}
-      className="fixed top-4 right-4 z-40 hidden md:block"
-    >
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900/70 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-200"
-      >
-        <ImageIcon size={14} className="text-white/50" />
-        <span className="text-xs font-medium text-white/70">
-          {currentIndex + 1} / {currentBlock.labs.length}
-        </span>
-        <ChevronDown 
-          size={12} 
-          className={`text-white/40 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-        />
-      </button>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300 group shadow-lg shadow-black/20"
+        >
+          <div className="flex flex-col items-start">
+            <span className="text-[10px] uppercase tracking-[0.15em] text-white/40 font-bold leading-none mb-1">Perspective</span>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-white/90 leading-none">
+                {currentBlock.labs[currentIndex]?.name || `View ${currentIndex + 1}`}
+              </span>
+              <span className="text-[10px] font-medium text-blue-400 px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20">
+                {currentIndex + 1} / {currentBlock.labs.length}
+              </span>
+            </div>
+          </div>
+          <ChevronDown 
+            size={14} 
+            className={`ml-1 text-white/30 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+          />
+        </button>
 
       <AnimatePresence>
         {isOpen && (
