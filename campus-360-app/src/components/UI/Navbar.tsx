@@ -1,13 +1,24 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Menu, X, MapPin, ChevronDown } from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
-import type { Manifest, Block } from '../../hooks/useTourDataStore';
+import type { Block } from '../../hooks/useTourDataStore';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export const Navbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLocationsOpen, setLocationsOpen] = useState(false);
   const { manifest, currentBlockId, setBlock, setIdle } = useTourState();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setLocationsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleLocationClick = (blockId: string) => {
     setBlock(blockId);
@@ -16,141 +27,100 @@ export const Navbar = () => {
     setIdle(false);
   };
 
+  const currentBlockName = manifest?.blocks?.find((b: Block) => b.id === currentBlockId)?.name || 'Select';
+
   return (
     <>
-      {/* Main Navigation - Minimal & Clean */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-6">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Logo */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3"
-          >
-            <img 
-              src="/logo.png" 
-              alt="Campus 360" 
-              className="w-9 h-9 object-contain"
-            />
-            <span className="text-lg font-semibold text-white tracking-tight hidden sm:block">
-              Campus 360
-            </span>
-          </motion.div>
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="Logo" className="w-7 h-7 object-contain" />
+            <span className="text-sm font-semibold text-white/80 hidden sm:block">Campus 360</span>
+          </div>
 
-            {/* Desktop: Location Selector */}
-            <motion.div 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="hidden md:block relative"
+          <div ref={dropdownRef} className="hidden md:block relative">
+            <button
+              onClick={() => setLocationsOpen(!isLocationsOpen)}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-sm"
             >
-              <button
-                onClick={() => setLocationsOpen(!isLocationsOpen)}
-                className="flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300 group"
-              >
-                <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
-                  <MapPin size={16} className="text-blue-400" />
-                </div>
-                <div className="flex flex-col items-start">
-                  <span className="text-[10px] uppercase tracking-[0.15em] text-white/40 font-bold leading-none mb-1">Current Location</span>
-                  <span className="text-sm font-semibold text-white/90 leading-none">
-                    {manifest?.blocks?.find((b: Block) => b.id === currentBlockId)?.name || 'Select Location'}
-                  </span>
-                </div>
-                <ChevronDown 
-                  size={14} 
-                  className={`ml-2 text-white/30 transition-transform duration-300 ${isLocationsOpen ? 'rotate-180' : ''}`}
-                />
-              </button>
+              <MapPin size={14} className="text-white/40" />
+              <span className="text-white/80 font-medium">{currentBlockName}</span>
+              <ChevronDown size={14} className={`text-white/40 transition-transform ${isLocationsOpen ? 'rotate-180' : ''}`} />
+            </button>
 
             <AnimatePresence>
               {isLocationsOpen && (
                 <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 4 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-2 rounded-xl bg-slate-900/95 backdrop-blur-xl border border-white/10 shadow-2xl"
+                  className="absolute top-full right-0 mt-2 w-52 p-1.5 rounded-lg bg-[#141414] border border-white/10 shadow-xl"
                 >
-                  <div className="max-h-72 overflow-y-auto scrollbar-hide">
-                    {manifest?.blocks?.map((block: Block) => (
-                      <button
-                        key={block.id}
-                        onClick={() => handleLocationClick(block.id)}
-                        className={`w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 ${
-                          currentBlockId === block.id
-                            ? 'bg-blue-500/20 text-white'
-                            : 'text-white/70 hover:bg-white/5 hover:text-white'
-                        }`}
-                      >
-                        <div className={`w-2 h-2 rounded-full ${currentBlockId === block.id ? 'bg-blue-400' : 'bg-white/20'}`} />
-                        <span className="text-sm font-medium">{block.name}</span>
-                      </button>
-                    ))}
-                  </div>
+                  {manifest?.blocks?.map((block: Block) => (
+                    <button
+                      key={block.id}
+                      onClick={() => handleLocationClick(block.id)}
+                      className={`w-full text-left flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
+                        currentBlockId === block.id
+                          ? 'bg-white/10 text-white'
+                          : 'text-white/60 hover:bg-white/5 hover:text-white'
+                      }`}
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${currentBlockId === block.id ? 'bg-blue-400' : 'bg-white/20'}`} />
+                      {block.name}
+                    </button>
+                  ))}
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
+          </div>
 
-          {/* Mobile Menu Button */}
-          <motion.button
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
+          <button
             onClick={() => setMobileMenuOpen(true)}
-            className="md:hidden p-2.5 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 text-white"
+            className="md:hidden p-2 rounded-lg bg-white/5 border border-white/10 text-white/60"
           >
-            <Menu size={20} />
-          </motion.button>
+            <Menu size={18} />
+          </button>
         </div>
       </nav>
 
-      {/* Mobile Menu Panel */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+              className="fixed inset-0 bg-black/70 z-[100]"
             />
-            
-            {/* Panel */}
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-slate-900/98 backdrop-blur-xl z-[101] border-l border-white/10"
+              className="fixed top-0 right-0 h-full w-72 bg-[#0f0f0f] z-[101] border-l border-white/10"
             >
               <div className="flex items-center justify-between p-4 border-b border-white/10">
-                <span className="text-lg font-semibold text-white">Locations</span>
-                <button 
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-colors"
-                >
-                  <X size={20} />
+                <span className="text-sm font-semibold text-white">Locations</span>
+                <button onClick={() => setMobileMenuOpen(false)} className="p-1.5 rounded-md hover:bg-white/10 text-white/60">
+                  <X size={18} />
                 </button>
               </div>
-              
-              <div className="p-4 overflow-y-auto h-[calc(100%-65px)]">
+              <div className="p-3">
                 {manifest?.blocks?.map((block: Block) => (
                   <button
                     key={block.id}
                     onClick={() => handleLocationClick(block.id)}
-                    className={`w-full text-left flex items-center gap-3 px-4 py-3.5 rounded-xl mb-2 transition-all duration-150 ${
+                    className={`w-full text-left flex items-center gap-3 px-3 py-3 rounded-lg mb-1 text-sm transition-colors ${
                       currentBlockId === block.id
-                        ? 'bg-blue-500/20 border border-blue-500/30 text-white'
-                        : 'text-white/70 hover:bg-white/5 hover:text-white border border-transparent'
+                        ? 'bg-white/10 text-white'
+                        : 'text-white/60 hover:bg-white/5 hover:text-white'
                     }`}
                   >
-                    <MapPin size={18} className={currentBlockId === block.id ? 'text-blue-400' : 'text-white/40'} />
-                    <div>
-                      <span className="text-sm font-medium block">{block.name}</span>
-                      <span className="text-xs text-white/40">{block.labs?.length || 0} views</span>
-                    </div>
+                    <MapPin size={16} className={currentBlockId === block.id ? 'text-blue-400' : 'text-white/30'} />
+                    {block.name}
                   </button>
                 ))}
               </div>

@@ -10,6 +10,7 @@ import {
   Minimize,
   Info,
   X,
+  Mouse,
 } from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,114 +36,79 @@ export const ArrowControls = () => {
     }
   };
 
-    const btnBase = "p-3 rounded-2xl bg-white/5 backdrop-blur-2xl border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 active:scale-95 group";
-    const btnPrimary = "p-3.5 rounded-2xl bg-blue-600 text-white hover:bg-blue-500 transition-all duration-300 active:scale-95 shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:shadow-[0_0_30px_rgba(37,99,235,0.4)]";
+  const btn = "p-2.5 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 text-white/50 hover:text-white hover:bg-black/60 transition-all active:scale-95";
 
-    return (
-      <>
-        {/* Bottom Center - Main Controls */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 p-2 rounded-[24px] bg-white/5 backdrop-blur-3xl border border-white/10"
+  return (
+    <>
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 p-1 rounded-xl bg-black/30 backdrop-blur-md border border-white/10"
+      >
+        <button onClick={previousImage} className={btn}>
+          <ChevronLeft size={18} />
+        </button>
+        <button
+          onClick={() => setAutoRotation(!isAutoRotating)}
+          className="p-2.5 rounded-lg bg-white text-black hover:bg-white/90 transition-all active:scale-95"
         >
-          {/* Previous */}
-          <button onClick={previousImage} className={btnBase} aria-label="Previous view">
-            <ChevronLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
-          </button>
-  
-          {/* Play/Pause */}
-          <button
-            onClick={() => setAutoRotation(!isAutoRotating)}
-            className={btnPrimary}
-            aria-label={isAutoRotating ? 'Pause auto-rotate' : 'Start auto-rotate'}
-          >
-            {isAutoRotating ? <Pause size={20} className="fill-current" /> : <Play size={20} className="fill-current" />}
-          </button>
-  
-          {/* Next */}
-          <button onClick={nextImage} className={btnBase} aria-label="Next view">
-            <ChevronRight size={20} className="group-hover:translate-x-0.5 transition-transform" />
-          </button>
-        </motion.div>
-  
-        {/* Bottom Right - Utility Controls */}
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="fixed bottom-8 right-8 z-40 flex flex-col gap-3"
-        >
-          <button onClick={() => zoomCamera('in')} className={btnBase} aria-label="Zoom in">
-            <ZoomIn size={18} />
-          </button>
-          <button onClick={() => zoomCamera('out')} className={btnBase} aria-label="Zoom out">
-            <ZoomOut size={18} />
-          </button>
-          <div className="w-full h-px bg-white/10 my-1" />
-          <button onClick={toggleFullscreen} className={btnBase} aria-label="Toggle fullscreen">
-            {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
-          </button>
-        </motion.div>
-  
-        {/* Bottom Left - Info Button */}
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="fixed bottom-8 left-8 z-40"
-        >
-          <button 
-            onClick={() => setShowInfo(true)} 
-            className={btnBase}
-            aria-label="Show controls info"
-          >
-            <Info size={18} />
-          </button>
-        </motion.div>
+          {isAutoRotating ? <Pause size={18} /> : <Play size={18} />}
+        </button>
+        <button onClick={nextImage} className={btn}>
+          <ChevronRight size={18} />
+        </button>
+      </motion.div>
 
-      {/* Info Modal */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="fixed bottom-6 right-4 z-40 flex flex-col gap-1 p-1 rounded-xl bg-black/30 backdrop-blur-md border border-white/10"
+      >
+        <button onClick={() => zoomCamera('in')} className={btn}><ZoomIn size={16} /></button>
+        <button onClick={() => zoomCamera('out')} className={btn}><ZoomOut size={16} /></button>
+        <div className="h-px bg-white/10 my-0.5" />
+        <button onClick={toggleFullscreen} className={btn}>
+          {isFullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
+        </button>
+      </motion.div>
+
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed bottom-6 left-4 z-40">
+        <button onClick={() => setShowInfo(true)} className={btn}><Info size={16} /></button>
+      </motion.div>
+
       <AnimatePresence>
         {showInfo && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
+            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
             onClick={() => setShowInfo(false)}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 max-w-sm w-full mx-4"
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.95 }}
+              className="bg-[#141414] border border-white/10 rounded-xl p-5 max-w-xs w-full mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">Controls</h3>
-                <button 
-                  onClick={() => setShowInfo(false)}
-                  className="p-1.5 rounded-lg hover:bg-white/10 text-white/60 hover:text-white transition-colors"
-                >
-                  <X size={18} />
+                <h3 className="text-sm font-semibold text-white">Controls</h3>
+                <button onClick={() => setShowInfo(false)} className="p-1 rounded hover:bg-white/10 text-white/50">
+                  <X size={16} />
                 </button>
               </div>
-              <ul className="space-y-3 text-sm text-white/70">
+              <ul className="space-y-2.5 text-xs text-white/60">
                 <li className="flex items-center gap-3">
-                  <kbd className="px-2 py-1 rounded bg-white/10 text-xs font-mono">Drag</kbd>
-                  <span>Look around</span>
+                  <Mouse size={14} className="text-white/40" />
+                  <span>Drag to look around</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <kbd className="px-2 py-1 rounded bg-white/10 text-xs font-mono">Scroll</kbd>
+                  <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] font-mono">Scroll</kbd>
                   <span>Zoom in/out</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <kbd className="px-2 py-1 rounded bg-white/10 text-xs font-mono">← →</kbd>
-                  <span>Navigate views</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <kbd className="px-2 py-1 rounded bg-white/10 text-xs font-mono">Space</kbd>
+                  <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] font-mono">Space</kbd>
                   <span>Toggle auto-rotate</span>
                 </li>
               </ul>
