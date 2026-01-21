@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTourState } from '../../hooks/useTourState';
 import type { Block, Lab } from '../../hooks/useTourDataStore';
-import { Image as ImageIcon, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export const LocationBar: React.FC = () => {
@@ -36,26 +36,32 @@ export const LocationBar: React.FC = () => {
   };
 
   return (
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300 group shadow-lg shadow-black/20"
-        >
-          <div className="flex flex-col items-start">
-            <span className="text-[10px] uppercase tracking-[0.15em] text-white/40 font-bold leading-none mb-1">Perspective</span>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-white/90 leading-none">
-                {currentBlock.labs[currentIndex]?.name || `View ${currentIndex + 1}`}
-              </span>
-              <span className="text-[10px] font-medium text-blue-400 px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20">
-                {currentIndex + 1} / {currentBlock.labs.length}
-              </span>
-            </div>
+    <motion.div 
+      ref={dropdownRef}
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="fixed top-4 right-4 md:right-6 z-50"
+    >
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all duration-300 group shadow-lg shadow-black/20"
+      >
+        <div className="flex flex-col items-start">
+          <span className="text-[10px] uppercase tracking-[0.15em] text-white/40 font-bold leading-none mb-1">Perspective</span>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-white/90 leading-none">
+              {currentBlock.labs[currentIndex]?.name || `View ${currentIndex + 1}`}
+            </span>
+            <span className="text-[10px] font-medium text-blue-400 px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20">
+              {currentIndex + 1} / {currentBlock.labs.length}
+            </span>
           </div>
-          <ChevronDown 
-            size={14} 
-            className={`ml-1 text-white/30 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
-          />
-        </button>
+        </div>
+        <ChevronDown 
+          size={14} 
+          className={`ml-1 text-white/30 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+        />
+      </button>
 
       <AnimatePresence>
         {isOpen && (
