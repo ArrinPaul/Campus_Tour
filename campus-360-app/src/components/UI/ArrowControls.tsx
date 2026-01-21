@@ -1,201 +1,154 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Info, Play, Pause, Plus, Minus } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Play,
+  Pause,
+  ZoomIn,
+  ZoomOut,
+  Maximize,
+  Minimize,
+  Info,
+  X,
+} from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const ArrowControls = () => {
-    const { zoomCamera, isAutoRotating, setAutoRotation, startRotation, stopRotation, nextImage, previousImage } = useTourState();
-    const [showInfo, setShowInfo] = useState(false);
+  const {
+    zoomCamera,
+    isAutoRotating,
+    setAutoRotation,
+    nextImage,
+    previousImage,
+  } = useTourState();
+  const [showInfo, setShowInfo] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
-    const arrowButtonStyle = {
-        background: 'rgba(0, 0, 0, 0.6)',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        color: 'white',
-        cursor: 'pointer',
-        padding: '0.75rem',
-        borderRadius: '0.5rem',
-        transition: 'all 0.2s',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '48px',
-        height: '48px',
-    };
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+      setIsFullscreen(false);
+    } else {
+      document.documentElement.requestFullscreen();
+      setIsFullscreen(true);
+    }
+  };
 
-    return (
-        <>
-            {/* Bottom Right Control Dock (Landscape) */}
-            <div style={{
-                position: 'absolute',
-                right: '2rem',
-                bottom: '2rem',
-                zIndex: 1000,
-                display: 'flex',
-                flexDirection: 'row',
-                gap: '1rem',
-                alignItems: 'center', // Align items vertically in the center
-                background: 'rgba(0, 0, 0, 0.4)',
-                padding: '1rem',
-                borderRadius: '1.5rem',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-            }}>
-                {/* Left Group: Info, Play, Zoom */}
-                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                    {/* Info Button */}
-                    <button
-                        onClick={() => setShowInfo(!showInfo)}
-                        style={{
-                            ...arrowButtonStyle,
-                            background: showInfo ? 'rgba(56, 189, 248, 0.3)' : 'rgba(0, 0, 0, 0.6)',
-                            borderColor: showInfo ? 'rgba(56, 189, 248, 0.5)' : 'rgba(255, 255, 255, 0.2)',
-                        }}
-                        aria-label="Information"
-                    >
-                        <Info size={20} />
-                    </button>
+  const btnBase = "p-3 rounded-xl bg-slate-900/80 backdrop-blur-xl border border-white/10 text-white/80 hover:text-white hover:bg-slate-800/90 hover:border-white/20 transition-all duration-200 active:scale-95";
+  const btnPrimary = "p-3.5 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 active:scale-95 shadow-lg shadow-blue-500/25";
 
-                    {/* Play/Pause Button */}
-                    <button
-                        onClick={() => setAutoRotation(!isAutoRotating)}
-                        style={{
-                            ...arrowButtonStyle,
-                            background: isAutoRotating ? 'rgba(56, 189, 248, 0.3)' : 'rgba(0, 0, 0, 0.6)',
-                            borderColor: isAutoRotating ? 'rgba(56, 189, 248, 0.5)' : 'rgba(255, 255, 255, 0.2)',
-                        }}
-                        aria-label={isAutoRotating ? "Pause rotation" : "Start rotation"}
-                    >
-                        {isAutoRotating ? <Pause size={20} /> : <Play size={20} />}
-                    </button>
+  return (
+    <>
+      {/* Bottom Center - Main Controls */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 p-2 rounded-2xl bg-slate-900/70 backdrop-blur-xl border border-white/10"
+      >
+        {/* Previous */}
+        <button onClick={previousImage} className={btnBase} aria-label="Previous view">
+          <ChevronLeft size={20} />
+        </button>
 
-                    {/* Divider */}
-                    <div style={{ width: '1px', height: '32px', background: 'rgba(255, 255, 255, 0.2)' }} />
+        {/* Play/Pause */}
+        <button
+          onClick={() => setAutoRotation(!isAutoRotating)}
+          className={btnPrimary}
+          aria-label={isAutoRotating ? 'Pause auto-rotate' : 'Start auto-rotate'}
+        >
+          {isAutoRotating ? <Pause size={20} /> : <Play size={20} />}
+        </button>
 
-                    {/* Zoom Controls */}
-                    <button onClick={() => zoomCamera('out')} style={arrowButtonStyle} aria-label="Zoom Out">
-                        <Minus size={20} />
-                    </button>
-                    <button onClick={() => zoomCamera('in')} style={arrowButtonStyle} aria-label="Zoom In">
-                        <Plus size={20} />
-                    </button>
-                </div>
+        {/* Next */}
+        <button onClick={nextImage} className={btnBase} aria-label="Next view">
+          <ChevronRight size={20} />
+        </button>
+      </motion.div>
 
-                {/* Divider */}
-                <div style={{ width: '1px', height: '48px', background: 'rgba(255, 255, 255, 0.2)' }} />
+      {/* Bottom Right - Utility Controls */}
+      <motion.div 
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.3 }}
+        className="fixed bottom-6 right-4 z-40 flex flex-col gap-2"
+      >
+        <button onClick={() => zoomCamera('in')} className={btnBase} aria-label="Zoom in">
+          <ZoomIn size={18} />
+        </button>
+        <button onClick={() => zoomCamera('out')} className={btnBase} aria-label="Zoom out">
+          <ZoomOut size={18} />
+        </button>
+        <button onClick={toggleFullscreen} className={btnBase} aria-label="Toggle fullscreen">
+          {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
+        </button>
+      </motion.div>
 
-                {/* Navigation Arrows (Cross Layout + Side Nav) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      {/* Bottom Left - Info Button */}
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.3 }}
+        className="fixed bottom-6 left-4 z-40"
+      >
+        <button 
+          onClick={() => setShowInfo(true)} 
+          className={btnBase}
+          aria-label="Show controls info"
+        >
+          <Info size={18} />
+        </button>
+      </motion.div>
 
-                    {/* Previous Image Button */}
-                    <button
-                        onClick={() => {
-                            console.log('Previous Image button clicked');
-                            previousImage();
-                        }}
-                        style={{ ...arrowButtonStyle, marginRight: '0.5rem' }}
-                        aria-label="Previous Image"
-                    >
-                        <ChevronLeft size={24} />
-                    </button>
-
-                    {/* Rotation Controls (Cross) */}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem' }}>
-                        {/* Top: Up */}
-                        <button
-                            onMouseDown={() => startRotation('up')}
-                            onMouseUp={stopRotation}
-                            onMouseLeave={stopRotation}
-                            onTouchStart={() => startRotation('up')}
-                            onTouchEnd={stopRotation}
-                            style={arrowButtonStyle}
-                            aria-label="Look up"
-                        >
-                            <ChevronUp size={24} />
-                        </button>
-
-                        {/* Middle: Left, Down, Right */}
-                        <div style={{ display: 'flex', gap: '0.25rem' }}>
-                            <button
-                                onMouseDown={() => startRotation('left')}
-                                onMouseUp={stopRotation}
-                                onMouseLeave={stopRotation}
-                                onTouchStart={() => startRotation('left')}
-                                onTouchEnd={stopRotation}
-                                style={arrowButtonStyle}
-                                aria-label="Look left"
-                            >
-                                <ChevronLeft size={24} />
-                            </button>
-
-                            <button
-                                onMouseDown={() => startRotation('down')}
-                                onMouseUp={stopRotation}
-                                onMouseLeave={stopRotation}
-                                onTouchStart={() => startRotation('down')}
-                                onTouchEnd={stopRotation}
-                                style={arrowButtonStyle}
-                                aria-label="Look down"
-                            >
-                                <ChevronDown size={24} />
-                            </button>
-
-                            <button
-                                onMouseDown={() => startRotation('right')}
-                                onMouseUp={stopRotation}
-                                onMouseLeave={stopRotation}
-                                onTouchStart={() => startRotation('right')}
-                                onTouchEnd={stopRotation}
-                                style={arrowButtonStyle}
-                                aria-label="Look right"
-                            >
-                                <ChevronRight size={24} />
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Next Image Button */}
-                    <button
-                        onClick={() => {
-                            console.log('Next Image button clicked');
-                            nextImage();
-                        }}
-                        style={{ ...arrowButtonStyle, marginLeft: '0.5rem' }}
-                        aria-label="Next Image"
-                    >
-                        <ChevronRight size={24} />
-                    </button>
-                </div>
-            </div>
-
-            {/* Info Panel (Opens Above) */}
-            {showInfo && (
-                <div style={{
-                    position: 'absolute',
-                    right: '2rem',
-                    bottom: '10rem', // Adjusted for taller dock
-                    zIndex: 99,
-                    background: 'rgba(0, 0, 0, 0.9)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    borderRadius: '0.5rem',
-                    padding: '1.5rem',
-                    maxWidth: '300px',
-                    color: 'white',
-                    boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
-                }}>
-                    <h3 style={{ margin: '0 0 1rem 0', fontSize: '1.125rem', fontWeight: '600' }}>
-                        Campus 360 Tour
-                    </h3>
-                    <p style={{ margin: '0 0 0.75rem 0', fontSize: '0.875rem', lineHeight: '1.5', color: 'rgba(255, 255, 255, 0.8)' }}>
-                        Navigate through the campus using the controls below.
-                    </p>
-                    <div style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.6)' }}>
-                        <div style={{ marginBottom: '0.5rem' }}>← → : Rotate view left/right</div>
-                        <div style={{ marginBottom: '0.5rem' }}>↑ ↓ : Look up/down</div>
-                        <div style={{ marginBottom: '0.5rem' }}>&lt; &gt; : Previous/Next Image</div>
-                        <div style={{ marginBottom: '0.5rem' }}>+ - : Zoom in/out</div>
-                        <div style={{ marginBottom: '0.5rem' }}>▶ : Auto-rotate camera</div>
-                    </div>
-                </div>
-            )}
-        </>
-    );
+      {/* Info Modal */}
+      <AnimatePresence>
+        {showInfo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
+            onClick={() => setShowInfo(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 max-w-sm w-full mx-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">Controls</h3>
+                <button 
+                  onClick={() => setShowInfo(false)}
+                  className="p-1.5 rounded-lg hover:bg-white/10 text-white/60 hover:text-white transition-colors"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              <ul className="space-y-3 text-sm text-white/70">
+                <li className="flex items-center gap-3">
+                  <kbd className="px-2 py-1 rounded bg-white/10 text-xs font-mono">Drag</kbd>
+                  <span>Look around</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <kbd className="px-2 py-1 rounded bg-white/10 text-xs font-mono">Scroll</kbd>
+                  <span>Zoom in/out</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <kbd className="px-2 py-1 rounded bg-white/10 text-xs font-mono">← →</kbd>
+                  <span>Navigate views</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <kbd className="px-2 py-1 rounded bg-white/10 text-xs font-mono">Space</kbd>
+                  <span>Toggle auto-rotate</span>
+                </li>
+              </ul>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
 };

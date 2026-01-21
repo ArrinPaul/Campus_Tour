@@ -1,174 +1,176 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
+import { OrbitControls as OrbitControlsImpl } from 'three/examples/jsm/controls/OrbitControls';
 import { useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useTourState } from '../../hooks/useTourState';
 
 export const Controls: React.FC = () => {
-    const { camera, gl } = useThree();
-    const controlsRef = useRef<any>(null);
-    const { isIdle, cameraRotation, cameraZoom, isAutoRotating, activeRotation } = useTourState();
+  const { camera, gl } = useThree();
+  const controlsRef = useRef<OrbitControlsImpl>(null);
+  const {
+    isIdle,
+    cameraRotation,
+    cameraZoom,
+    isAutoRotating,
+    activeRotation,
+    setCameraFov,
+    cameraFov,
+  } = useTourState();
 
-    // Listen to camera rotation triggers from UI buttons (Discrete clicks if any, though we use continuous mostly)
-    useEffect(() => {
-        if (!cameraRotation.direction) return;
+  const fovChanged = useRef(false);
+  useEffect(() => {
+    fovChanged.current = true;
+  }, [cameraFov]);
 
-        const speed = 0.1;
-        switch (cameraRotation.direction) {
-            case 'up':
-                camera.rotateX(speed);
-                break;
-            case 'down':
-                camera.rotateX(-speed);
-                break;
-            case 'left':
-                camera.rotateY(speed);
-                break;
-            case 'right':
-                camera.rotateY(-speed);
-                break;
-        }
-    }, [cameraRotation, camera]);
+  // Listen to camera rotation triggers from UI buttons
+  useEffect(() => {
+    if (!cameraRotation.direction) return;
 
-    // Listen to camera zoom triggers from UI buttons
-    useEffect(() => {
-        if (!cameraZoom.direction) return;
+    const speed = 0.1;
+    switch (cameraRotation.direction) {
+      case 'up':
+        camera.rotateX(speed);
+        break;
+      case 'down':
+        camera.rotateX(-speed);
+        break;
+      case 'left':
+        camera.rotateY(speed);
+        break;
+      case 'right':
+        camera.rotateY(-speed);
+        break;
+    }
+  }, [cameraRotation, camera]);
 
-        const zoomSpeed = 5;
-        const currentFov = (camera as THREE.PerspectiveCamera).fov;
-        let newFov = currentFov;
+  // Listen to camera zoom triggers from UI buttons
+  useEffect(() => {
+    if (!cameraZoom.direction) return;
 
-        if (cameraZoom.direction === 'in') {
-            newFov = Math.max(30, currentFov - zoomSpeed);
-        } else if (cameraZoom.direction === 'out') {
-            newFov = Math.min(100, currentFov + zoomSpeed);
-        }
+    const zoomSpeed = 5;
+    let newFov = cameraFov;
 
-        if (newFov !== currentFov) {
-            (camera as THREE.PerspectiveCamera).fov = newFov;
-            camera.updateProjectionMatrix();
-        }
-    }, [cameraZoom, camera]);
+    if (cameraZoom.direction === 'in') {
+      newFov = Math.max(30, cameraFov - zoomSpeed);
+    } else if (cameraZoom.direction === 'out') {
+      newFov = Math.min(100, cameraFov + zoomSpeed);
+    }
 
-    // Handle mouse wheel zoom
-    useEffect(() => {
-        const handleWheel = (e: WheelEvent) => {
-            e.preventDefault();
+    if (newFov !== cameraFov) {
+      setCameraFov(newFov);
+    }
+  }, [cameraZoom, cameraFov, setCameraFov]);
 
-            const zoomSpeed = 0.05;
-            const currentFov = (camera as THREE.PerspectiveCamera).fov;
-            let newFov = currentFov + e.deltaY * zoomSpeed;
+  // Handle mouse wheel zoom
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
 
-            newFov = Math.max(30, Math.min(100, newFov));
+      const zoomSpeed = 0.05;
+      let newFov = cameraFov + e.deltaY * zoomSpeed;
 
-            if (newFov !== currentFov) {
-                (camera as THREE.PerspectiveCamera).fov = newFov;
-                camera.updateProjectionMatrix();
-            }
-        };
+      newFov = Math.max(30, Math.min(100, newFov));
 
-        const canvas = gl.domElement;
-        canvas.addEventListener('wheel', handleWheel, { passive: false });
-        return () => canvas.removeEventListener('wheel', handleWheel);
-    }, [camera, gl]);
+      if (newFov !== cameraFov) {
+        setCameraFov(newFov);
+      }
+    };
 
-    // Keyboard state tracking for continuous movement (Up/Down)
-    const keysPressed = useRef<Set<string>>(new Set());
+    const canvas = gl.domElement;
+    canvas.addEventListener('wheel', handleWheel, { passive: false });
+    return () => canvas.removeEventListener('wheel', handleWheel);
+  }, [cameraFov, gl, setCameraFov]);
 
-    // Handle discrete keyboard events (Next/Prev Image)
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            const key = e.key.toLowerCase();
+  // Keyboard state tracking for continuous movement
+  const keysPressed = useRef<Set<string>>(new Set());
 
-            // Continuous keys
-            keysPressed.current.add(key);
-            if (e.key.startsWith('Arrow')) {
-                keysPressed.current.add(e.key);
-            }
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      keysPressed.current.add(e.key.toLowerCase());
+    };
 
-            // Discrete actions (removed, using rotation now)
-            /*
-            if (key === 'arrowleft' || key === 'a') {
-                previousImage();
-            }
-            if (key === 'arrowright' || key === 'd') {
-                nextImage();
-            }
-            */
-        };
+    const handleKeyUp = (e: KeyboardEvent) => {
+      keysPressed.current.delete(e.key.toLowerCase());
+    };
 
-        const handleKeyUp = (e: KeyboardEvent) => {
-            const key = e.key.toLowerCase();
-            keysPressed.current.delete(key);
-            if (e.key.startsWith('Arrow')) {
-                keysPressed.current.delete(e.key);
-            }
-        };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
-        window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('keyup', handleKeyUp);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('keyup', handleKeyUp);
-        };
-    }, []); // Removed nextImage, previousImage dependency
+  // Auto-rotate, Manual Continuous Rotation, and Keyboard logic
+  useFrame((state) => {
+    if (fovChanged.current) {
+      if ((state.camera as THREE.PerspectiveCamera).fov !== cameraFov) {
+        (state.camera as THREE.PerspectiveCamera).fov = cameraFov;
+        state.camera.updateProjectionMatrix();
+      }
+      fovChanged.current = false;
+    }
 
-    // Auto-rotate, Manual Continuous Rotation, and Keyboard logic
-    useFrame(() => {
-        const rotationSpeed = 0.02; // Adjust speed as needed
+    const rotationSpeed = 0.02;
 
-        let rotated = false;
+    let rotated = false;
 
-        // 1. Check activeRotation (from UI buttons)
-        if (activeRotation) {
-            switch (activeRotation) {
-                case 'up': camera.rotateX(rotationSpeed); break;
-                case 'down': camera.rotateX(-rotationSpeed); break;
-                case 'left': camera.rotateY(rotationSpeed); break;
-                case 'right': camera.rotateY(-rotationSpeed); break;
-            }
-            rotated = true;
-        }
+    if (activeRotation) {
+      switch (activeRotation) {
+        case 'up':
+          camera.rotateX(rotationSpeed);
+          break;
+        case 'down':
+          camera.rotateX(-rotationSpeed);
+          break;
+        case 'left':
+          camera.rotateY(rotationSpeed);
+          break;
+        case 'right':
+          camera.rotateY(-rotationSpeed);
+          break;
+      }
+      rotated = true;
+    }
 
-        // 2. Check Keyboard Controls
-        const keys = keysPressed.current;
-        if (keys.has('arrowup') || keys.has('w') || keys.has('ArrowUp')) {
-            camera.rotateX(rotationSpeed);
-            rotated = true;
-        }
-        if (keys.has('arrowdown') || keys.has('s') || keys.has('ArrowDown')) {
-            camera.rotateX(-rotationSpeed);
-            rotated = true;
-        }
-        if (keys.has('arrowleft') || keys.has('a') || keys.has('ArrowLeft')) {
-            camera.rotateY(rotationSpeed);
-            rotated = true;
-        }
-        if (keys.has('arrowright') || keys.has('d') || keys.has('ArrowRight')) {
-            camera.rotateY(-rotationSpeed);
-            rotated = true;
-        }
+    const keys = keysPressed.current;
+    if (keys.has('arrowup') || keys.has('w')) {
+      camera.rotateX(rotationSpeed);
+      rotated = true;
+    }
+    if (keys.has('arrowdown') || keys.has('s')) {
+      camera.rotateX(-rotationSpeed);
+      rotated = true;
+    }
+    if (keys.has('arrowleft') || keys.has('a')) {
+      camera.rotateY(rotationSpeed);
+      rotated = true;
+    }
+    if (keys.has('arrowright') || keys.has('d')) {
+      camera.rotateY(-rotationSpeed);
+      rotated = true;
+    }
 
-        // 3. Auto-rotation (only if not manually rotating)
-        if (!rotated && isAutoRotating) {
-            camera.rotateY(-0.002); // Smooth rotation speed
-        }
+    if (!rotated && isAutoRotating) {
+      camera.rotateY(-0.02);
+    }
 
-        if (controlsRef.current) {
-            controlsRef.current.autoRotate = isIdle && !isAutoRotating && !rotated && !activeRotation;
-            controlsRef.current.autoRotateSpeed = 0.5;
-            controlsRef.current.update();
-        }
-    });
+    if (controlsRef.current) {
+      controlsRef.current.autoRotate = isIdle && !isAutoRotating && !rotated && !activeRotation;
+      controlsRef.current.autoRotateSpeed = 0.5;
+      controlsRef.current.update();
+    }
+  });
 
-    return (
-        <OrbitControls
-            ref={controlsRef}
-            enableZoom={false} // Disable default zoom to use FOV zoom
-            minDistance={10}
-            maxDistance={200}
-            enablePan={false}
-            rotateSpeed={-0.5} // Invert drag for natural feel
-        />
-    );
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      enableZoom={false}
+      minDistance={10}
+      maxDistance={200}
+      enablePan={false}
+      rotateSpeed={-0.5}
+    />
+  );
 };
