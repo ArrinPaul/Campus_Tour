@@ -2,11 +2,8 @@ import { useEffect, Suspense } from 'react';
 import { Scene } from './components/Viewer/Scene';
 import { Canvas } from '@react-three/fiber';
 import { Controls } from './components/Viewer/Controls';
-import { Overlay } from './components/UI/Overlay';
 import { Loader } from './components/UI/Loader';
-import { Navbar } from './components/UI/Navbar';
 import { ArrowControls } from './components/UI/ArrowControls';
-import { LocationBar } from './components/UI/LocationBar';
 import { Landing } from './components/UI/Landing';
 import { useTourState } from './hooks/useTourState';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -108,10 +105,8 @@ function App() {
             </Canvas>
 
             {/* UI Layer */}
-            <Loader />
-            <Navbar />
-            <LocationBar />
-            <ArrowControls />
+              <Loader />
+              <ArrowControls />
           </motion.div>
         )}
       </AnimatePresence>

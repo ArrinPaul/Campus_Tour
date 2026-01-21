@@ -11,9 +11,11 @@ import {
   Info,
   X,
   Mouse,
+  MapPin,
 } from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
 import { motion, AnimatePresence } from 'framer-motion';
+import type { Block, Lab } from '../../hooks/useTourDataStore';
 
 export const ArrowControls = () => {
   const {
@@ -22,8 +24,15 @@ export const ArrowControls = () => {
     setAutoRotation,
     nextImage,
     previousImage,
+    manifest,
+    currentBlockId,
+    currentImageId,
+    setBlock,
+    setImage,
+    setIdle,
   } = useTourState();
   const [showInfo, setShowInfo] = useState(false);
+  const [showLocations, setShowLocations] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const toggleFullscreen = () => {
@@ -36,45 +45,120 @@ export const ArrowControls = () => {
     }
   };
 
-  const btn = "p-2.5 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 text-white/50 hover:text-white hover:bg-black/60 transition-all active:scale-95";
+  const currentBlock: Block | undefined = manifest?.blocks?.find((b: Block) => b.id === currentBlockId);
+  const currentIndex = currentBlock?.labs?.findIndex((l: Lab) => l.id === currentImageId) ?? 0;
+  const totalViews = currentBlock?.labs?.length ?? 0;
+
+  const handleBlockClick = (blockId: string) => {
+    const block = manifest?.blocks?.find((b: Block) => b.id === blockId);
+    setBlock(blockId);
+    if (block?.labs?.length > 0) {
+      setImage(block.labs[0].id);
+    }
+    setShowLocations(false);
+    setIdle(false);
+  };
+
+  const btn = "p-3 rounded-xl bg-white/10 backdrop-blur-md text-white/70 hover:text-white hover:bg-white/20 transition-all active:scale-95";
 
   return (
     <>
       <motion.div 
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 p-1 rounded-xl bg-black/30 backdrop-blur-md border border-white/10"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 p-2 rounded-2xl bg-black/50 backdrop-blur-xl border border-white/10"
       >
-        <button onClick={previousImage} className={btn}>
-          <ChevronLeft size={18} />
+        <button onClick={() => setShowLocations(true)} className={btn}>
+          <MapPin size={20} />
         </button>
+        
+        <div className="w-px h-8 bg-white/10" />
+        
+        <button onClick={previousImage} className={btn}>
+          <ChevronLeft size={20} />
+        </button>
+        
         <button
           onClick={() => setAutoRotation(!isAutoRotating)}
-          className="p-2.5 rounded-lg bg-white text-black hover:bg-white/90 transition-all active:scale-95"
+          className="p-3 rounded-xl bg-white text-black hover:bg-white/90 transition-all active:scale-95"
         >
-          {isAutoRotating ? <Pause size={18} /> : <Play size={18} />}
+          {isAutoRotating ? <Pause size={20} /> : <Play size={20} />}
         </button>
+        
         <button onClick={nextImage} className={btn}>
-          <ChevronRight size={18} />
+          <ChevronRight size={20} />
         </button>
-      </motion.div>
-
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="fixed bottom-6 right-4 z-40 flex flex-col gap-1 p-1 rounded-xl bg-black/30 backdrop-blur-md border border-white/10"
-      >
-        <button onClick={() => zoomCamera('in')} className={btn}><ZoomIn size={16} /></button>
-        <button onClick={() => zoomCamera('out')} className={btn}><ZoomOut size={16} /></button>
-        <div className="h-px bg-white/10 my-0.5" />
+        
+        <div className="w-px h-8 bg-white/10" />
+        
+        <button onClick={() => zoomCamera('in')} className={btn}>
+          <ZoomIn size={20} />
+        </button>
+        <button onClick={() => zoomCamera('out')} className={btn}>
+          <ZoomOut size={20} />
+        </button>
+        
+        <div className="w-px h-8 bg-white/10" />
+        
         <button onClick={toggleFullscreen} className={btn}>
-          {isFullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
+          {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
+        </button>
+        <button onClick={() => setShowInfo(true)} className={btn}>
+          <Info size={20} />
         </button>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed bottom-6 left-4 z-40">
-        <button onClick={() => setShowInfo(true)} className={btn}><Info size={16} /></button>
-      </motion.div>
+      {totalViews > 1 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md text-white/60 text-xs"
+        >
+          {currentIndex + 1} / {totalViews}
+        </motion.div>
+      )}
+
+      <AnimatePresence>
+        {showLocations && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 pb-28"
+            onClick={() => setShowLocations(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-4 max-w-md w-full mx-4 max-h-[60vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-semibold text-white">Locations</h3>
+                <button onClick={() => setShowLocations(false)} className="p-1.5 rounded-lg hover:bg-white/10 text-white/50">
+                  <X size={18} />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {manifest?.blocks?.map((block: Block) => (
+                  <button
+                    key={block.id}
+                    onClick={() => handleBlockClick(block.id)}
+                    className={`text-left p-3 rounded-xl transition-all ${
+                      currentBlockId === block.id
+                        ? 'bg-white text-black'
+                        : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white'
+                    }`}
+                  >
+                    <span className="text-sm font-medium">{block.name}</span>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {showInfo && (
@@ -82,33 +166,33 @@ export const ArrowControls = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+            className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
             onClick={() => setShowInfo(false)}
           >
             <motion.div
-              initial={{ scale: 0.95 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.95 }}
-              className="bg-[#141414] border border-white/10 rounded-xl p-5 max-w-xs w-full mx-4"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-5 max-w-xs w-full mx-4"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-white">Controls</h3>
-                <button onClick={() => setShowInfo(false)} className="p-1 rounded hover:bg-white/10 text-white/50">
-                  <X size={16} />
+                <button onClick={() => setShowInfo(false)} className="p-1.5 rounded-lg hover:bg-white/10 text-white/50">
+                  <X size={18} />
                 </button>
               </div>
-              <ul className="space-y-2.5 text-xs text-white/60">
+              <ul className="space-y-3 text-sm text-white/60">
                 <li className="flex items-center gap-3">
-                  <Mouse size={14} className="text-white/40" />
+                  <Mouse size={16} className="text-white/40" />
                   <span>Drag to look around</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] font-mono">Scroll</kbd>
+                  <kbd className="px-2 py-1 rounded-lg bg-white/10 text-xs font-mono">Scroll</kbd>
                   <span>Zoom in/out</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] font-mono">Space</kbd>
+                  <kbd className="px-2 py-1 rounded-lg bg-white/10 text-xs font-mono">Space</kbd>
                   <span>Toggle auto-rotate</span>
                 </li>
               </ul>
