@@ -11,8 +11,7 @@ export const Landing = () => {
       
       <header className="absolute top-0 left-0 right-0 z-10 px-6 py-5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="Logo" className="w-8 h-8 object-contain" />
+          <div className="flex items-center">
             <span className="text-base font-semibold tracking-tight text-white/90">Campus 360</span>
           </div>
           <nav className="hidden md:flex items-center gap-8">

@@ -33,10 +33,7 @@ export const Navbar = () => {
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="Logo" className="w-7 h-7 object-contain" />
-            <span className="text-sm font-semibold text-white/80 hidden sm:block">Campus 360</span>
-          </div>
+          <span className="text-sm font-semibold text-white/80">Campus 360</span>
 
           <div ref={dropdownRef} className="hidden md:block relative">
             <button
