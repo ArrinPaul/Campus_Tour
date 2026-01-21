@@ -152,9 +152,9 @@ export const Controls: React.FC = () => {
       rotated = true;
     }
 
-    if (!rotated && isAutoRotating) {
-      camera.rotateY(-0.02);
-    }
+      if (!rotated && isAutoRotating) {
+        camera.rotateY(-0.005);
+      }
 
     if (controlsRef.current) {
       controlsRef.current.autoRotate = isIdle && !isAutoRotating && !rotated && !activeRotation;
