@@ -49,9 +49,6 @@ export const ArrowControls = () => {
   const currentBlock: Block | undefined = manifest?.blocks?.find(
     (b: Block) => b.id === currentBlockId
   );
-  const currentImage: Lab | undefined = currentBlock?.labs?.find(
-    (l: Lab) => l.id === currentImageId
-  );
   const currentIndex = currentBlock?.labs?.findIndex((l: Lab) => l.id === currentImageId) ?? 0;
   const totalViews = currentBlock?.labs?.length ?? 0;
 
