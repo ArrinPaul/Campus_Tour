@@ -19,12 +19,14 @@ export const InfoModal: React.FC = () => {
         {isOpen && (
           <motion.div
             initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
-                                    onClick={() => setIsOpen(false)}
-                                    data-testid="info-modal-overlay"
-                                >            <motion.div
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
+            onClick={() => setIsOpen(false)}
+            data-testid="info-modal-overlay"
+          >
+            {' '}
+            <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -55,7 +57,7 @@ export const InfoModal: React.FC = () => {
               </p>
 
               <div className="mt-6 pt-6 border-t border-white/10 text-sm text-white/50">
-                © 2024 University Name. All rights reserved.
+                Ã‚Â© 2024 University Name. All rights reserved.
               </div>
             </motion.div>
           </motion.div>

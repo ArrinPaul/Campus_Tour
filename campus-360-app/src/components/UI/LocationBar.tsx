@@ -21,7 +21,9 @@ export const LocationBar: React.FC = () => {
 
   if (!manifest || !currentBlockId) return null;
 
-  const currentBlock: Block | undefined = manifest.blocks.find((b: Block) => b.id === currentBlockId);
+  const currentBlock: Block | undefined = manifest.blocks.find(
+    (b: Block) => b.id === currentBlockId
+  );
   if (!currentBlock?.labs || currentBlock.labs.length <= 1) return null;
 
   const currentIndex = currentBlock.labs.findIndex((l: Lab) => l.id === currentImageId);
@@ -33,14 +35,24 @@ export const LocationBar: React.FC = () => {
   };
 
   return (
-    <div ref={dropdownRef} className="fixed top-3 right-4 md:right-auto md:left-1/2 md:-translate-x-1/2 z-50">
+    <div
+      ref={dropdownRef}
+      className="fixed top-3 right-4 md:right-auto md:left-1/2 md:-translate-x-1/2 z-50"
+    >
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/50 transition-all text-sm"
       >
-        <span className="text-white/60">{currentBlock.labs[currentIndex]?.name || `View ${currentIndex + 1}`}</span>
-        <span className="text-[10px] text-white/40 px-1.5 py-0.5 rounded bg-white/10">{currentIndex + 1}/{currentBlock.labs.length}</span>
-        <ChevronDown size={14} className={`text-white/40 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <span className="text-white/60">
+          {currentBlock.labs[currentIndex]?.name || `View ${currentIndex + 1}`}
+        </span>
+        <span className="text-[10px] text-white/40 px-1.5 py-0.5 rounded bg-white/10">
+          {currentIndex + 1}/{currentBlock.labs.length}
+        </span>
+        <ChevronDown
+          size={14}
+          className={`text-white/40 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+        />
       </button>
 
       <AnimatePresence>

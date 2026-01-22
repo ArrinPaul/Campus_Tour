@@ -12,7 +12,7 @@ describe('InfoModal', () => {
     render(<InfoModal />);
     const infoButton = screen.getByLabelText('Open information modal');
     await act(async () => {
-        fireEvent.click(infoButton);
+      fireEvent.click(infoButton);
     });
     const modalTitle = screen.getByRole('heading', { name: /campus 360 tour/i });
     expect(modalTitle).toBeInTheDocument();
@@ -23,9 +23,9 @@ describe('InfoModal', () => {
     const infoButton = screen.getByLabelText('Open information modal');
     fireEvent.click(infoButton); // Open modal
     const closeButton = screen.getByLabelText('Close information modal');
-    
+
     await act(async () => {
-        fireEvent.click(closeButton); // Close modal
+      fireEvent.click(closeButton); // Close modal
     });
 
     const modalTitle = screen.queryByRole('heading', { name: /campus 360 tour/i });
@@ -39,11 +39,10 @@ describe('InfoModal', () => {
 
     // Click on the overlay background
     await act(async () => {
-        fireEvent.click(screen.getByTestId('info-modal-overlay'));
+      fireEvent.click(screen.getByTestId('info-modal-overlay'));
     });
 
     const modalTitle = screen.queryByRole('heading', { name: /campus 360 tour/i });
     expect(modalTitle).not.toBeInTheDocument();
   });
 });
-

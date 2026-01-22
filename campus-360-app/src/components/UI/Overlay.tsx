@@ -9,7 +9,7 @@ export const Overlay: React.FC = () => {
   const { manifest, currentBlockId, currentImageId } = useTourState();
 
   // Get current location info
-  const currentBlock = manifest?.blocks?.find(b => b.id === currentBlockId);
+  const currentBlock = manifest?.blocks?.find((b) => b.id === currentBlockId);
   const currentImage = currentBlock?.labs?.find((l: Lab) => l.id === currentImageId);
 
   useEffect(() => {
@@ -58,7 +58,8 @@ export const Overlay: React.FC = () => {
                   <p className="text-white font-medium text-sm">{currentBlock.name}</p>
                   {currentImage && (
                     <p className="text-white/50 text-xs mt-0.5">
-                      View {currentBlock.labs?.findIndex((l: Lab) => l.id === currentImageId) + 1} of {currentBlock.labs?.length}
+                      View {currentBlock.labs?.findIndex((l: Lab) => l.id === currentImageId) + 1}{' '}
+                      of {currentBlock.labs?.length}
                     </p>
                   )}
                 </div>

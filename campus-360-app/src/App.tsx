@@ -1,23 +1,33 @@
 import { useEffect, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { Scene } from './components/Viewer/Scene';
 import { Canvas } from '@react-three/fiber';
 import { Controls } from './components/Viewer/Controls';
 import { Loader } from './components/UI/Loader';
 import { ArrowControls } from './components/UI/ArrowControls';
 import { Landing } from './components/UI/Landing';
+import { About } from './pages/About';
+import { Campus } from './pages/Campus';
+import { Admissions } from './pages/Admissions';
+import { Contact } from './pages/Contact';
 import { useTourState } from './hooks/useTourState';
 import { AnimatePresence, motion } from 'framer-motion';
 
-function App() {
-  const { 
-    setManifest, 
-    setBlock, 
-    setImage, 
-    setIdle, 
-    currentBlockId, 
+function TourView() {
+  const {
+    setManifest,
+    setBlock,
+    setImage,
+    setIdle,
+    currentBlockId,
     currentImageId,
-    isTourStarted 
+    isTourStarted,
+    setTourStarted,
   } = useTourState();
+
+  const handleStartTour = () => {
+    setTourStarted(true);
+  };
 
   // Load manifest on mount
   useEffect(() => {
@@ -87,30 +97,51 @@ function App() {
             exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           >
-            <Landing />
+            <Landing onStartTour={handleStartTour} />
           </motion.div>
         ) : (
           <motion.div
             key="tour"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="w-full h-full"
+            className="w-full h-full relative"
           >
             {/* 3D Canvas - Full Screen */}
-            <Canvas camera={{ fov: 75, position: [0, 0, 0.1] }}>
-              <Suspense fallback={null}>
-                <Scene />
-                <Controls />
-              </Suspense>
-            </Canvas>
+            <div
+              className="absolute inset-0 w-full h-full"
+              style={{ width: '100vw', height: '100vh' }}
+            >
+              <Canvas
+                camera={{ fov: 75, position: [0, 0, 0.1] }}
+                style={{ width: '100%', height: '100%', display: 'block' }}
+                gl={{ preserveDrawingBuffer: true }}
+              >
+                <Suspense fallback={null}>
+                  <Scene />
+                  <Controls />
+                </Suspense>
+              </Canvas>
+            </div>
 
             {/* UI Layer */}
-              <Loader />
-              <ArrowControls />
+            <Loader />
+            <ArrowControls />
           </motion.div>
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<TourView />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/campus" element={<Campus />} />
+      <Route path="/admissions" element={<Admissions />} />
+      <Route path="/contact" element={<Contact />} />
+    </Routes>
   );
 }
 

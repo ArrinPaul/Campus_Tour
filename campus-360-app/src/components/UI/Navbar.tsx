@@ -27,7 +27,8 @@ export const Navbar = () => {
     setIdle(false);
   };
 
-  const currentBlockName = manifest?.blocks?.find((b: Block) => b.id === currentBlockId)?.name || 'Select';
+  const currentBlockName =
+    manifest?.blocks?.find((b: Block) => b.id === currentBlockId)?.name || 'Select';
 
   return (
     <>
@@ -42,7 +43,10 @@ export const Navbar = () => {
             >
               <MapPin size={14} className="text-white/40" />
               <span className="text-white/80 font-medium">{currentBlockName}</span>
-              <ChevronDown size={14} className={`text-white/40 transition-transform ${isLocationsOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown
+                size={14}
+                className={`text-white/40 transition-transform ${isLocationsOpen ? 'rotate-180' : ''}`}
+              />
             </button>
 
             <AnimatePresence>
@@ -64,7 +68,9 @@ export const Navbar = () => {
                           : 'text-white/60 hover:bg-white/5 hover:text-white'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${currentBlockId === block.id ? 'bg-blue-400' : 'bg-white/20'}`} />
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${currentBlockId === block.id ? 'bg-blue-400' : 'bg-white/20'}`}
+                      />
                       {block.name}
                     </button>
                   ))}
@@ -101,7 +107,10 @@ export const Navbar = () => {
             >
               <div className="flex items-center justify-between p-4 border-b border-white/10">
                 <span className="text-sm font-semibold text-white">Locations</span>
-                <button onClick={() => setMobileMenuOpen(false)} className="p-1.5 rounded-md hover:bg-white/10 text-white/60">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-1.5 rounded-md hover:bg-white/10 text-white/60"
+                >
                   <X size={18} />
                 </button>
               </div>
@@ -116,7 +125,10 @@ export const Navbar = () => {
                         : 'text-white/60 hover:bg-white/5 hover:text-white'
                     }`}
                   >
-                    <MapPin size={16} className={currentBlockId === block.id ? 'text-blue-400' : 'text-white/30'} />
+                    <MapPin
+                      size={16}
+                      className={currentBlockId === block.id ? 'text-blue-400' : 'text-white/30'}
+                    />
                     {block.name}
                   </button>
                 ))}
