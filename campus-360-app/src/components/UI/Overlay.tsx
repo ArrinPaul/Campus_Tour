@@ -1,91 +1,73 @@
-import React, { useEffect, useState } from 'react';
-import { Menu } from './Menu';
-import { Navigation } from './Navigation';
-import { Title } from './Title';
-import { Compass } from './Compass';
-import { InfoModal } from './InfoModal';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Maximize, Minimize } from 'lucide-react';
+import { useTourState } from '../../hooks/useTourState';
+import type { Lab } from '../../hooks/useTourDataStore';
 
 export const Overlay: React.FC = () => {
-    const [visible, setVisible] = useState(true);
-    const [isFullscreen, setIsFullscreen] = useState(false);
-    let timeout: number;
+  const [visible, setVisible] = useState(true);
+  const timeoutRef = useRef<number | null>(null);
+  const { manifest, currentBlockId, currentImageId } = useTourState();
 
-    const resetVisibility = () => {
-        setVisible(true);
-        clearTimeout(timeout);
-        timeout = setTimeout(() => setVisible(false), 3000); // Hide after 3s of inactivity
+  // Get current location info
+  const currentBlock = manifest?.blocks?.find((b) => b.id === currentBlockId);
+  const currentImage = currentBlock?.labs?.find((l: Lab) => l.id === currentImageId);
+
+  useEffect(() => {
+    const handleActivity = () => {
+      setVisible(true);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = window.setTimeout(() => {
+        setVisible(false);
+      }, 4000);
     };
 
-    const toggleFullscreen = () => {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
-            setIsFullscreen(true);
-        } else {
-            document.exitFullscreen();
-            setIsFullscreen(false);
-        }
+    handleActivity();
+
+    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('click', handleActivity);
+    window.addEventListener('keydown', handleActivity);
+
+    return () => {
+      window.removeEventListener('mousemove', handleActivity);
+      window.removeEventListener('click', handleActivity);
+      window.removeEventListener('keydown', handleActivity);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
     };
+  }, []);
 
-    useEffect(() => {
-        window.addEventListener('mousemove', resetVisibility);
-        window.addEventListener('click', resetVisibility);
-        window.addEventListener('keydown', resetVisibility);
-
-        const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
-        document.addEventListener('fullscreenchange', handleFsChange);
-
-        resetVisibility();
-
-        return () => {
-            window.removeEventListener('mousemove', resetVisibility);
-            window.removeEventListener('click', resetVisibility);
-            window.removeEventListener('keydown', resetVisibility);
-            document.removeEventListener('fullscreenchange', handleFsChange);
-            clearTimeout(timeout);
-        };
-    }, []);
-
-    return (
-        <div className="absolute inset-0 pointer-events-none">
-            {/* Always visible elements (or handle visibility inside them if needed) */}
-            <div className="pointer-events-auto">
-                <Title />
+  return (
+    <div className="fixed inset-0 pointer-events-none z-30">
+      <AnimatePresence>
+        {visible && currentBlock && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-20 left-1/2 -translate-x-1/2 pointer-events-auto"
+          >
+            {/* Current Location Badge */}
+            <div className="px-5 py-3 rounded-xl bg-slate-900/70 backdrop-blur-xl border border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                <div>
+                  <p className="text-white font-medium text-sm">{currentBlock.name}</p>
+                  {currentImage && (
+                    <p className="text-white/50 text-xs mt-0.5">
+                      View {currentBlock.labs?.findIndex((l: Lab) => l.id === currentImageId) + 1}{' '}
+                      of {currentBlock.labs?.length}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
-
-            <AnimatePresence>
-                {visible && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute inset-0 pointer-events-none"
-                    >
-                        <div className="pointer-events-auto">
-                            <Menu />
-                            <Navigation />
-                            <Compass />
-                            <InfoModal />
-
-                            {/* Fullscreen Toggle */}
-                            <motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={toggleFullscreen}
-                                className="absolute top-6 right-28 p-3.5 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 backdrop-blur-xl border border-white/30 text-white hover:border-white/40 hover:shadow-[0_0_25px_rgba(102,126,234,0.5)] transition-all duration-300 shadow-lg"
-                            >
-                                {isFullscreen ? <Minimize size={22} /> : <Maximize size={22} />}
-                            </motion.button>
-                        </div>
-
-                        {/* Logo Placeholder */}
-                        <div className="absolute top-6 right-6 w-16 h-16 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 backdrop-blur-xl rounded-full border border-white/30 flex items-center justify-center pointer-events-auto shadow-lg hover:shadow-[0_0_25px_rgba(102,126,234,0.4)] transition-all duration-300">
-                            <span className="text-xs text-white/70 font-bold tracking-wider">LOGO</span>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
-    );
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 };

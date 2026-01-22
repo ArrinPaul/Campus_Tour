@@ -1,231 +1,142 @@
-import { useState } from 'react';
-import { Menu, X, Map, Info, Home, ChevronDown } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Menu, X, MapPin, ChevronDown } from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
+import type { Block } from '../../hooks/useTourDataStore';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [showLocations, setShowLocations] = useState(false);
-    const { manifest, setBlock, setIdle } = useTourState();
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLocationsOpen, setLocationsOpen] = useState(false);
+  const { manifest, currentBlockId, setBlock, setIdle } = useTourState();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const handleLocationClick = (blockId: string) => {
-        setBlock(blockId);
-        setIsOpen(false);
-        setShowLocations(false);
-        setIdle(false);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setLocationsOpen(false);
+      }
     };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-    const navItems = [
-        { name: 'Home', icon: <Home size={20} />, action: () => console.log('Home') },
-        { name: 'About', icon: <Info size={20} />, action: () => console.log('About') },
-    ];
+  const handleLocationClick = (blockId: string) => {
+    setBlock(blockId);
+    setMobileMenuOpen(false);
+    setLocationsOpen(false);
+    setIdle(false);
+  };
 
-    return (
-        <nav style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            zIndex: 1000,
-            padding: '1rem 2rem',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%)',
-            color: 'white',
-            pointerEvents: 'none'
-        }}>
-            <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>Campus 360</h1>
-            </div>
+  const currentBlockName =
+    manifest?.blocks?.find((b: Block) => b.id === currentBlockId)?.name || 'Select';
 
-            {/* Desktop Menu */}
-            <div style={{ pointerEvents: 'auto', display: 'flex', gap: '2rem', alignItems: 'center' }} className="hidden md:flex">
-                {/* Locations Dropdown */}
-                <div style={{ position: 'relative' }}>
-                    <button
-                        style={{
-                            background: 'none',
-                            border: 'none',
-                            color: 'white',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            fontSize: '1rem',
-                            padding: '0.5rem 1rem',
-                            borderRadius: '2rem',
-                            transition: 'background 0.3s'
-                        }}
-                        onClick={() => setShowLocations(!showLocations)}
-                        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                        onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
-                    >
-                        <Map size={20} />
-                        <span>Locations</span>
-                        <ChevronDown size={16} style={{ transform: showLocations ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
-                    </button>
+  return (
+    <>
+      <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <span className="text-sm font-semibold text-white/80">Campus 360</span>
 
-                    {showLocations && (
-                        <div style={{
-                            position: 'absolute',
-                            top: '100%',
-                            left: 0,
-                            background: 'rgba(0,0,0,0.9)',
-                            padding: '0.5rem',
-                            borderRadius: '1rem',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '0.5rem',
-                            minWidth: '200px',
-                            marginTop: '0.5rem',
-                            maxHeight: '60vh',
-                            overflowY: 'auto'
-                        }}>
-                            {manifest?.blocks?.map((block: any) => (
-                                <button
-                                    key={block.id}
-                                    onClick={() => handleLocationClick(block.id)}
-                                    style={{
-                                        background: 'none',
-                                        border: 'none',
-                                        color: 'white',
-                                        cursor: 'pointer',
-                                        display: 'block',
-                                        width: '100%',
-                                        textAlign: 'left',
-                                        padding: '0.5rem 1rem',
-                                        borderRadius: '0.5rem',
-                                        fontSize: '0.9rem',
-                                        transition: 'all 0.2s'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                                        e.currentTarget.style.color = 'white';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.background = 'none';
-                                        e.currentTarget.style.color = 'white';
-                                    }}
-                                >
-                                    {block.name}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                {navItems.map((item) => (
-                    <button
-                        key={item.name}
-                        onClick={item.action}
-                        style={{
-                            background: 'none',
-                            border: 'none',
-                            color: 'white',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            fontSize: '1rem',
-                            padding: '0.5rem 1rem',
-                            borderRadius: '2rem',
-                            transition: 'background 0.3s'
-                        }}
-                        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                        onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
-                    >
-                        {item.icon}
-                        <span>{item.name}</span>
-                    </button>
-                ))}
-            </div>
-
-            {/* Mobile Menu Button */}
+          <div ref={dropdownRef} className="hidden md:block relative">
             <button
-                style={{ pointerEvents: 'auto', background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
-                className="md:hidden"
-                onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setLocationsOpen(!isLocationsOpen)}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-sm"
             >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
+              <MapPin size={14} className="text-white/40" />
+              <span className="text-white/80 font-medium">{currentBlockName}</span>
+              <ChevronDown
+                size={14}
+                className={`text-white/40 transition-transform ${isLocationsOpen ? 'rotate-180' : ''}`}
+              />
             </button>
 
-            {/* Mobile Menu Dropdown */}
-            {isOpen && (
-                <div style={{
-                    position: 'absolute',
-                    top: '100%',
-                    right: 0,
-                    background: 'rgba(0,0,0,0.9)',
-                    padding: '1rem',
-                    borderRadius: '0 0 0 1rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1rem',
-                    pointerEvents: 'auto',
-                    minWidth: '250px',
-                    maxHeight: '80vh',
-                    overflowY: 'auto'
-                }}>
-                    <div style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1rem', marginBottom: '0.5rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#aaa', fontSize: '0.9rem', padding: '0 0.5rem 0.5rem' }}>
-                            <Map size={16} /> LOCATIONS
-                        </div>
-                        {manifest?.blocks?.map((block: any) => (
-                            <button
-                                key={block.id}
-                                onClick={() => handleLocationClick(block.id)}
-                                style={{
-                                    background: 'none',
-                                    border: 'none',
-                                    color: 'white',
-                                    cursor: 'pointer',
-                                    display: 'block',
-                                    width: '100%',
-                                    textAlign: 'left',
-                                    padding: '0.5rem 1rem',
-                                    fontSize: '1rem',
-                                    transition: 'all 0.2s'
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                                    e.currentTarget.style.color = 'white';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.background = 'none';
-                                    e.currentTarget.style.color = 'white';
-                                }}
-                            >
-                                {block.name}
-                            </button>
-                        ))}
-                    </div>
+            <AnimatePresence>
+              {isLocationsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 4 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute top-full right-0 mt-2 w-52 p-1.5 rounded-lg bg-[#141414] border border-white/10 shadow-xl"
+                >
+                  {manifest?.blocks?.map((block: Block) => (
+                    <button
+                      key={block.id}
+                      onClick={() => handleLocationClick(block.id)}
+                      className={`w-full text-left flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
+                        currentBlockId === block.id
+                          ? 'bg-white/10 text-white'
+                          : 'text-white/60 hover:bg-white/5 hover:text-white'
+                      }`}
+                    >
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${currentBlockId === block.id ? 'bg-blue-400' : 'bg-white/20'}`}
+                      />
+                      {block.name}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-                    {navItems.map((item) => (
-                        <button
-                            key={item.name}
-                            onClick={() => {
-                                item.action();
-                                setIsOpen(false);
-                            }}
-                            style={{
-                                background: 'none',
-                                border: 'none',
-                                color: 'white',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '1rem',
-                                fontSize: '1.1rem',
-                                padding: '0.5rem',
-                                textAlign: 'left'
-                            }}
-                        >
-                            {item.icon}
-                            <span>{item.name}</span>
-                        </button>
-                    ))}
-                </div>
-            )}
-        </nav>
-    );
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="md:hidden p-2 rounded-lg bg-white/5 border border-white/10 text-white/60"
+          >
+            <Menu size={18} />
+          </button>
+        </div>
+      </nav>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/70 z-[100]"
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="fixed top-0 right-0 h-full w-72 bg-[#0f0f0f] z-[101] border-l border-white/10"
+            >
+              <div className="flex items-center justify-between p-4 border-b border-white/10">
+                <span className="text-sm font-semibold text-white">Locations</span>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-1.5 rounded-md hover:bg-white/10 text-white/60"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              <div className="p-3">
+                {manifest?.blocks?.map((block: Block) => (
+                  <button
+                    key={block.id}
+                    onClick={() => handleLocationClick(block.id)}
+                    className={`w-full text-left flex items-center gap-3 px-3 py-3 rounded-lg mb-1 text-sm transition-colors ${
+                      currentBlockId === block.id
+                        ? 'bg-white/10 text-white'
+                        : 'text-white/60 hover:bg-white/5 hover:text-white'
+                    }`}
+                  >
+                    <MapPin
+                      size={16}
+                      className={currentBlockId === block.id ? 'text-blue-400' : 'text-white/30'}
+                    />
+                    {block.name}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
 };

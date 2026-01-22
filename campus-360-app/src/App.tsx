@@ -1,27 +1,41 @@
-import React, { useEffect, Suspense } from 'react';
+import { useEffect, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { Scene } from './components/Viewer/Scene';
 import { Canvas } from '@react-three/fiber';
-// import { XR, createXRStore } from '@react-three/xr';
 import { Controls } from './components/Viewer/Controls';
-import { Overlay } from './components/UI/Overlay';
 import { Loader } from './components/UI/Loader';
-import { Navbar } from './components/UI/Navbar';
 import { ArrowControls } from './components/UI/ArrowControls';
-import { LocationBar } from './components/UI/LocationBar';
+import { Landing } from './components/UI/Landing';
+import { About } from './pages/About';
+import { Campus } from './pages/Campus';
+import { Admissions } from './pages/Admissions';
+import { Contact } from './pages/Contact';
 import { useTourState } from './hooks/useTourState';
+import { AnimatePresence, motion } from 'framer-motion';
 
-// const store = createXRStore();
+function TourView() {
+  const {
+    setManifest,
+    setBlock,
+    setImage,
+    setIdle,
+    currentBlockId,
+    currentImageId,
+    isTourStarted,
+    setTourStarted,
+  } = useTourState();
 
-function App() {
-  const { setManifest, setBlock, setImage, setIdle } = useTourState();
+  const handleStartTour = () => {
+    setTourStarted(true);
+  };
 
+  // Load manifest on mount
   useEffect(() => {
     fetch('/manifest.json')
       .then((res) => res.json())
       .then((data) => {
         setManifest(data);
 
-        // Check URL params
         const params = new URLSearchParams(window.location.search);
         const blockId = params.get('block');
         const imageId = params.get('view');
@@ -29,14 +43,11 @@ function App() {
         if (blockId && imageId) {
           setBlock(blockId);
           setImage(imageId);
-        } else {
-          // Set initial state (Gate to Logo)
-          if (data.blocks && data.blocks.length > 0) {
-            const firstBlock = data.blocks[0];
-            setBlock(firstBlock.id);
-            if (firstBlock.labs && firstBlock.labs.length > 0) {
-              setImage(firstBlock.labs[0].id);
-            }
+        } else if (data.blocks?.length > 0) {
+          const firstBlock = data.blocks[0];
+          setBlock(firstBlock.id);
+          if (firstBlock.labs?.length > 0) {
+            setImage(firstBlock.labs[0].id);
           }
         }
       })
@@ -44,7 +55,6 @@ function App() {
   }, [setManifest, setBlock, setImage]);
 
   // Sync state to URL
-  const { currentBlockId, currentImageId } = useTourState();
   useEffect(() => {
     if (currentBlockId && currentImageId) {
       const params = new URLSearchParams(window.location.search);
@@ -60,14 +70,13 @@ function App() {
     const resetIdle = () => {
       setIdle(false);
       clearTimeout(timeout);
-      timeout = setTimeout(() => setIdle(true), 5000); // 5 seconds idle
+      timeout = window.setTimeout(() => setIdle(true), 5000);
     };
 
     window.addEventListener('mousemove', resetIdle);
     window.addEventListener('keydown', resetIdle);
     window.addEventListener('click', resetIdle);
-
-    resetIdle(); // Init
+    resetIdle();
 
     return () => {
       window.removeEventListener('mousemove', resetIdle);
@@ -78,52 +87,61 @@ function App() {
   }, [setIdle]);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', background: '#000', position: 'relative' }}>
-      <Navbar />
-      <LocationBar />
-      <Canvas camera={{ fov: 75, position: [0, 0, 0.1] }}>
-        <Suspense fallback={null}>
-          {/* <XR store={store}> */}
-          <Scene />
-          <Controls />
-          {/* </XR> */}
-        </Suspense>
-      </Canvas>
-      <Overlay />
-      <Loader />
-      <ArrowControls />
+    <div className="w-screen h-screen bg-black relative overflow-hidden">
+      <AnimatePresence mode="wait">
+        {!isTourStarted ? (
+          <motion.div
+            key="landing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <Landing onStartTour={handleStartTour} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="tour"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="w-full h-full relative"
+          >
+            {/* 3D Canvas - Full Screen */}
+            <div
+              className="absolute inset-0 w-full h-full"
+              style={{ width: '100vw', height: '100vh' }}
+            >
+              <Canvas
+                camera={{ fov: 75, position: [0, 0, 0.1] }}
+                style={{ width: '100%', height: '100%', display: 'block' }}
+                gl={{ preserveDrawingBuffer: true }}
+              >
+                <Suspense fallback={null}>
+                  <Scene />
+                  <Controls />
+                </Suspense>
+              </Canvas>
+            </div>
 
-      {/* VR Button */}
-      {/* <button
-        onClick={() => store.enterVR()}
-        style={{
-          position: 'absolute',
-          bottom: '2rem',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 1000,
-          padding: '12px 24px',
-          background: 'rgba(0, 0, 0, 0.8)',
-          color: 'white',
-          border: '1px solid rgba(255, 255, 255, 0.3)',
-          borderRadius: '30px',
-          cursor: 'pointer',
-          fontSize: '16px',
-          fontWeight: 'bold',
-          backdropFilter: 'blur(10px)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-        }}
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 8v13H3V8" />
-          <path d="M1 3h22v5H1z" />
-          <path d="M10 12h4" />
-        </svg>
-        Enter VR
-      </button> */}
+            {/* UI Layer */}
+            <Loader />
+            <ArrowControls />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<TourView />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/campus" element={<Campus />} />
+      <Route path="/admissions" element={<Admissions />} />
+      <Route path="/contact" element={<Contact />} />
+    </Routes>
   );
 }
 

@@ -1,210 +1,88 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTourState } from '../../hooks/useTourState';
-import { Map, Image as ImageIcon, ChevronDown } from 'lucide-react';
+import type { Block, Lab } from '../../hooks/useTourDataStore';
+import { ChevronDown } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export const LocationBar: React.FC = () => {
-    const { manifest, currentBlockId, currentImageId, setBlock, setImage, setIdle } = useTourState();
-    const [isBlockOpen, setIsBlockOpen] = useState(false);
-    const [isImageOpen, setIsImageOpen] = useState(false);
+  const { manifest, currentBlockId, currentImageId, setImage, setIdle } = useTourState();
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const blockDropdownRef = useRef<HTMLDivElement>(null);
-    const imageDropdownRef = useRef<HTMLDivElement>(null);
-
-    // Close dropdowns when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (blockDropdownRef.current && !blockDropdownRef.current.contains(event.target as Node)) {
-                setIsBlockOpen(false);
-            }
-            if (imageDropdownRef.current && !imageDropdownRef.current.contains(event.target as Node)) {
-                setIsImageOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    if (!manifest || !currentBlockId) return null;
-
-    console.log('LocationBar Render:', {
-        blockCount: manifest.blocks?.length,
-        currentBlockId,
-        blocks: manifest.blocks
-    });
-
-    const currentBlock = manifest.blocks.find((b: any) => b.id === currentBlockId);
-    const blockName = currentBlock ? (currentBlock.label || currentBlock.name) : 'Select Location';
-
-    const currentImage = currentBlock?.labs?.find((l: any) => l.id === currentImageId);
-    const imageName = currentImage ? (currentImage.label || currentImage.id) : 'Select View';
-
-    const handleBlockClick = (blockId: string) => {
-        setBlock(blockId);
-        setIsBlockOpen(false);
-        setIdle(false);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
     };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-    const handleImageClick = (imageId: string) => {
-        setImage(imageId);
-        setIsImageOpen(false);
-        setIdle(false);
-    };
+  if (!manifest || !currentBlockId) return null;
 
-    const buttonStyle = {
-        background: 'rgba(0, 0, 0, 0.8)',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        color: 'white',
-        padding: '0.75rem 1.25rem',
-        borderRadius: '2rem',
-        fontSize: '0.9rem',
-        fontWeight: '600',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.75rem',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
-        transition: 'all 0.2s',
-        minWidth: '180px',
-        justifyContent: 'space-between'
-    };
+  const currentBlock: Block | undefined = manifest.blocks.find(
+    (b: Block) => b.id === currentBlockId
+  );
+  if (!currentBlock?.labs || currentBlock.labs.length <= 1) return null;
 
-    const dropdownStyle = {
-        position: 'absolute' as const,
-        top: '120%',
-        left: 0,
-        background: 'rgba(0, 0, 0, 0.9)',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        borderRadius: '1rem',
-        padding: '0.5rem',
-        width: '100%',
-        minWidth: '240px',
-        maxHeight: '60vh',
-        overflowY: 'auto' as const,
-        boxShadow: '0 10px 15px rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        flexDirection: 'column' as const,
-        gap: '0.25rem',
-        zIndex: 100
-    };
+  const currentIndex = currentBlock.labs.findIndex((l: Lab) => l.id === currentImageId);
 
-    const itemStyle = (isActive: boolean) => ({
-        background: isActive ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
-        border: '1px solid',
-        borderColor: isActive ? 'rgba(56, 189, 248, 0.3)' : 'transparent',
-        color: 'white',
-        padding: '0.75rem 1rem',
-        borderRadius: '0.75rem',
-        fontSize: '0.9rem',
-        cursor: 'pointer',
-        textAlign: 'left' as const,
-        transition: 'all 0.2s',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        fontWeight: isActive ? '600' : '400'
-    });
+  const handleImageClick = (imageId: string) => {
+    setImage(imageId);
+    setIsOpen(false);
+    setIdle(false);
+  };
 
-    return (
-        <div style={{
-            position: 'absolute',
-            top: '5rem', // Below Navbar
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 90,
-            display: 'flex',
-            gap: '1rem',
-            alignItems: 'flex-start'
-        }}>
-            {/* Block Selection Dropdown */}
-            <div ref={blockDropdownRef} style={{ position: 'relative' }}>
+  return (
+    <div
+      ref={dropdownRef}
+      className="fixed top-3 right-4 md:right-auto md:left-1/2 md:-translate-x-1/2 z-50"
+    >
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/50 transition-all text-sm"
+      >
+        <span className="text-white/60">
+          {currentBlock.labs[currentIndex]?.name || `View ${currentIndex + 1}`}
+        </span>
+        <span className="text-[10px] text-white/40 px-1.5 py-0.5 rounded bg-white/10">
+          {currentIndex + 1}/{currentBlock.labs.length}
+        </span>
+        <ChevronDown
+          size={14}
+          className={`text-white/40 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 4 }}
+            transition={{ duration: 0.15 }}
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-44 p-1.5 rounded-lg bg-[#141414] border border-white/10 shadow-xl"
+          >
+            <div className="max-h-48 overflow-y-auto scrollbar-hide">
+              {currentBlock.labs.map((lab: Lab, index: number) => (
                 <button
-                    onClick={() => { setIsBlockOpen(!isBlockOpen); setIsImageOpen(false); }}
-                    style={buttonStyle}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.9)';
-                        e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.5)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                    }}
+                  key={lab.id}
+                  onClick={() => handleImageClick(lab.id)}
+                  className={`w-full text-left flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
+                    currentImageId === lab.id
+                      ? 'bg-white/10 text-white'
+                      : 'text-white/60 hover:bg-white/5 hover:text-white'
+                  }`}
                 >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Map size={16} style={{ color: '#38bdf8' }} />
-                        <span>{blockName}</span>
-                    </div>
-                    <ChevronDown size={16} style={{ transform: isBlockOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                  <span className="text-[10px] text-white/30 w-4">{index + 1}</span>
+                  <span className="truncate">{lab.name || `View ${index + 1}`}</span>
                 </button>
-
-                {isBlockOpen && (
-                    <div style={dropdownStyle}>
-                        {manifest.blocks.map((block: any) => {
-                            console.log('Rendering block item:', block);
-                            return (
-                                <button
-                                    key={block.id}
-                                    onClick={() => handleBlockClick(block.id)}
-                                    style={itemStyle(currentBlockId === block.id)}
-                                    onMouseEnter={(e) => {
-                                        if (currentBlockId !== block.id) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        if (currentBlockId !== block.id) e.currentTarget.style.background = 'transparent';
-                                    }}
-                                >
-                                    <span>{block.label || block.name}</span>
-                                    <span style={{ fontSize: '0.75rem', color: '#888' }}>{block.labs?.length || 0}</span>
-                                </button>
-                            );
-                        })}
-                    </div>
-                )}
+              ))}
             </div>
-
-            {/* Image Selection Dropdown */}
-            <div ref={imageDropdownRef} style={{ position: 'relative' }}>
-                <button
-                    onClick={() => { setIsImageOpen(!isImageOpen); setIsBlockOpen(false); }}
-                    style={buttonStyle}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.9)';
-                        e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.5)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                    }}
-                >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <ImageIcon size={16} style={{ color: '#a78bfa' }} />
-                        <span style={{ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {imageName}
-                        </span>
-                    </div>
-                    <ChevronDown size={16} style={{ transform: isImageOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
-                </button>
-
-                {isImageOpen && currentBlock?.labs && (
-                    <div style={dropdownStyle}>
-                        {currentBlock.labs.map((lab: any) => (
-                            <button
-                                key={lab.id}
-                                onClick={() => handleImageClick(lab.id)}
-                                style={itemStyle(currentImageId === lab.id)}
-                                onMouseEnter={(e) => {
-                                    if (currentImageId !== lab.id) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    if (currentImageId !== lab.id) e.currentTarget.style.background = 'transparent';
-                                }}
-                            >
-                                <span>{lab.label || lab.id}</span>
-                            </button>
-                        ))}
-                    </div>
-                )}
-            </div>
-        </div>
-    );
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 };
