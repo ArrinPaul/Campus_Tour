@@ -1,7 +1,0 @@
-{
-  "projectId": "55c61475-4633-4f21-a6c7-c99d58a61932",
-  "createdAt": 1768990573539,
-  "startupCommands": [
-    "cd campus-360-app && npm install; npm run dev"
-  ]
-}
