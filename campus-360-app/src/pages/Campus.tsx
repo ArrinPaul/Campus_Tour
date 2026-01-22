@@ -45,7 +45,7 @@ export const Campus = () => {
       style={{
         minHeight: '100vh',
         backgroundColor: '#fafafa',
-        padding: '80px 60px',
+        padding: '80px 60px 120px 60px',
       }}
     >
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
@@ -103,7 +103,7 @@ export const Campus = () => {
               fontWeight: 500,
             }}
           >
-            Ã°Å¸â€œÂ Kanmanike, Kumbalgodu, Mysore Road, Bangalore, Karnataka - 560074
+            Kanmanike, Kumbalgodu, Mysore Road, Bangalore, Karnataka - 560074
           </p>
 
           <div
@@ -236,6 +236,170 @@ export const Campus = () => {
                 bkc.christuniversity.in
               </a>
             </p>
+          </div>
+
+          <h2
+            style={{
+              fontSize: '32px',
+              fontWeight: 700,
+              color: '#0f172a',
+              marginTop: '60px',
+              marginBottom: '24px',
+            }}
+          >
+            Campus Facilities
+          </h2>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: '20px',
+              marginBottom: '48px',
+            }}
+          >
+            {[
+              {
+                title: 'Central Library',
+                desc: 'Well-equipped library with over 50,000 books, journals, e-resources, and digital archives.',
+                icon: '📚',
+              },
+              {
+                title: 'Computer Labs',
+                desc: 'State-of-the-art computing facilities with high-speed internet and latest software.',
+                icon: '💻',
+              },
+              {
+                title: 'Research Centers',
+                desc: 'Advanced research facilities for engineering, sciences, and interdisciplinary studies.',
+                icon: '🔬',
+              },
+              {
+                title: 'Auditorium',
+                desc: 'Modern auditorium with 1000+ seating capacity for events and conferences.',
+                icon: '🎭',
+              },
+              {
+                title: 'Cafeteria',
+                desc: 'Spacious dining facilities serving nutritious vegetarian meals throughout the day.',
+                icon: '🍽️',
+              },
+              {
+                title: 'Health Center',
+                desc: '24/7 medical facility with qualified doctors and first-aid services.',
+                icon: '🏥',
+              },
+              {
+                title: 'Hostel Accommodation',
+                desc: 'Separate hostels for boys and girls with modern amenities and 24/7 security.',
+                icon: '🏠',
+              },
+              {
+                title: 'WiFi Campus',
+                desc: 'Entire campus covered with high-speed wireless internet connectivity.',
+                icon: '📶',
+              },
+            ].map((facility, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: '24px',
+                  backgroundColor: 'white',
+                  borderRadius: '12px',
+                  border: '1px solid #e2e8f0',
+                }}
+              >
+                <div style={{ fontSize: '32px', marginBottom: '12px' }}>{facility.icon}</div>
+                <h4
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    color: '#0f172a',
+                    marginBottom: '8px',
+                  }}
+                >
+                  {facility.title}
+                </h4>
+                <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.6 }}>
+                  {facility.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <h2
+            style={{
+              fontSize: '32px',
+              fontWeight: 700,
+              color: '#0f172a',
+              marginTop: '48px',
+              marginBottom: '24px',
+            }}
+          >
+            How to Reach
+          </h2>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '24px',
+            }}
+          >
+            <div
+              style={{
+                padding: '24px',
+                backgroundColor: 'white',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0',
+              }}
+            >
+              <h4
+                style={{
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  color: '#10b981',
+                  marginBottom: '12px',
+                }}
+              >
+                From Bangalore City
+              </h4>
+              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.8 }}>
+                - 25 km from Christ University Central Campus (Hosur Road)
+                <br />
+                - 10 km from Bangalore University
+                <br />
+                - 8 km from R V College of Engineering
+                <br />- Located on Mysore Road, near Kumbalgodu
+              </p>
+            </div>
+            <div
+              style={{
+                padding: '24px',
+                backgroundColor: 'white',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0',
+              }}
+            >
+              <h4
+                style={{
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  color: '#10b981',
+                  marginBottom: '12px',
+                }}
+              >
+                Public Transport
+              </h4>
+              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.8 }}>
+                - BMTC buses available from Majestic, Kengeri
+                <br />
+                - Nearest Metro: Kengeri Metro Station
+                <br />
+                - Regular campus shuttle services
+                <br />- Auto-rickshaws available from Kumbalgodu Junction
+              </p>
+            </div>
           </div>
         </motion.div>
       </div>

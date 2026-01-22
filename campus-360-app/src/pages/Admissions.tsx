@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { ArrowLeft, FileText, Calendar, Users, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ export const Admissions = () => {
       style={{
         minHeight: '100vh',
         backgroundColor: '#fafafa',
-        padding: '80px 60px',
+        padding: '80px 60px 120px 60px',
       }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -439,6 +439,127 @@ export const Admissions = () => {
                 Call Us
               </a>
             </div>
+          </div>
+
+          <h2
+            style={{
+              fontSize: '32px',
+              fontWeight: 600,
+              color: '#0f172a',
+              marginTop: '60px',
+              marginBottom: '24px',
+            }}
+          >
+            Scholarships & Financial Aid
+          </h2>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '24px',
+              marginBottom: '48px',
+            }}
+          >
+            {[
+              {
+                title: 'Merit Scholarships',
+                desc: 'Based on academic performance in qualifying examinations. Up to 100% tuition waiver for top performers.',
+                eligibility: 'Students with 90%+ in Class 12',
+              },
+              {
+                title: 'Sports Scholarships',
+                desc: 'For students excelling in sports at state, national, or international levels.',
+                eligibility: 'State/National level sports achievers',
+              },
+              {
+                title: 'Need-Based Aid',
+                desc: 'Financial assistance for economically disadvantaged students with strong academic records.',
+                eligibility: 'Based on family income criteria',
+              },
+            ].map((scholarship, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: '28px',
+                  backgroundColor: 'white',
+                  borderRadius: '12px',
+                  border: '1px solid #e2e8f0',
+                }}
+              >
+                <h4
+                  style={{
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#10b981',
+                    marginBottom: '12px',
+                  }}
+                >
+                  {scholarship.title}
+                </h4>
+                <p
+                  style={{
+                    fontSize: '14px',
+                    color: '#64748b',
+                    lineHeight: 1.6,
+                    marginBottom: '12px',
+                  }}
+                >
+                  {scholarship.desc}
+                </p>
+                <p style={{ fontSize: '13px', color: '#94a3b8', fontStyle: 'italic' }}>
+                  Eligibility: {scholarship.eligibility}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <h2
+            style={{
+              fontSize: '32px',
+              fontWeight: 600,
+              color: '#0f172a',
+              marginTop: '48px',
+              marginBottom: '24px',
+            }}
+          >
+            Why Choose CHRIST Kengeri?
+          </h2>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '20px',
+            }}
+          >
+            {[
+              { icon: '🎓', text: 'NAAC A++ Accredited University' },
+              { icon: '🏆', text: 'NBA Accredited Engineering Programs' },
+              { icon: '🌿', text: '78.5 Acres Lush Green Campus' },
+              { icon: '💼', text: 'Strong Industry Connections & Placements' },
+              { icon: '🔬', text: 'State-of-the-art Research Facilities' },
+              { icon: '🌍', text: 'International Exchange Programs' },
+              { icon: '🏠', text: 'On-campus Hostel Accommodation' },
+              { icon: '🚌', text: 'Transport Facilities from City' },
+            ].map((item, i) => (
+              <div
+                key={i}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '16px',
+                  backgroundColor: '#f0fdf4',
+                  borderRadius: '8px',
+                }}
+              >
+                <span style={{ fontSize: '24px' }}>{item.icon}</span>
+                <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 500 }}>
+                  {item.text}
+                </span>
+              </div>
+            ))}
           </div>
         </motion.div>
       </div>

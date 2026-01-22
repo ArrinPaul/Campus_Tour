@@ -50,7 +50,7 @@ export const Contact = () => {
       style={{
         minHeight: '100vh',
         backgroundColor: '#fafafa',
-        padding: '80px 60px',
+        padding: '80px 60px 120px 60px',
       }}
     >
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
@@ -433,6 +433,128 @@ export const Contact = () => {
                 </p>
               </div>
             </div>
+          </div>
+
+          <h2
+            style={{
+              fontSize: '32px',
+              fontWeight: 600,
+              color: '#0f172a',
+              marginTop: '60px',
+              marginBottom: '24px',
+            }}
+          >
+            Frequently Asked Questions
+          </h2>
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              marginBottom: '48px',
+            }}
+          >
+            {[
+              {
+                q: 'What programs are offered at Kengeri Campus?',
+                a: 'Kengeri Campus offers B.Tech, M.Tech, MBA, BBA, B.Com, B.Arch, and various science programs through its schools of Engineering, Business, Architecture, and Sciences.',
+              },
+              {
+                q: 'Is hostel accommodation available?',
+                a: 'Yes, separate hostel facilities for boys and girls are available on campus with modern amenities, mess facilities, and 24/7 security.',
+              },
+              {
+                q: 'How can I apply for admission?',
+                a: 'Applications can be submitted online through the Christ University admissions portal. Visit christuniversity.in/admissions for details and deadlines.',
+              },
+              {
+                q: 'Is transportation provided from the city?',
+                a: 'Yes, the university provides bus services from various points in Bangalore. Private buses and BMTC services also connect to the campus.',
+              },
+              {
+                q: 'What are the placement opportunities?',
+                a: 'The Training and Placement Cell facilitates campus placements with top companies. Engineering graduates have been placed in companies like TCS, Infosys, Wipro, and more.',
+              },
+            ].map((faq, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: '24px',
+                  backgroundColor: 'white',
+                  borderRadius: '12px',
+                  border: '1px solid #e2e8f0',
+                }}
+              >
+                <h4
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    color: '#0f172a',
+                    marginBottom: '8px',
+                  }}
+                >
+                  {faq.q}
+                </h4>
+                <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.6 }}>{faq.a}</p>
+              </div>
+            ))}
+          </div>
+
+          <h2
+            style={{
+              fontSize: '32px',
+              fontWeight: 600,
+              color: '#0f172a',
+              marginTop: '48px',
+              marginBottom: '24px',
+            }}
+          >
+            Connect With Us
+          </h2>
+
+          <div
+            style={{
+              display: 'flex',
+              gap: '16px',
+              flexWrap: 'wrap',
+            }}
+          >
+            {[
+              { name: 'Facebook', url: 'https://www.facebook.com/ChristUniversity/' },
+              { name: 'Instagram', url: 'https://www.instagram.com/christuniversity_official/' },
+              { name: 'Twitter', url: 'https://twitter.com/ChristUni_India' },
+              { name: 'LinkedIn', url: 'https://www.linkedin.com/school/christ-university/' },
+              { name: 'YouTube', url: 'https://www.youtube.com/c/ChristUniversity' },
+            ].map((social, i) => (
+              <a
+                key={i}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  padding: '12px 24px',
+                  backgroundColor: 'white',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                  color: '#0f172a',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#10b981';
+                  e.currentTarget.style.color = '#10b981';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.color = '#0f172a';
+                }}
+              >
+                {social.name}
+              </a>
+            ))}
           </div>
         </motion.div>
       </div>

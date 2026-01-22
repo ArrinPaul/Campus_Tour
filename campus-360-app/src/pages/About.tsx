@@ -8,7 +8,7 @@ export const About = () => {
       style={{
         minHeight: '100vh',
         backgroundColor: '#fafafa',
-        padding: '80px 60px',
+        padding: '80px 60px 120px 60px',
       }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -154,6 +154,174 @@ export const About = () => {
               goes beyond books, beyond instructions, beyond horizons. Here, we enable students to
               learn by capturing experiences and exploring new realms of wisdom.
             </p>
+
+            <h2
+              style={{
+                fontSize: '28px',
+                fontWeight: 600,
+                color: '#0f172a',
+                marginTop: '48px',
+                marginBottom: '20px',
+              }}
+            >
+              Schools & Departments
+            </h2>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: '20px',
+                marginBottom: '32px',
+              }}
+            >
+              {[
+                {
+                  name: 'School of Engineering and Technology',
+                  desc: 'Offers B.Tech programs in CSE, ECE, Civil, Mechanical and more with NBA accreditation.',
+                },
+                {
+                  name: 'School of Business and Management',
+                  desc: 'MBA and BBA programs with focus on industry-ready skills and placements.',
+                },
+                {
+                  name: 'School of Architecture',
+                  desc: 'B.Arch program offering deep insight into built environment through ecological and artistic lenses.',
+                },
+                {
+                  name: 'School of Sciences',
+                  desc: 'UG to post-doctoral programs in Chemistry, Physics, Math, Life Sciences, and Computing.',
+                },
+              ].map((school, i) => (
+                <div
+                  key={i}
+                  style={{
+                    padding: '24px',
+                    backgroundColor: 'white',
+                    borderRadius: '12px',
+                    border: '1px solid #e2e8f0',
+                  }}
+                >
+                  <h4
+                    style={{
+                      fontSize: '16px',
+                      fontWeight: 600,
+                      color: '#10b981',
+                      marginBottom: '8px',
+                    }}
+                  >
+                    {school.name}
+                  </h4>
+                  <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.6 }}>
+                    {school.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <h2
+              style={{
+                fontSize: '28px',
+                fontWeight: 600,
+                color: '#0f172a',
+                marginTop: '48px',
+                marginBottom: '20px',
+              }}
+            >
+              University Rankings & Accreditations
+            </h2>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '16px',
+                marginBottom: '32px',
+              }}
+            >
+              {[
+                { rank: 'NAAC A++', label: 'Accreditation' },
+                { rank: 'QS 1401+', label: 'World Ranking 2026' },
+                { rank: 'NIRF Top 50', label: 'India Ranking 2025' },
+                { rank: 'NBA', label: 'Engineering Accreditation' },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  style={{
+                    padding: '20px',
+                    backgroundColor: '#f0fdf4',
+                    borderRadius: '12px',
+                    textAlign: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: '24px',
+                      fontWeight: 700,
+                      color: '#10b981',
+                      marginBottom: '4px',
+                    }}
+                  >
+                    {item.rank}
+                  </div>
+                  <div style={{ fontSize: '13px', color: '#64748b' }}>{item.label}</div>
+                </div>
+              ))}
+            </div>
+
+            <h2
+              style={{
+                fontSize: '28px',
+                fontWeight: 600,
+                color: '#0f172a',
+                marginTop: '48px',
+                marginBottom: '20px',
+              }}
+            >
+              Campus Life
+            </h2>
+            <p style={{ marginBottom: '20px' }}>
+              The Kengeri Campus offers a vibrant campus life with numerous clubs, events, and
+              activities. Students participate in cultural fests like Magnovite, technical
+              symposiums, sports events, and community outreach programs. The campus provides hostel
+              facilities, health services, NCC, sports facilities, and a well-stocked library.
+            </p>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '24px',
+                marginTop: '32px',
+              }}
+            >
+              {[
+                { stat: '38+', label: 'Countries Represented' },
+                { stat: '90,000+', label: 'Alumni Network' },
+                { stat: '339,053+', label: 'Library Books' },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  style={{
+                    textAlign: 'center',
+                    padding: '24px',
+                    backgroundColor: 'white',
+                    borderRadius: '12px',
+                    border: '1px solid #e2e8f0',
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: '32px',
+                      fontWeight: 700,
+                      color: '#10b981',
+                      marginBottom: '8px',
+                    }}
+                  >
+                    {item.stat}
+                  </div>
+                  <div style={{ fontSize: '14px', color: '#64748b' }}>{item.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>

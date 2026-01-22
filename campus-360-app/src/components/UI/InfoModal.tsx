@@ -57,7 +57,7 @@ export const InfoModal: React.FC = () => {
               </p>
 
               <div className="mt-6 pt-6 border-t border-white/10 text-sm text-white/50">
-                Ã‚Â© 2024 University Name. All rights reserved.
+                Ãƒâ€šÃ‚Â© 2024 University Name. All rights reserved.
               </div>
             </motion.div>
           </motion.div>
