@@ -23,6 +23,17 @@
           },
           "hotspots": [
             { "id": "gatetologo-2", "x": 0, "y": -10, "z": -40, "text": "Move Forward" }
+          ],
+          "pois": [
+            {
+              "id": "poi-gate-1",
+              "x": 30,
+              "y": 5,
+              "z": -20,
+              "title": "Main Entrance Gate",
+              "description": "The grand entrance to the Kengeri Campus, featuring modern architectural design.",
+              "image": "https://christuniversity.in/uploads/facility/large/1220458784_2020-03-02_12-25-06.jpg"
+            }
           ]
         },
         {

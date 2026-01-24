@@ -11,6 +11,17 @@ export type Hotspot = {
   targetBlockId?: string;
 };
 
+export type POI = {
+  id: string;
+  x: number;
+  y: number;
+  z: number;
+  title: string;
+  description: string;
+  image?: string;
+  video?: string;
+};
+
 export type Lab = {
   id: string;
   panorama: string;
@@ -18,6 +29,7 @@ export type Lab = {
   initialLookAt?: { x: number; y: number; z: number };
   links?: { [key: string]: string };
   hotspots?: Hotspot[];
+  pois?: POI[];
 };
 
 export type Block = {
