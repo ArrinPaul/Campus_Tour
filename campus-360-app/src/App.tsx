@@ -7,12 +7,16 @@ import { Loader } from './components/UI/Loader';
 import { ArrowControls } from './components/UI/ArrowControls';
 import { MapOverlay } from './components/UI/MapOverlay';
 import { Landing } from './components/UI/Landing';
+import { TransitionOverlay } from './components/UI/TransitionOverlay';
+import { AmbientAudio } from './components/UI/AmbientAudio';
 import { About } from './pages/About';
 import { Campus } from './pages/Campus';
 import { Admissions } from './pages/Admissions';
 import { Contact } from './pages/Contact';
 import { useTourState } from './hooks/useTourState';
 import { AnimatePresence, motion } from 'framer-motion';
+import { XR } from '@react-three/xr';
+import { xrStore } from './utils/xr';
 
 function TourView() {
   const {
@@ -117,15 +121,19 @@ function TourView() {
                 style={{ width: '100%', height: '100%', display: 'block' }}
                 gl={{ preserveDrawingBuffer: true }}
               >
-                <Suspense fallback={null}>
-                  <Scene />
-                  <Controls />
-                </Suspense>
+                <XR store={xrStore}>
+                  <Suspense fallback={null}>
+                    <Scene />
+                    <Controls />
+                  </Suspense>
+                </XR>
               </Canvas>
             </div>
 
             {/* UI Layer */}
             <Loader />
+            <TransitionOverlay />
+            <AmbientAudio />
             <ArrowControls />
             <MapOverlay />
           </motion.div>

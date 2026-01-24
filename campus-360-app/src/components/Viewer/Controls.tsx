@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useThree, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, DeviceOrientationControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useTourState } from '../../hooks/useTourState';
 
@@ -13,6 +13,7 @@ export const Controls: React.FC = () => {
     cameraRotation,
     cameraZoom,
     isAutoRotating,
+    isGyroEnabled,
     activeRotation,
     setCameraFov,
     cameraFov,
@@ -157,11 +158,15 @@ export const Controls: React.FC = () => {
     }
 
     if (controlsRef.current) {
-      controlsRef.current.autoRotate = isIdle && !isAutoRotating && !rotated && !activeRotation;
+      controlsRef.current.autoRotate = isIdle && !isAutoRotating && !rotated && !activeRotation && !isGyroEnabled;
       controlsRef.current.autoRotateSpeed = 0.5;
       controlsRef.current.update();
     }
   });
+
+  if (isGyroEnabled) {
+    return <DeviceOrientationControls />;
+  }
 
   return (
     <OrbitControls

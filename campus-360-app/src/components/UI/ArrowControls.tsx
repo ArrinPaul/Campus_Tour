@@ -13,8 +13,13 @@ import {
   Mouse,
   MapPin,
   Layers,
+  Smartphone,
+  Glasses,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
+import { xrStore } from '../../utils/xr';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Block, Lab } from '../../hooks/useTourDataStore';
 
@@ -23,6 +28,10 @@ export const ArrowControls = () => {
     zoomCamera,
     isAutoRotating,
     setAutoRotation,
+    isGyroEnabled,
+    setGyroEnabled,
+    isAudioEnabled,
+    setAudioEnabled,
     nextImage,
     previousImage,
     manifest,
@@ -153,6 +162,36 @@ export const ArrowControls = () => {
             title="Locations"
           >
             <Layers size={20} />
+          </button>
+
+          <div className="w-px h-6 bg-white/10" />
+
+          <button
+            onClick={() => setGyroEnabled(!isGyroEnabled)}
+            className={`p-3 rounded-full transition-all ${
+              isGyroEnabled ? 'bg-white text-black' : 'text-white/60 hover:text-white hover:bg-white/10'
+            }`}
+            title="Gyroscope Control"
+          >
+            <Smartphone size={20} />
+          </button>
+
+          <button
+            onClick={() => xrStore.enterVR()}
+            className="p-3 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all"
+            title="Enter VR Mode"
+          >
+            <Glasses size={20} />
+          </button>
+
+          <button
+            onClick={() => setAudioEnabled(!isAudioEnabled)}
+            className={`p-3 rounded-full transition-all ${
+              isAudioEnabled ? 'bg-white text-black' : 'text-white/60 hover:text-white hover:bg-white/10'
+            }`}
+            title="Toggle Audio"
+          >
+            {isAudioEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
           </button>
 
           <div className="w-px h-6 bg-white/10" />
