@@ -55,7 +55,7 @@ export const ArrowControls = () => {
   const handleBlockClick = (blockId: string) => {
     const block = manifest?.blocks?.find((b: Block) => b.id === blockId);
     setBlock(blockId);
-    if (block?.labs?.length > 0) {
+    if (block?.labs && block.labs.length > 0) {
       setImage(block.labs[0].id);
     }
     setShowLocations(false);

@@ -5,6 +5,7 @@ import { Canvas } from '@react-three/fiber';
 import { Controls } from './components/Viewer/Controls';
 import { Loader } from './components/UI/Loader';
 import { ArrowControls } from './components/UI/ArrowControls';
+import { MapOverlay } from './components/UI/MapOverlay';
 import { Landing } from './components/UI/Landing';
 import { About } from './pages/About';
 import { Campus } from './pages/Campus';
@@ -126,6 +127,7 @@ function TourView() {
             {/* UI Layer */}
             <Loader />
             <ArrowControls />
+            <MapOverlay />
           </motion.div>
         )}
       </AnimatePresence>

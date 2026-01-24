@@ -3,6 +3,7 @@ import { useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useTourState } from '../../hooks/useTourState';
 import type { Manifest } from '../../hooks/useTourDataStore';
+import { Hotspots } from './Hotspots';
 
 const SceneContent: React.FC<{ panoramaUrl: string }> = ({ panoramaUrl }) => {
   const texture = useLoader(THREE.TextureLoader, panoramaUrl);
@@ -17,9 +18,12 @@ const SceneContent: React.FC<{ panoramaUrl: string }> = ({ panoramaUrl }) => {
   }, [texture]);
 
   return (
-    <mesh scale={[-1, 1, 1]} material={material}>
-      <sphereGeometry args={[500, 60, 40]} />
-    </mesh>
+    <>
+      <mesh scale={[-1, 1, 1]} material={material}>
+        <sphereGeometry args={[500, 60, 40]} />
+      </mesh>
+      <Hotspots />
+    </>
   );
 };
 

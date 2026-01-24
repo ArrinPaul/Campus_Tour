@@ -2,17 +2,31 @@ import { create } from 'zustand';
 import { preloadImages } from '../utils/textureLoader';
 
 // Type definitions - using type instead of interface for better module exports
+export type Hotspot = {
+  id: string; // Target Image ID or 'next'/'prev'
+  x: number;
+  y: number;
+  z: number;
+  text?: string;
+  targetBlockId?: string;
+};
+
 export type Lab = {
   id: string;
   panorama: string;
   name: string;
   initialLookAt?: { x: number; y: number; z: number };
   links?: { [key: string]: string };
+  hotspots?: Hotspot[];
 };
 
 export type Block = {
   id: string;
-  name: string;
+  name?: string; // made optional as label/short might be used
+  label?: string;
+  short?: string;
+  svgPath?: string;
+  svgAnchor?: { x: number; y: number };
   labs: Lab[];
 };
 

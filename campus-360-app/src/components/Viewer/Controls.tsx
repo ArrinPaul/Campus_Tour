@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { OrbitControls as OrbitControlsImpl } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
