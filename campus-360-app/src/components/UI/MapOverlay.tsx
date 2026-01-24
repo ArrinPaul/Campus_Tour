@@ -5,13 +5,18 @@ import { useTourState } from '../../hooks/useTourState';
 
 export const MapOverlay: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { manifest, currentBlockId, setBlock } = useTourState();
+  const { manifest, currentBlockId, setBlock, currentYaw } = useTourState();
 
   if (!manifest) return null;
 
   // Calculate approximate bounding box to center the map (simple approach)
   // Defaulting to a fixed reasonable canvas for now based on the path data observed
   const viewBox = "0 0 800 500"; 
+
+  // Radar cone rotation calculation (yaw is in radians)
+  // We need to map 3D yaw to 2D rotation. 
+  // In Three.js, Y is up, rotation around Y is horizontal.
+  const radarRotation = (currentYaw * 180) / Math.PI;
 
   return (
     <>
@@ -117,23 +122,32 @@ export const MapOverlay: React.FC = () => {
                           {block.short || block.label}
                         </text>
 
-                        {/* Active Indicator Pulse */}
+                        {/* Active Indicator Pulse & Radar */}
                         {isActive && block.svgAnchor && (
-                          <motion.circle
-                            cx={block.svgAnchor.x}
-                            cy={block.svgAnchor.y}
-                            r="6"
-                            fill="#34d399"
-                            animate={{
-                              scale: [1, 1.5, 1],
-                              opacity: [1, 0.5, 1],
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: "easeInOut"
-                            }}
-                          />
+                          <g transform={`translate(${block.svgAnchor.x}, ${block.svgAnchor.y})`}>
+                            {/* Radar Cone */}
+                            <motion.path
+                              d="M 0 0 L -20 -40 A 45 45 0 0 1 20 -40 Z"
+                              fill="#10b981"
+                              fillOpacity="0.3"
+                              animate={{ rotate: radarRotation }}
+                              transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+                            />
+                            
+                            <motion.circle
+                              r="6"
+                              fill="#34d399"
+                              animate={{
+                                scale: [1, 1.5, 1],
+                                opacity: [1, 0.5, 1],
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                              }}
+                            />
+                          </g>
                         )}
                       </g>
                     );

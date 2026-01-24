@@ -6,6 +6,7 @@ import { Controls } from './components/Viewer/Controls';
 import { Loader } from './components/UI/Loader';
 import { ArrowControls } from './components/UI/ArrowControls';
 import { MapOverlay } from './components/UI/MapOverlay';
+import { Sidebar } from './components/UI/Sidebar';
 import { Landing } from './components/UI/Landing';
 import { TransitionOverlay } from './components/UI/TransitionOverlay';
 import { AmbientAudio } from './components/UI/AmbientAudio';
@@ -134,6 +135,7 @@ function TourView() {
             <Loader />
             <TransitionOverlay />
             <AmbientAudio />
+            <Sidebar />
             <ArrowControls />
             <MapOverlay />
           </motion.div>
