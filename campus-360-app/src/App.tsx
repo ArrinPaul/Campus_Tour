@@ -4,7 +4,10 @@ import { Scene } from './components/Viewer/Scene';
 import { Canvas } from '@react-three/fiber';
 import { Controls } from './components/Viewer/Controls';
 import { Loader } from './components/UI/Loader';
-import { ArrowControls } from './components/UI/ArrowControls';
+import { TopBar } from './components/UI/TopBar';
+import { BottomControls } from './components/UI/BottomControls';
+import { NavArrows } from './components/UI/NavArrows';
+import { Compass } from './components/UI/Compass';
 import { MapOverlay } from './components/UI/MapOverlay';
 import { Sidebar } from './components/UI/Sidebar';
 import { Landing } from './components/UI/Landing';
@@ -140,7 +143,10 @@ function TourView() {
             <GameOverlay />
             <HelpOverlay />
             <Sidebar />
-            <ArrowControls />
+            <TopBar />
+            <BottomControls />
+            <NavArrows />
+            <Compass />
             <MapOverlay />
           </motion.div>
         )}

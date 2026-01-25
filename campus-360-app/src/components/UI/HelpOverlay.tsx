@@ -12,7 +12,7 @@ export const HelpOverlay: React.FC = () => {
     if (isTourStarted) {
       const hasSeenHelp = localStorage.getItem('hasSeenHelp');
       if (!hasSeenHelp) {
-        setIsOpen(true);
+        setTimeout(() => setIsOpen(true), 0);
         localStorage.setItem('hasSeenHelp', 'true');
       }
     }
@@ -61,17 +61,17 @@ export const HelpOverlay: React.FC = () => {
                   <Mouse size={16} /> Desktop
                 </h3>
                 <div className="space-y-4">
-                  <ControlItem 
+                  <ControlItem
                     icon={<Move size={20} />}
                     title="Look Around"
                     text="Click and drag your mouse to rotate the view 360°."
                   />
-                  <ControlItem 
+                  <ControlItem
                     icon={<ZoomIn size={20} />}
                     title="Zoom"
                     text="Use your mouse wheel to zoom in and out."
                   />
-                  <ControlItem 
+                  <ControlItem
                     icon={<span className="font-bold text-lg px-1">W/A/S/D</span>}
                     title="Move"
                     text="Click arrows or use keyboard keys to change scenes."
@@ -85,17 +85,17 @@ export const HelpOverlay: React.FC = () => {
                   <Smartphone size={16} /> Mobile
                 </h3>
                 <div className="space-y-4">
-                  <ControlItem 
+                  <ControlItem
                     icon={<Move size={20} />}
                     title="Touch & Drag"
                     text="Swipe with one finger to look around."
                   />
-                  <ControlItem 
+                  <ControlItem
                     icon={<Smartphone size={20} className="animate-pulse" />}
                     title="Gyro Mode"
                     text="Tap the phone icon to look around by moving your device."
                   />
-                  <ControlItem 
+                  <ControlItem
                     icon={<ZoomIn size={20} />}
                     title="Pinch to Zoom"
                     text="Use two fingers to zoom in and out."
@@ -120,7 +120,15 @@ export const HelpOverlay: React.FC = () => {
   );
 };
 
-const ControlItem = ({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) => (
+const ControlItem = ({
+  icon,
+  title,
+  text,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  text: string;
+}) => (
   <div className="flex gap-4">
     <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white shrink-0">
       {icon}

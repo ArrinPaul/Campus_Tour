@@ -1,47 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Map as MapIcon, X, Navigation } from 'lucide-react';
+import { X, Navigation } from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
 
 export const MapOverlay: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { manifest, currentBlockId, setBlock, currentYaw } = useTourState();
+  const { manifest, currentBlockId, setBlock, currentYaw, isMapOpen, setMapOpen } = useTourState();
 
   if (!manifest) return null;
 
   // Calculate approximate bounding box to center the map (simple approach)
   // Defaulting to a fixed reasonable canvas for now based on the path data observed
-  const viewBox = "0 0 800 500"; 
+  const viewBox = '0 0 800 500';
 
   // Radar cone rotation calculation (yaw is in radians)
-  // We need to map 3D yaw to 2D rotation. 
+  // We need to map 3D yaw to 2D rotation.
   // In Three.js, Y is up, rotation around Y is horizontal.
   const radarRotation = (currentYaw * 180) / Math.PI;
 
   return (
     <>
-      {/* Toggle Button */}
-      <motion.button
-        className="absolute top-4 right-4 z-50 p-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white hover:bg-white/20 transition-all shadow-lg"
-        onClick={() => setIsOpen(true)}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        <MapIcon size={24} />
-      </motion.button>
-
       {/* Map Modal */}
       <AnimatePresence>
-        {isOpen && (
+        {isMapOpen && (
           <motion.div
             className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsOpen(false)}
+            onClick={() => setMapOpen(false)}
           >
             <motion.div
               className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-gray-900/90 rounded-2xl border border-white/10 overflow-hidden shadow-2xl"
@@ -56,7 +42,7 @@ export const MapOverlay: React.FC = () => {
                   Campus Map
                 </h2>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => setMapOpen(false)}
                   className="p-2 hover:bg-white/10 rounded-full text-white/70 hover:text-white transition-colors"
                 >
                   <X size={20} />
@@ -77,12 +63,12 @@ export const MapOverlay: React.FC = () => {
 
                   {/* Connecting Paths (Roads - stylistic representation) */}
                   <path
-                     d="M 140 210 L 500 340"
-                     stroke="white"
-                     strokeWidth="2"
-                     strokeOpacity="0.1"
-                     fill="none"
-                     strokeDasharray="4 4"
+                    d="M 140 210 L 500 340"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeOpacity="0.1"
+                    fill="none"
+                    strokeDasharray="4 4"
                   />
 
                   {/* Blocks */}
@@ -93,7 +79,7 @@ export const MapOverlay: React.FC = () => {
                         key={block.id}
                         onClick={() => {
                           setBlock(block.id);
-                          setIsOpen(false);
+                          setMapOpen(false);
                         }}
                         className="cursor-pointer group"
                       >
@@ -107,14 +93,14 @@ export const MapOverlay: React.FC = () => {
                           whileHover={{ scale: 1.05, fill: isActive ? '#059669' : '#334155' }}
                           transition={{ duration: 0.3 }}
                         />
-                        
+
                         {/* Label */}
                         <text
                           x={block.svgAnchor?.x}
                           y={block.svgAnchor?.y}
                           fill="white"
                           fontSize="12"
-                          fontWeight={isActive ? "bold" : "normal"}
+                          fontWeight={isActive ? 'bold' : 'normal'}
                           textAnchor="middle"
                           dy="-10"
                           className="pointer-events-none select-none drop-shadow-md"
@@ -133,7 +119,7 @@ export const MapOverlay: React.FC = () => {
                               animate={{ rotate: radarRotation }}
                               transition={{ type: 'spring', stiffness: 100, damping: 20 }}
                             />
-                            
+
                             <motion.circle
                               r="6"
                               fill="#34d399"
@@ -144,7 +130,7 @@ export const MapOverlay: React.FC = () => {
                               transition={{
                                 duration: 2,
                                 repeat: Infinity,
-                                ease: "easeInOut"
+                                ease: 'easeInOut',
                               }}
                             />
                           </g>
@@ -153,7 +139,7 @@ export const MapOverlay: React.FC = () => {
                     );
                   })}
                 </svg>
-                
+
                 <div className="absolute bottom-4 left-4 text-xs text-white/40">
                   Click on a highlighted zone to fast-travel.
                 </div>

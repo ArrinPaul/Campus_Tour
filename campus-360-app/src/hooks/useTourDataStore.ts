@@ -83,66 +83,67 @@ export const useTourDataStore = create<TourDataState>((set, get) => ({
   setImage: (imageId) => {
     // Start transition
     set({ isTransitioning: true });
-    
+
     // Delay state update to allow fade-out animation
     setTimeout(() => {
-        set({ currentImageId: imageId });
-        
-          // Preload logic: Load adjacent linear nodes AND hotspot targets
-          const state = get();
-          const currentBlock = state.manifest?.blocks.find((b) => b.id === state.currentBlockId);
-          const currentImage = currentBlock?.labs?.find((lab) => lab.id === imageId);
+      set({ currentImageId: imageId });
 
-          const urlsToPreload: string[] = [];
+      // Preload logic: Load adjacent linear nodes AND hotspot targets
+      const state = get();
+      const currentBlock = state.manifest?.blocks.find((b) => b.id === state.currentBlockId);
+      const currentImage = currentBlock?.labs?.find((lab) => lab.id === imageId);
 
-          if (currentBlock && currentBlock.labs) {
-            const currentIndex = currentBlock.labs.findIndex((lab) => lab.id === imageId);
-            if (currentIndex !== -1) {
-              const nextIndex = (currentIndex + 1) % currentBlock.labs.length;
-              const prevIndex = currentIndex === 0 ? currentBlock.labs.length - 1 : currentIndex - 1;
-              if (currentBlock.labs[nextIndex]) urlsToPreload.push(currentBlock.labs[nextIndex].panorama);
-              if (currentBlock.labs[prevIndex]) urlsToPreload.push(currentBlock.labs[prevIndex].panorama);
+      const urlsToPreload: string[] = [];
+
+      if (currentBlock && currentBlock.labs) {
+        const currentIndex = currentBlock.labs.findIndex((lab) => lab.id === imageId);
+        if (currentIndex !== -1) {
+          const nextIndex = (currentIndex + 1) % currentBlock.labs.length;
+          const prevIndex = currentIndex === 0 ? currentBlock.labs.length - 1 : currentIndex - 1;
+          if (currentBlock.labs[nextIndex])
+            urlsToPreload.push(currentBlock.labs[nextIndex].panorama);
+          if (currentBlock.labs[prevIndex])
+            urlsToPreload.push(currentBlock.labs[prevIndex].panorama);
+        }
+
+        // Preload Hotspots
+        if (currentImage?.hotspots) {
+          currentImage.hotspots.forEach((hotspot) => {
+            // Search in current block first
+            let targetLab = currentBlock.labs.find((l) => l.id === hotspot.id);
+            // If not found (cross-block link), search globally (simplified for now)
+            if (!targetLab && state.manifest) {
+              for (const b of state.manifest.blocks) {
+                const found = b.labs.find((l) => l.id === hotspot.id);
+                if (found) {
+                  targetLab = found;
+                  break;
+                }
+              }
             }
-            
-            // Preload Hotspots
-            if (currentImage?.hotspots) {
-                currentImage.hotspots.forEach(hotspot => {
-                    // Search in current block first
-                    let targetLab = currentBlock.labs.find(l => l.id === hotspot.id);
-                    // If not found (cross-block link), search globally (simplified for now)
-                    if (!targetLab && state.manifest) {
-                        for(const b of state.manifest.blocks) {
-                            const found = b.labs.find(l => l.id === hotspot.id);
-                            if(found) {
-                                targetLab = found;
-                                break;
-                            }
-                        }
-                    }
-                    if (targetLab) {
-                        urlsToPreload.push(targetLab.panorama);
-                    }
-                });
+            if (targetLab) {
+              urlsToPreload.push(targetLab.panorama);
             }
-          }
+          });
+        }
+      }
 
-          // Deduplicate and preload
-          const uniqueUrls = [...new Set(urlsToPreload)];
-          if (uniqueUrls.length > 0) {
-              preloadImages(uniqueUrls);
-          }
-    
-        set((state) => {
-          const newHistory = [imageId, ...state.history.filter((id) => id !== imageId)].slice(0, 5);
-          localStorage.setItem('tour-history', JSON.stringify(newHistory));
-          return { history: newHistory };
-        });
+      // Deduplicate and preload
+      const uniqueUrls = [...new Set(urlsToPreload)];
+      if (uniqueUrls.length > 0) {
+        preloadImages(uniqueUrls);
+      }
 
-        // End transition after a slight delay to allow fade-in
-        setTimeout(() => {
-             set({ isTransitioning: false });
-        }, 500); 
+      set((state) => {
+        const newHistory = [imageId, ...state.history.filter((id) => id !== imageId)].slice(0, 5);
+        localStorage.setItem('tour-history', JSON.stringify(newHistory));
+        return { history: newHistory };
+      });
 
+      // End transition after a slight delay to allow fade-in
+      setTimeout(() => {
+        set({ isTransitioning: false });
+      }, 500);
     }, 300); // Wait for fade-out
   },
   addToHistory: (imageId) =>

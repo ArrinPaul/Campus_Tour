@@ -1,45 +1,12 @@
-import { useState } from 'react';
-import {
-  ChevronLeft,
-  ChevronRight,
-  Play,
-  Pause,
-  ZoomIn,
-  ZoomOut,
-  Maximize,
-  Minimize,
-  HelpCircle,
-  X,
-  MapPin,
-  Layers,
-  Smartphone,
-  Glasses,
-  Volume2,
-  VolumeX,
-} from 'lucide-react';
-import { useTourState } from '../../hooks/useTourState';
-import { xrStore } from '../../utils/xr';
+import React, { useState } from 'react';
+import { ChevronRight, MapPin, Maximize, Minimize, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { Block, Lab } from '../../hooks/useTourDataStore';
+import { useTourState } from '../../hooks/useTourState';
+import type { Block } from '../../hooks/useTourDataStore';
+import { X } from 'lucide-react';
 
-export const ArrowControls = () => {
-  const {
-    zoomCamera,
-    isAutoRotating,
-    setAutoRotation,
-    isGyroEnabled,
-    setGyroEnabled,
-    isAudioEnabled,
-    setAudioEnabled,
-    nextImage,
-    previousImage,
-    manifest,
-    currentBlockId,
-    currentImageId,
-    setBlock,
-    setImage,
-    setIdle,
-  } = useTourState();
+export const TopBar: React.FC = () => {
+  const { manifest, currentBlockId, currentImageId, setBlock, setImage, setIdle } = useTourState();
   const [showLocations, setShowLocations] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -53,14 +20,12 @@ export const ArrowControls = () => {
     }
   };
 
-  const currentBlock: Block | undefined = manifest?.blocks?.find(
-    (b: Block) => b.id === currentBlockId
-  );
-  const currentIndex = currentBlock?.labs?.findIndex((l: Lab) => l.id === currentImageId) ?? 0;
+  const currentBlock = manifest?.blocks?.find((b) => b.id === currentBlockId);
+  const currentIndex = currentBlock?.labs?.findIndex((l) => l.id === currentImageId) ?? 0;
   const totalViews = currentBlock?.labs?.length ?? 0;
 
   const handleBlockClick = (blockId: string) => {
-    const block = manifest?.blocks?.find((b: Block) => b.id === blockId);
+    const block = manifest?.blocks?.find((b) => b.id === blockId);
     setBlock(blockId);
     if (block?.labs && block.labs.length > 0) {
       setImage(block.labs[0].id);
@@ -118,110 +83,6 @@ export const ArrowControls = () => {
         >
           <HelpCircle size={18} />
         </button>
-      </motion.div>
-
-      {/* Left Arrow - Previous */}
-      <motion.button
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        whileHover={{ scale: 1.1, x: -2 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={previousImage}
-        className="fixed left-6 top-1/2 -translate-y-1/2 z-40 p-4 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-black/50 transition-all shadow-lg"
-      >
-        <ChevronLeft size={24} />
-      </motion.button>
-
-      {/* Right Arrow - Next */}
-      <motion.button
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        whileHover={{ scale: 1.1, x: 2 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={nextImage}
-        className="fixed right-6 top-1/2 -translate-y-1/2 z-40 p-4 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-black/50 transition-all shadow-lg"
-      >
-        <ChevronRight size={24} />
-      </motion.button>
-
-      {/* Bottom Center - Controls */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40"
-      >
-        <div className="flex items-center gap-2 p-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/10">
-          <button
-            onClick={() => setShowLocations(true)}
-            className="p-3 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all"
-            title="Locations"
-          >
-            <Layers size={20} />
-          </button>
-
-          <div className="w-px h-6 bg-white/10" />
-
-          <button
-            onClick={() => setGyroEnabled(!isGyroEnabled)}
-            className={`p-3 rounded-full transition-all ${
-              isGyroEnabled ? 'bg-white text-black' : 'text-white/60 hover:text-white hover:bg-white/10'
-            }`}
-            title="Gyroscope Control"
-          >
-            <Smartphone size={20} />
-          </button>
-
-          <button
-            onClick={() => xrStore.enterVR()}
-            className="p-3 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all"
-            title="Enter VR Mode"
-          >
-            <Glasses size={20} />
-          </button>
-
-          <button
-            onClick={() => setAudioEnabled(!isAudioEnabled)}
-            className={`p-3 rounded-full transition-all ${
-              isAudioEnabled ? 'bg-white text-black' : 'text-white/60 hover:text-white hover:bg-white/10'
-            }`}
-            title="Toggle Audio"
-          >
-            {isAudioEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
-          </button>
-
-          <div className="w-px h-6 bg-white/10" />
-
-          <button
-            onClick={() => zoomCamera('out')}
-            className="p-3 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all"
-            title="Zoom Out"
-          >
-            <ZoomOut size={20} />
-          </button>
-
-          <button
-            onClick={() => setAutoRotation(!isAutoRotating)}
-            className="p-4 rounded-full bg-white text-black hover:bg-white/90 transition-all shadow-lg"
-            title={isAutoRotating ? 'Pause' : 'Play'}
-          >
-            {isAutoRotating ? (
-              <Pause size={22} strokeWidth={2.5} />
-            ) : (
-              <Play size={22} strokeWidth={2.5} className="ml-0.5" />
-            )}
-          </button>
-
-          <button
-            onClick={() => zoomCamera('in')}
-            className="p-3 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all"
-            title="Zoom In"
-          >
-            <ZoomIn size={20} />
-          </button>
-        </div>
       </motion.div>
 
       {/* Locations Modal */}
@@ -284,4 +145,3 @@ export const ArrowControls = () => {
     </>
   );
 };
-

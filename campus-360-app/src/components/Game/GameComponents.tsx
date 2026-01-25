@@ -45,7 +45,7 @@ export const Collectible: React.FC<{ id: string; position: [number, number, numb
         <octahedronGeometry args={[0.5, 0]} />
         <meshStandardMaterial color="#fbbf24" emissive="#f59e0b" emissiveIntensity={0.5} />
       </mesh>
-      
+
       {/* Sparkle Effect */}
       <Html center>
         <div className={`transition-opacity duration-300 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
@@ -85,7 +85,7 @@ export const GameOverlay: React.FC = () => {
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-gradient-to-br from-yellow-500 to-orange-600 p-1 rounded-2xl max-w-sm w-full shadow-2xl animate-bounce-in">
             <div className="bg-black/90 rounded-xl p-8 text-center relative overflow-hidden">
-               <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
               <Trophy size={64} className="text-yellow-400 mx-auto mb-4 drop-shadow-lg" />
               <h2 className="text-3xl font-bold text-white mb-2">You Won!</h2>
               <p className="text-yellow-100 mb-6">You found all the hidden items on campus!</p>

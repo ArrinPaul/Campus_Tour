@@ -46,9 +46,7 @@
             "filename": "img2.jpg",
             "directory": "Gate_to_Logo"
           },
-          "hotspots": [
-            { "id": "gatetologo-1", "x": 0, "y": -10, "z": 40, "text": "Go Back" }
-          ]
+          "hotspots": [{ "id": "gatetologo-1", "x": 0, "y": -10, "z": 40, "text": "Go Back" }]
         },
         {
           "id": "gatetologo-3",

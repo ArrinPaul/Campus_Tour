@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { useTourState } from '../../hooks/useTourState';
+import type { Hotspot } from '../../hooks/useTourDataStore';
 import { ChevronUp } from 'lucide-react';
 
 export const Hotspots: React.FC = () => {
@@ -26,7 +27,7 @@ export const Hotspots: React.FC = () => {
               setBlock(hotspot.targetBlockId);
             }
             if (hotspot.id) {
-               setImage(hotspot.id);
+              setImage(hotspot.id);
             }
           }}
         />
@@ -35,13 +36,7 @@ export const Hotspots: React.FC = () => {
   );
 };
 
-const HotspotMarker = ({
-  hotspot,
-  onClick,
-}: {
-  hotspot: any;
-  onClick: () => void;
-}) => {
+const HotspotMarker = ({ hotspot, onClick }: { hotspot: Hotspot; onClick: () => void }) => {
   const meshRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
 
@@ -94,14 +89,14 @@ const HotspotMarker = ({
             </div>
           )}
           <div className="p-2 bg-white/10 rounded-full border border-white/30 backdrop-blur-sm animate-bounce">
-             <ChevronUp className="w-5 h-5 text-emerald-400" />
+            <ChevronUp className="w-5 h-5 text-emerald-400" />
           </div>
         </div>
       </Html>
-      
+
       {/* LookAt Camera Constraint - simplified by using Billboard if needed, but Circle geometry + rotation works */}
       <mesh rotation={[0, 0, 0]}>
-         {/* This is just a placeholder. For better facing, we might use sprite or lookAt in useFrame */}
+        {/* This is just a placeholder. For better facing, we might use sprite or lookAt in useFrame */}
       </mesh>
     </group>
   );
