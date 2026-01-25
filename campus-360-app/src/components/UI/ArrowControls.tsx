@@ -10,7 +10,6 @@ import {
   Minimize,
   HelpCircle,
   X,
-  Mouse,
   MapPin,
   Layers,
   Smartphone,
@@ -41,7 +40,6 @@ export const ArrowControls = () => {
     setImage,
     setIdle,
   } = useTourState();
-  const [showInfo, setShowInfo] = useState(false);
   const [showLocations, setShowLocations] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -115,7 +113,7 @@ export const ArrowControls = () => {
           {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
         </button>
         <button
-          onClick={() => setShowInfo(true)}
+          onClick={() => window.dispatchEvent(new CustomEvent('open-help-modal'))}
           className="p-2.5 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-black/50 transition-all"
         >
           <HelpCircle size={18} />
@@ -283,83 +281,7 @@ export const ArrowControls = () => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Help Modal */}
-      <AnimatePresence>
-        {showInfo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowInfo(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="bg-zinc-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 max-w-sm w-full shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-white">How to Navigate</h2>
-                <button
-                  onClick={() => setShowInfo(false)}
-                  className="p-2 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-all"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                <HelpItem
-                  icon={<Mouse size={18} />}
-                  title="Look Around"
-                  description="Click and drag to explore the view"
-                />
-                <HelpItem
-                  icon={<span className="text-xs font-bold">SCROLL</span>}
-                  title="Zoom In/Out"
-                  description="Use scroll wheel or pinch gesture"
-                />
-                <HelpItem
-                  icon={<ChevronLeft size={16} />}
-                  title="Navigate Views"
-                  description="Use arrow buttons or keyboard arrows"
-                />
-                <HelpItem
-                  icon={<Play size={16} />}
-                  title="Auto-Rotate"
-                  description="Press play to auto-rotate the view"
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 };
 
-function HelpItem({
-  icon,
-  title,
-  description,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="flex items-start gap-4 p-3 rounded-xl bg-white/5 border border-white/5">
-      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 text-white/60 shrink-0">
-        {icon}
-      </div>
-      <div>
-        <h3 className="text-sm font-medium text-white">{title}</h3>
-        <p className="text-xs text-white/50 mt-0.5">{description}</p>
-      </div>
-    </div>
-  );
-}

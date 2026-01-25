@@ -5,9 +5,11 @@ import { useTourState } from '../../hooks/useTourState';
 import type { Manifest } from '../../hooks/useTourDataStore';
 import { Hotspots } from './Hotspots';
 import { PointsOfInterest } from './PointsOfInterest';
+import { SceneGameItems } from './SceneGameItems';
 
 const SceneContent: React.FC<{ panoramaUrl: string }> = ({ panoramaUrl }) => {
   const texture = useLoader(THREE.TextureLoader, panoramaUrl);
+  const { currentImageId } = useTourState();
 
   const material = useMemo(() => {
     const clonedTexture = texture.clone();
@@ -25,6 +27,7 @@ const SceneContent: React.FC<{ panoramaUrl: string }> = ({ panoramaUrl }) => {
       </mesh>
       <Hotspots />
       <PointsOfInterest />
+      {currentImageId && <SceneGameItems currentImageId={currentImageId} />}
     </>
   );
 };

@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, X, ChevronRight, Compass } from 'lucide-react';
+import { Search, MapPin, X, ChevronRight, Compass, Share2, Check, Gamepad2 } from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
+import { useGameStore } from '../../hooks/useGameStore';
 import type { Block } from '../../hooks/useTourDataStore';
 
 export const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [copied, setCopied] = useState(false);
   const { manifest, currentBlockId, setBlock, setImage } = useTourState();
+  const { isGameActive, setGameActive, resetGame } = useGameStore();
 
   if (!manifest) return null;
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const filteredBlocks = manifest.blocks.filter(block => 
     (block.name || block.label || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -54,16 +63,49 @@ export const Sidebar: React.FC = () => {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 left-0 h-full w-80 bg-gray-900/95 border-r border-white/10 z-[70] flex flex-col shadow-2xl"
+              className="fixed top-0 left-0 h-full w-full sm:w-80 bg-gray-900/95 border-r border-white/10 z-[70] flex flex-col shadow-2xl"
             >
               <div className="p-6 flex justify-between items-center border-b border-white/10">
                 <h2 className="text-xl font-bold text-white">Explore Campus</h2>
-                <button 
-                  onClick={() => setIsOpen(false)}
-                  className="p-2 hover:bg-white/10 rounded-full text-white/50 hover:text-white transition-colors"
-                >
-                  <X size={20} />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleShare}
+                    className="p-2 hover:bg-white/10 rounded-full text-white/50 hover:text-white transition-colors relative group"
+                    title="Share current view"
+                  >
+                    {copied ? <Check size={20} className="text-emerald-400" /> : <Share2 size={20} />}
+                    {copied && (
+                      <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-black text-white px-2 py-1 rounded whitespace-nowrap">
+                        Copied!
+                      </span>
+                    )}
+                  </button>
+                  <button 
+                    onClick={() => setIsOpen(false)}
+                    className="p-2 hover:bg-white/10 rounded-full text-white/50 hover:text-white transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Game Toggle */}
+              <div className="px-4 pt-2">
+                 <button
+                  onClick={() => {
+                    if (!isGameActive) resetGame();
+                    else setGameActive(false);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full py-3 rounded-xl flex items-center justify-center gap-2 font-semibold transition-all ${
+                    isGameActive 
+                    ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/50' 
+                    : 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 border border-yellow-500/50'
+                  }`}
+                 >
+                   <Gamepad2 size={20} />
+                   {isGameActive ? 'Stop Scavenger Hunt' : 'Start Scavenger Hunt'}
+                 </button>
               </div>
 
               {/* Search Bar */}

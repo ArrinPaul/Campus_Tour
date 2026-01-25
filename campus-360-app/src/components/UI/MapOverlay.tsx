@@ -44,7 +44,7 @@ export const MapOverlay: React.FC = () => {
             onClick={() => setIsOpen(false)}
           >
             <motion.div
-              className="relative w-full max-w-4xl bg-gray-900/90 rounded-2xl border border-white/10 overflow-hidden shadow-2xl"
+              className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-gray-900/90 rounded-2xl border border-white/10 overflow-hidden shadow-2xl"
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
@@ -63,10 +63,10 @@ export const MapOverlay: React.FC = () => {
                 </button>
               </div>
 
-              <div className="relative aspect-video w-full bg-[#0f172a] p-8">
+              <div className="relative w-full h-full bg-[#0f172a] p-4 md:p-8 overflow-auto flex-1 flex items-center justify-center">
                 <svg
                   viewBox={viewBox}
-                  className="w-full h-full drop-shadow-xl"
+                  className="w-full h-full max-h-[70vh] drop-shadow-xl"
                   style={{ filter: 'drop-shadow(0 0 20px rgba(16, 185, 129, 0.1))' }}
                 >
                   {/* Background Grid (Optional) */}

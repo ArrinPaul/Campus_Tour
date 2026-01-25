@@ -1,35 +1,17 @@
-# Implementation Plan
+# Remaining Tasks
 
-## Phase 1: Core Navigation & Map System
-- [ ] **Interactive Map Component**:
-    - [ ] Create `MapOverlay` component using `svgPath` data from manifest.
-    - [ ] Implement current location indicator (dot + radar cone).
-    - [ ] Add click handlers to switch Blocks.
-- [ ] **Spatial Links (Hotspots)**:
-    - [ ] Update data store to handle `links` (node-to-node connections).
-    - [ ] Create `Hotspot` 3D component in the Scene.
-    - [ ] Implement click-to-move logic.
+## User Experience & Interface
+- [ ] **Share View Button**: Add a button to the UI that copies the current URL (which already syncs `block` and `view` parameters) to the clipboard.
+- [ ] **Help/Controls Overlay**: Add a startup overlay or a permanent "Help" button explaining controls (Drag to rotate, Scroll to zoom, Click arrows/hotspots).
+- [ ] **Loading Optimization**: Implement a smarter pre-loading strategy for "nearby" nodes (linked via hotspots) rather than just linear next/prev.
 
-## Phase 2: Enhanced UI & Information
-- [ ] **Point of Interest (POI) System**:
-    - [ ] Define POI structure in `manifest.json`.
-    - [ ] Create `Html` markers in Three.js scene.
-    - [ ] Build `InfoModal` for displaying POI content.
-- [ ] **Quick Jump Menu**:
-    - [ ] Refactor existing block navigation into a sidebar/drawer.
-    - [ ] Add search functionality for rooms/labs.
+## Advanced Features
+- [ ] **Gamification - "Campus Scavenger Hunt"**:
+    - [ ] Add a global state for "collected items".
+    - [ ] Place hidden collectibles (e.g., University Mascot icons) in specific scenes.
+    - [ ] Show a "Trophy" or "Success" modal when all are found.
+- [ ] **Compass/Orientation UI**: Refine the compass/radar to be always visible or integrated better into the mobile UI.
 
-## Phase 3: Mobile Experience & Polish
-- [ ] **Gyroscope Controls**:
-    - [ ] Integrate DeviceOrientation API for mobile camera control.
-- [ ] **Transitions**:
-    - [ ] Add fade-to-black or cross-dissolve effects when switching images.
-- [ ] **Loading States**:
-    - [ ] Improve progress bar visualization.
-    - [ ] Implement smarter pre-loading for adjacent nodes.
-
-## Phase 4: VR & Advanced
-- [ ] **VR Support**:
-    - [ ] Add VR button to toggle split-screen stereo rendering.
-- [ ] **Audio System**:
-    - [ ] Add ambient background audio support.
+## Polish & Clean up
+- [ ] **Asset Placeholder Cleanup**: Ensure no broken image links if placeholders are used.
+- [ ] **Code Refactoring**: Extract large components (like `ArrowControls`) into smaller sub-components if they have grown too large.

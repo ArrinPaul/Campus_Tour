@@ -10,14 +10,16 @@ import { Sidebar } from './components/UI/Sidebar';
 import { Landing } from './components/UI/Landing';
 import { TransitionOverlay } from './components/UI/TransitionOverlay';
 import { AmbientAudio } from './components/UI/AmbientAudio';
-import { About } from './pages/About';
-import { Campus } from './pages/Campus';
-import { Admissions } from './pages/Admissions';
-import { Contact } from './pages/Contact';
+import { GameOverlay } from './components/Game/GameComponents';
+import { HelpOverlay } from './components/UI/HelpOverlay';
 import { useTourState } from './hooks/useTourState';
 import { AnimatePresence, motion } from 'framer-motion';
 import { XR } from '@react-three/xr';
 import { xrStore } from './utils/xr';
+import { About } from './pages/About';
+import { Campus } from './pages/Campus';
+import { Admissions } from './pages/Admissions';
+import { Contact } from './pages/Contact';
 
 function TourView() {
   const {
@@ -135,6 +137,8 @@ function TourView() {
             <Loader />
             <TransitionOverlay />
             <AmbientAudio />
+            <GameOverlay />
+            <HelpOverlay />
             <Sidebar />
             <ArrowControls />
             <MapOverlay />
