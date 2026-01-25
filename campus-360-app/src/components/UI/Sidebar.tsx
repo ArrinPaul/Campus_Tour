@@ -1,14 +1,28 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, X, ChevronRight, Compass, Share2, Check, Gamepad2 } from 'lucide-react';
+import {
+  Search,
+  MapPin,
+  X,
+  ChevronRight,
+  Compass,
+  Share2,
+  Check,
+  Gamepad2,
+  Info,
+} from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
 import { useGameStore } from '../../hooks/useGameStore';
+import { SocialShare } from './SocialShare';
+import { RequestInfoModal } from './RequestInfoModal';
 import type { Block } from '../../hooks/useTourDataStore';
 
 export const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [copied, setCopied] = useState(false);
+  const [showSocial, setShowSocial] = useState(false);
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
   const { manifest, currentBlockId, setBlock, setImage } = useTourState();
   const { isGameActive, setGameActive, resetGame } = useGameStore();
 
@@ -36,6 +50,8 @@ export const Sidebar: React.FC = () => {
 
   return (
     <>
+      <RequestInfoModal isOpen={isRequestModalOpen} onClose={() => setIsRequestModalOpen(false)} />
+
       {/* Sidebar Toggle Button */}
       <motion.button
         className="fixed top-20 left-4 z-40 p-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white hover:bg-white/20 transition-all shadow-lg"
@@ -69,22 +85,43 @@ export const Sidebar: React.FC = () => {
               <div className="p-6 flex justify-between items-center border-b border-white/10">
                 <h2 className="text-xl font-bold text-white">Explore Campus</h2>
                 <div className="flex items-center gap-2">
-                  <button
-                    onClick={handleShare}
-                    className="p-2 hover:bg-white/10 rounded-full text-white/50 hover:text-white transition-colors relative group"
-                    title="Share current view"
-                  >
-                    {copied ? (
-                      <Check size={20} className="text-emerald-400" />
-                    ) : (
-                      <Share2 size={20} />
-                    )}
-                    {copied && (
-                      <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-black text-white px-2 py-1 rounded whitespace-nowrap">
-                        Copied!
-                      </span>
-                    )}
-                  </button>
+                  <div className="flex items-center gap-2 relative">
+                    <AnimatePresence>
+                      {showSocial && (
+                        <motion.div
+                          initial={{ opacity: 0, x: 10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 10 }}
+                          className="absolute right-full mr-2 bg-black/60 backdrop-blur-md p-2 rounded-full flex gap-2 border border-white/10 shadow-xl"
+                        >
+                          <SocialShare
+                            shareUrl={window.location.href}
+                            shareTitle="Take a 360° virtual tour of CHRIST University Kengeri Campus!"
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <button
+                      onClick={() => setShowSocial(!showSocial)}
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        handleShare();
+                      }}
+                      className={`p-2 rounded-full transition-colors relative group ${showSocial ? 'bg-emerald-500 text-white' : 'text-white/50 hover:bg-white/10 hover:text-white'}`}
+                      title="Share options (Right-click to copy link)"
+                    >
+                      {copied ? (
+                        <Check size={20} className="text-emerald-400" />
+                      ) : (
+                        <Share2 size={20} />
+                      )}
+                      {copied && (
+                        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-black text-white px-2 py-1 rounded whitespace-nowrap">
+                          Copied!
+                        </span>
+                      )}
+                    </button>
+                  </div>
                   <button
                     onClick={() => setIsOpen(false)}
                     className="p-2 hover:bg-white/10 rounded-full text-white/50 hover:text-white transition-colors"
@@ -169,7 +206,14 @@ export const Sidebar: React.FC = () => {
               </div>
 
               {/* CTA at Bottom */}
-              <div className="p-6 border-t border-white/10">
+              <div className="p-6 border-t border-white/10 space-y-3">
+                <button
+                  className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-xl transition-all border border-white/10 flex items-center justify-center gap-2"
+                  onClick={() => setIsRequestModalOpen(true)}
+                >
+                  <Info size={18} />
+                  Request Info
+                </button>
                 <button
                   className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-emerald-900/20 active:scale-95"
                   onClick={() => window.open('https://christuniversity.in/apply-online', '_blank')}

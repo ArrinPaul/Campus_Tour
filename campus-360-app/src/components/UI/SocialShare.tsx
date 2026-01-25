@@ -51,33 +51,33 @@ export const SocialShare: React.FC<SocialShareProps> = ({ shareUrl, shareTitle }
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex gap-2">
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={shareOnFacebook}
-        className="p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg transition-all"
+        className="p-1.5 rounded-full bg-white/10 hover:bg-blue-600 text-white transition-all"
         aria-label="Share on Facebook"
       >
-        <Facebook size={20} />
+        <Facebook size={16} />
       </motion.button>
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={shareOnTwitter}
-        className="p-3 rounded-full bg-blue-400 hover:bg-blue-500 text-white shadow-lg transition-all"
+        className="p-1.5 rounded-full bg-white/10 hover:bg-sky-500 text-white transition-all"
         aria-label="Share on Twitter"
       >
-        <Twitter size={20} />
+        <Twitter size={16} />
       </motion.button>
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={shareOnLinkedin}
-        className="p-3 rounded-full bg-blue-700 hover:bg-blue-800 text-white shadow-lg transition-all"
+        className="p-1.5 rounded-full bg-white/10 hover:bg-blue-700 text-white transition-all"
         aria-label="Share on LinkedIn"
       >
-        <Linkedin size={20} />
+        <Linkedin size={16} />
       </motion.button>
     </div>
   );

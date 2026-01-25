@@ -89,17 +89,33 @@ const POIMarker = ({
 
                 <div className="p-5">
                   <h3 className="text-lg font-bold text-gray-900 mb-2">{poi.title}</h3>
+
                   <p className="text-sm text-gray-600 leading-relaxed mb-4">{poi.description}</p>
 
                   {poi.video && (
-                    <a
-                      href={poi.video}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center text-xs font-semibold text-emerald-600 hover:text-emerald-700 uppercase tracking-wider"
-                    >
-                      Watch Video →
-                    </a>
+                    <div className="mt-4 rounded-lg overflow-hidden bg-black aspect-video">
+                      {poi.video.includes('youtube.com') || poi.video.includes('youtu.be') ? (
+                        <iframe
+                          className="w-full h-full"
+                          src={poi.video
+                            .replace('watch?v=', 'embed/')
+                            .replace('youtu.be/', 'youtube.com/embed/')}
+                          title="YouTube video player"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <a
+                          href={poi.video}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-xs font-semibold text-emerald-600 hover:text-emerald-700 uppercase tracking-wider"
+                        >
+                          Watch Video External →
+                        </a>
+                      )}
+                    </div>
                   )}
                 </div>
               </motion.div>
