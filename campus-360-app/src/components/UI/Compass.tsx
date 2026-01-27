@@ -1,34 +1,44 @@
 import React from 'react';
-import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Navigation } from 'lucide-react';
+import { useTourState } from '../../hooks/useTourState';
 
 export const Compass: React.FC = () => {
-  const handleMove = (direction: 'up' | 'down' | 'left' | 'right') => {
-    // Dispatch custom event for controls to listen to
-    window.dispatchEvent(new CustomEvent('compass-move', { detail: direction }));
-  };
+  const { currentYaw } = useTourState();
 
-  const btnClass =
-    'p-3 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 backdrop-blur-xl rounded-full text-white border border-white/25 hover:border-white/40 hover:from-indigo-500/30 hover:to-purple-500/30 active:scale-90 transition-all duration-200 shadow-lg hover:shadow-[0_0_20px_rgba(102,126,234,0.4)]';
+  // Convert yaw (radians) to degrees for CSS rotation
+  // Three.js rotation.y is usually counter-clockwise in radians
+  const rotationDegrees = (currentYaw * 180) / Math.PI;
 
   return (
-    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-black/30 to-black/20 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl">
-      <button className={btnClass} onClick={() => handleMove('up')}>
-        <ChevronUp size={24} strokeWidth={2.5} />
-      </button>
-      <div className="flex gap-3">
-        <button className={btnClass} onClick={() => handleMove('left')}>
-          <ChevronLeft size={24} strokeWidth={2.5} />
-        </button>
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-white/10 flex items-center justify-center">
-          <div className="w-2 h-2 rounded-full bg-white/50"></div>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="fixed bottom-24 right-6 z-30 hidden md:block"
+    >
+      <div className="relative w-16 h-16 rounded-full bg-black/40 backdrop-blur-md border border-white/20 shadow-xl flex items-center justify-center">
+        {/* Cardinal Directions */}
+        <div className="absolute top-1 left-1/2 -translate-x-1/2 text-[10px] font-bold text-white/80">
+          N
         </div>
-        <button className={btnClass} onClick={() => handleMove('right')}>
-          <ChevronRight size={24} strokeWidth={2.5} />
-        </button>
+        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[10px] font-bold text-white/40">
+          S
+        </div>
+        <div className="absolute left-1 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/40">
+          W
+        </div>
+        <div className="absolute right-1 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/40">
+          E
+        </div>
+
+        {/* Rotating Needle */}
+        <div
+          className="w-full h-full flex items-center justify-center transition-transform duration-100 ease-out"
+          style={{ transform: `rotate(${rotationDegrees}deg)` }}
+        >
+          <Navigation size={24} className="text-emerald-400 fill-emerald-400/20" />
+        </div>
       </div>
-      <button className={btnClass} onClick={() => handleMove('down')}>
-        <ChevronDown size={24} strokeWidth={2.5} />
-      </button>
-    </div>
+    </motion.div>
   );
 };

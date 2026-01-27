@@ -1,10 +1,10 @@
-import { defineConfig } from 'vite';
+/// <reference types="vitest" />
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import Terminal from 'vite-plugin-terminal';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), Terminal({ console: 'terminal' })],
+  plugins: [react()],
   test: {
     globals: true,
     environment: 'jsdom',

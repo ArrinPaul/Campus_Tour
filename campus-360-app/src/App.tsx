@@ -4,14 +4,25 @@ import { Scene } from './components/Viewer/Scene';
 import { Canvas } from '@react-three/fiber';
 import { Controls } from './components/Viewer/Controls';
 import { Loader } from './components/UI/Loader';
-import { ArrowControls } from './components/UI/ArrowControls';
+import { TopBar } from './components/UI/TopBar';
+import { BottomControls } from './components/UI/BottomControls';
+import { NavArrows } from './components/UI/NavArrows';
+import { Compass } from './components/UI/Compass';
+import { MapOverlay } from './components/UI/MapOverlay';
+import { Sidebar } from './components/UI/Sidebar';
 import { Landing } from './components/UI/Landing';
+import { TransitionOverlay } from './components/UI/TransitionOverlay';
+import { AmbientAudio } from './components/UI/AmbientAudio';
+import { GameOverlay } from './components/Game/GameComponents';
+import { HelpOverlay } from './components/UI/HelpOverlay';
+import { useTourState } from './hooks/useTourState';
+import { AnimatePresence, motion } from 'framer-motion';
+import { XR } from '@react-three/xr';
+import { xrStore } from './utils/xr';
 import { About } from './pages/About';
 import { Campus } from './pages/Campus';
 import { Admissions } from './pages/Admissions';
 import { Contact } from './pages/Contact';
-import { useTourState } from './hooks/useTourState';
-import { AnimatePresence, motion } from 'framer-motion';
 
 function TourView() {
   const {
@@ -116,16 +127,27 @@ function TourView() {
                 style={{ width: '100%', height: '100%', display: 'block' }}
                 gl={{ preserveDrawingBuffer: true }}
               >
-                <Suspense fallback={null}>
-                  <Scene />
-                  <Controls />
-                </Suspense>
+                <XR store={xrStore}>
+                  <Suspense fallback={null}>
+                    <Scene />
+                    <Controls />
+                  </Suspense>
+                </XR>
               </Canvas>
             </div>
 
             {/* UI Layer */}
             <Loader />
-            <ArrowControls />
+            <TransitionOverlay />
+            <AmbientAudio />
+            <GameOverlay />
+            <HelpOverlay />
+            <Sidebar />
+            <TopBar />
+            <BottomControls />
+            <NavArrows />
+            <Compass />
+            <MapOverlay />
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
-import { OrbitControls as OrbitControlsImpl } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useThree, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, DeviceOrientationControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useTourState } from '../../hooks/useTourState';
 
@@ -13,8 +13,10 @@ export const Controls: React.FC = () => {
     cameraRotation,
     cameraZoom,
     isAutoRotating,
+    isGyroEnabled,
     activeRotation,
     setCameraFov,
+    setCameraYaw,
     cameraFov,
   } = useTourState();
 
@@ -104,6 +106,9 @@ export const Controls: React.FC = () => {
 
   // Auto-rotate, Manual Continuous Rotation, and Keyboard logic
   useFrame((state) => {
+    // Sync Yaw to Store for Map Radar
+    setCameraYaw(camera.rotation.y);
+
     if (fovChanged.current) {
       if ((state.camera as THREE.PerspectiveCamera).fov !== cameraFov) {
         (state.camera as THREE.PerspectiveCamera).fov = cameraFov;
@@ -157,11 +162,16 @@ export const Controls: React.FC = () => {
     }
 
     if (controlsRef.current) {
-      controlsRef.current.autoRotate = isIdle && !isAutoRotating && !rotated && !activeRotation;
+      controlsRef.current.autoRotate =
+        isIdle && !isAutoRotating && !rotated && !activeRotation && !isGyroEnabled;
       controlsRef.current.autoRotateSpeed = 0.5;
       controlsRef.current.update();
     }
   });
+
+  if (isGyroEnabled) {
+    return <DeviceOrientationControls />;
+  }
 
   return (
     <OrbitControls
