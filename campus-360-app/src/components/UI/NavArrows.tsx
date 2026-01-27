@@ -1,10 +1,47 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTourState } from '../../hooks/useTourState';
 
 export const NavArrows: React.FC = () => {
   const { nextImage, previousImage } = useTourState();
+
+  // Keyboard navigation handler
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    // Don't navigate if user is typing in an input field
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+      return;
+    }
+
+    // Use Page Up/Down or Space for navigation to avoid conflict with camera controls
+    switch (e.key) {
+      case 'PageDown':
+      case ' ': // Space bar
+        e.preventDefault();
+        nextImage();
+        break;
+      case 'PageUp':
+      case 'Backspace':
+        e.preventDefault();
+        previousImage();
+        break;
+      case 'n': // N for next
+      case 'N':
+        nextImage();
+        break;
+      case 'p': // P for previous
+      case 'P':
+        previousImage();
+        break;
+    }
+  }, [nextImage, previousImage]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
 
   return (
     <>
@@ -16,6 +53,7 @@ export const NavArrows: React.FC = () => {
         whileTap={{ scale: 0.95 }}
         onClick={previousImage}
         className="fixed left-6 top-1/2 -translate-y-1/2 z-40 p-4 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-black/50 transition-all shadow-lg"
+        title="Previous (P or Page Up)"
       >
         <ChevronLeft size={24} />
       </motion.button>
@@ -28,6 +66,7 @@ export const NavArrows: React.FC = () => {
         whileTap={{ scale: 0.95 }}
         onClick={nextImage}
         className="fixed right-6 top-1/2 -translate-y-1/2 z-40 p-4 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-black/50 transition-all shadow-lg"
+        title="Next (N or Space)"
       >
         <ChevronRight size={24} />
       </motion.button>

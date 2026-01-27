@@ -31,7 +31,8 @@ export const BottomControls: React.FC = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4, duration: 0.5 }}
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40"
+      style={{ left: '50%', x: '-50%' }}
+      className="fixed bottom-6 z-40"
     >
       <div className="flex items-center gap-2 p-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/10">
         <button

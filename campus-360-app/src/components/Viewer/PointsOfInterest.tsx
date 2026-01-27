@@ -56,13 +56,13 @@ const POIMarker = ({
                 onOpen();
               }
             }}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg border-2 ${
+            className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 shadow-md border-2 ${
               isActive
-                ? 'bg-emerald-500 border-white text-white scale-110'
-                : 'bg-white/90 border-emerald-500 text-emerald-600 hover:bg-emerald-500 hover:text-white hover:border-white'
+                ? 'bg-emerald-500 border-white text-white scale-105'
+                : 'bg-white/80 border-emerald-500 text-emerald-600 hover:bg-emerald-500 hover:text-white hover:border-white'
             }`}
           >
-            {isActive ? <X size={20} /> : <Info size={24} />}
+            {isActive ? <X size={14} /> : <Info size={16} />}
           </button>
 
           {/* Pulse Ring */}

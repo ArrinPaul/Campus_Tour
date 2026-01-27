@@ -951,7 +951,7 @@
       "label": "Block 5",
       "short": "Block 5",
       "svgAnchor": {
-        "x": 450,
+        "x": 380,
         "y": 310
       },
       "svgPath": "M 220 230 L 300 230 L 300 310 L 220 310 Z",
@@ -1228,7 +1228,7 @@
       "label": "Block 4",
       "short": "Block 4",
       "svgAnchor": {
-        "x": 550,
+        "x": 490,
         "y": 370
       },
       "svgPath": "M 260 250 L 340 250 L 340 330 L 260 330 Z",
@@ -1328,8 +1328,8 @@
       "label": "Architecture Building",
       "short": "Architecture Building",
       "svgAnchor": {
-        "x": 600,
-        "y": 400
+        "x": 520,
+        "y": 430
       },
       "svgPath": "M 280 260 L 360 260 L 360 340 L 280 340 Z",
       "labs": [
@@ -1711,13 +1711,13 @@
     },
     {
       "id": "outside",
-      "label": "Outside Areas",
-      "short": "Outside",
+      "label": "Outdoor Areas",
+      "short": "Outdoor Areas",
       "svgAnchor": {
-        "x": 400,
-        "y": 320
+        "x": 330,
+        "y": 350
       },
-      "svgPath": "M 220 230 L 300 230 L 300 310 L 220 310 Z",
+      "svgPath": "M 180 270 L 260 270 L 260 350 L 180 350 Z",
       "labs": [
         {
           "id": "outside-105",

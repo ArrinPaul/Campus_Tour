@@ -41,7 +41,7 @@ export const TopBar: React.FC = () => {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="fixed top-0 left-0 p-6 z-40"
+        className="fixed top-6 left-6 z-40"
       >
         <h1 className="text-xl font-semibold text-white tracking-tight">Campus Virtual Tour</h1>
         <button
@@ -62,7 +62,7 @@ export const TopBar: React.FC = () => {
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="fixed top-0 right-0 p-6 z-40 flex items-center gap-3"
+        className="fixed top-6 right-6 z-40 flex items-center gap-3"
       >
         {totalViews > 1 && (
           <div className="px-3 py-1.5 rounded-full bg-black/30 backdrop-blur-md border border-white/10">
