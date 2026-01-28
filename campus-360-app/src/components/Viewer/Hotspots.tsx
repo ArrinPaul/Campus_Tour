@@ -1,6 +1,6 @@
 import React, { useRef, useState, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
+import { Html, Billboard } from '@react-three/drei';
 import * as THREE from 'three';
 import { useTourState } from '../../hooks/useTourState';
 import type { Hotspot } from '../../hooks/useTourDataStore';
@@ -36,7 +36,7 @@ export const Hotspots: React.FC = () => {
       hotspots.push({
         id: currentBlock.labs[nextIndex].id,
         x: 0,
-        y: -20,
+        y: -15,
         z: -45,
         text: 'Move Forward',
         action: 'next',
@@ -49,7 +49,7 @@ export const Hotspots: React.FC = () => {
       hotspots.push({
         id: currentBlock.labs[prevIndex].id,
         x: 0,
-        y: -20,
+        y: -15,
         z: 45,
         text: 'Go Back',
         action: 'prev',
@@ -114,21 +114,21 @@ const HotspotMarker = ({
   onClick: () => void;
   isBackward?: boolean;
 }) => {
-  const meshRef = useRef<THREE.Group>(null);
+  const groupRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
 
   useFrame((state) => {
-    if (meshRef.current) {
+    if (groupRef.current) {
       // Gentle floating animation
       const t = state.clock.getElapsedTime();
-      meshRef.current.position.y = hotspot.y + Math.sin(t * 2) * 0.8;
+      groupRef.current.position.y = hotspot.y + Math.sin(t * 2) * 0.8;
     }
   });
 
   return (
     <group
       position={[hotspot.x, hotspot.y, hotspot.z]}
-      ref={meshRef}
+      ref={groupRef}
       onPointerOver={() => {
         document.body.style.cursor = 'pointer';
         setHovered(true);
@@ -142,43 +142,58 @@ const HotspotMarker = ({
         onClick();
       }}
     >
-      {/* 3D Marker - Smaller Glowing Circle */}
-      <mesh>
-        <circleGeometry args={[5, 32]} />
-        <meshBasicMaterial
-          color={hovered ? '#34d399' : '#10b981'}
-          transparent
-          opacity={hovered ? 0.85 : 0.5}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
+      <Billboard
+        follow={true}
+        lockX={false}
+        lockY={false}
+        lockZ={false} // Ensure it faces camera
+      >
+        {/* 3D Marker - Glowing Circle */}
+        <mesh>
+          <circleGeometry args={[5, 32]} />
+          <meshBasicMaterial
+            color={hovered ? '#34d399' : '#10b981'}
+            transparent
+            opacity={hovered ? 0.9 : 0.6}
+            side={THREE.DoubleSide}
+            depthTest={false} // Always visible
+          />
+        </mesh>
 
-      {/* Label */}
-      <Html position={[0, -6, 0]} center pointerEvents="none">
-        <div
-          className={`transition-all duration-300 flex flex-col items-center gap-1 ${
-            hovered ? 'scale-110 opacity-100' : 'scale-100 opacity-80'
-          }`}
-        >
-          <div className="p-1.5 bg-emerald-500/20 rounded-full border border-emerald-400/40 backdrop-blur-sm animate-bounce">
-            {isBackward ? (
-              <ChevronDown className="w-4 h-4 text-emerald-400" />
-            ) : (
-              <ChevronUp className="w-4 h-4 text-emerald-400" />
+        {/* Outer Ring for extra visibility */}
+        <mesh>
+          <ringGeometry args={[5.5, 6, 32]} />
+          <meshBasicMaterial
+            color="#ffffff"
+            transparent
+            opacity={0.4}
+            side={THREE.DoubleSide}
+            depthTest={false}
+          />
+        </mesh>
+
+        {/* Label */}
+        <Html position={[0, -8, 0]} center pointerEvents="none" zIndexRange={[100, 0]}>
+          <div
+            className={`transition-all duration-300 flex flex-col items-center gap-1 ${
+              hovered ? 'scale-110 opacity-100' : 'scale-100 opacity-90'
+            }`}
+          >
+            <div className="p-2 bg-emerald-500/30 rounded-full border border-emerald-400/60 backdrop-blur-md animate-bounce shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+              {isBackward ? (
+                <ChevronDown className="w-5 h-5 text-emerald-300" />
+              ) : (
+                <ChevronUp className="w-5 h-5 text-emerald-300" />
+              )}
+            </div>
+            {hotspot.text && (
+              <div className="bg-black/80 text-white px-3 py-1 rounded-full backdrop-blur-md text-sm font-semibold border border-emerald-500/30 shadow-lg whitespace-nowrap tracking-wide">
+                {hotspot.text}
+              </div>
             )}
           </div>
-          {hotspot.text && hovered && (
-            <div className="bg-black/70 text-white px-2.5 py-0.5 rounded-full backdrop-blur-md text-xs font-medium border border-white/20 shadow-lg whitespace-nowrap">
-              {hotspot.text}
-            </div>
-          )}
-        </div>
-      </Html>
-
-      {/* LookAt Camera Constraint - simplified by using Billboard if needed, but Circle geometry + rotation works */}
-      <mesh rotation={[0, 0, 0]}>
-        {/* This is just a placeholder. For better facing, we might use sprite or lookAt in useFrame */}
-      </mesh>
+        </Html>
+      </Billboard>
     </group>
   );
 };

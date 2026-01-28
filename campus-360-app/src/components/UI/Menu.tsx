@@ -36,17 +36,21 @@ export const Menu: React.FC = () => {
     }
   };
 
-  const filteredBlocks: Block[] = manifest.blocks.filter((block: Block) => {
-    const lowerCaseSearchTerm = searchTerm.toLowerCase();
-    const matchesBlockName = block.name?.toLowerCase().includes(lowerCaseSearchTerm) || false;
-    const matchesLab =
-      block.labs?.some(
-        (lab: Lab) =>
-          lab.id?.toLowerCase().includes(lowerCaseSearchTerm) ||
-          lab.name?.toLowerCase().includes(lowerCaseSearchTerm)
-      ) || false;
-    return matchesBlockName || matchesLab;
-  });
+  const filteredBlocks: Block[] = manifest.blocks
+    .filter((block: Block) => {
+      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+      const matchesBlockName = block.name?.toLowerCase().includes(lowerCaseSearchTerm) || false;
+      const matchesLab =
+        block.labs?.some(
+          (lab: Lab) =>
+            lab.id?.toLowerCase().includes(lowerCaseSearchTerm) ||
+            lab.name?.toLowerCase().includes(lowerCaseSearchTerm)
+        ) || false;
+      return matchesBlockName || matchesLab;
+    })
+    .sort((a: Block, b: Block) =>
+      (a.name || a.label || '').localeCompare(b.name || b.label || '')
+    );
 
   const historyItems: HistoryItem[] = history
     .map((imageId: string) => {

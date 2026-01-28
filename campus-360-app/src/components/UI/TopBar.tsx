@@ -10,6 +10,12 @@ export const TopBar: React.FC = () => {
   const [showLocations, setShowLocations] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  const sortedBlocks = React.useMemo(() => {
+    return [...(manifest?.blocks || [])].sort((a, b) =>
+      (a.name || a.label || '').localeCompare(b.name || b.label || '')
+    );
+  }, [manifest?.blocks]);
+
   const toggleFullscreen = () => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
@@ -49,7 +55,9 @@ export const TopBar: React.FC = () => {
           className="flex items-center gap-2 mt-1 text-white/60 hover:text-white transition-colors group"
         >
           <MapPin size={14} className="text-blue-400" />
-          <span className="text-sm">{currentBlock?.name || 'Select Location'}</span>
+          <span className="text-sm">
+            {currentBlock?.name || currentBlock?.label || 'Select Location'}
+          </span>
           <ChevronRight
             size={14}
             className="opacity-0 group-hover:opacity-100 transition-opacity"
@@ -116,8 +124,8 @@ export const TopBar: React.FC = () => {
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto pr-1">
-                {manifest?.blocks?.map((block: Block) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                {sortedBlocks.map((block: Block) => (
                   <button
                     key={block.id}
                     onClick={() => handleBlockClick(block.id)}
@@ -131,7 +139,9 @@ export const TopBar: React.FC = () => {
                       size={16}
                       className={currentBlockId === block.id ? 'text-blue-400' : 'text-white/40'}
                     />
-                    <span className="block mt-2 text-sm font-medium">{block.name}</span>
+                    <span className="block mt-2 text-sm font-medium">
+                      {block.name || block.label}
+                    </span>
                     {currentBlockId === block.id && (
                       <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-blue-400" />
                     )}

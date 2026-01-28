@@ -7,34 +7,37 @@ export const NavArrows: React.FC = () => {
   const { nextImage, previousImage } = useTourState();
 
   // Keyboard navigation handler
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    // Don't navigate if user is typing in an input field
-    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-      return;
-    }
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      // Don't navigate if user is typing in an input field
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
 
-    // Use Page Up/Down or Space for navigation to avoid conflict with camera controls
-    switch (e.key) {
-      case 'PageDown':
-      case ' ': // Space bar
-        e.preventDefault();
-        nextImage();
-        break;
-      case 'PageUp':
-      case 'Backspace':
-        e.preventDefault();
-        previousImage();
-        break;
-      case 'n': // N for next
-      case 'N':
-        nextImage();
-        break;
-      case 'p': // P for previous
-      case 'P':
-        previousImage();
-        break;
-    }
-  }, [nextImage, previousImage]);
+      // Use Page Up/Down or Space for navigation to avoid conflict with camera controls
+      switch (e.key) {
+        case 'PageDown':
+        case ' ': // Space bar
+          e.preventDefault();
+          nextImage();
+          break;
+        case 'PageUp':
+        case 'Backspace':
+          e.preventDefault();
+          previousImage();
+          break;
+        case 'n': // N for next
+        case 'N':
+          nextImage();
+          break;
+        case 'p': // P for previous
+        case 'P':
+          previousImage();
+          break;
+      }
+    },
+    [nextImage, previousImage]
+  );
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
