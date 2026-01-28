@@ -1,5 +1,4 @@
 import { useEffect, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
 import { Scene } from './components/Viewer/Scene';
 import { Canvas } from '@react-three/fiber';
 import { Controls } from './components/Viewer/Controls';
@@ -8,35 +7,17 @@ import { TopBar } from './components/UI/TopBar';
 import { BottomControls } from './components/UI/BottomControls';
 import { Compass } from './components/UI/Compass';
 import { MapOverlay } from './components/UI/MapOverlay';
-import { Landing } from './components/UI/Landing';
 import { TransitionOverlay } from './components/UI/TransitionOverlay';
 import { AmbientAudio } from './components/UI/AmbientAudio';
 import { GameOverlay } from './components/Game/GameComponents';
 import { HelpOverlay } from './components/UI/HelpOverlay';
 import { useTourState } from './hooks/useTourState';
-import { AnimatePresence, motion } from 'framer-motion';
 import { XR } from '@react-three/xr';
 import { xrStore } from './utils/xr';
-import { About } from './pages/About';
-import { Campus } from './pages/Campus';
-import { Admissions } from './pages/Admissions';
-import { Contact } from './pages/Contact';
 
-function TourView() {
-  const {
-    setManifest,
-    setBlock,
-    setImage,
-    setIdle,
-    currentBlockId,
-    currentImageId,
-    isTourStarted,
-    setTourStarted,
-  } = useTourState();
-
-  const handleStartTour = () => {
-    setTourStarted(true);
-  };
+function App() {
+  const { setManifest, setBlock, setImage, setIdle, currentBlockId, currentImageId } =
+    useTourState();
 
   // Load manifest on mount
   useEffect(() => {
@@ -97,69 +78,33 @@ function TourView() {
 
   return (
     <div className="w-screen h-screen bg-black relative overflow-hidden">
-      <AnimatePresence mode="wait">
-        {!isTourStarted ? (
-          <motion.div
-            key="landing"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Landing onStartTour={handleStartTour} />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="tour"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="w-full h-full relative"
-          >
-            {/* 3D Canvas - Full Screen */}
-            <div
-              className="absolute inset-0 w-full h-full"
-              style={{ width: '100vw', height: '100vh' }}
-            >
-              <Canvas
-                camera={{ fov: 75, position: [0, 0, 0.1] }}
-                style={{ width: '100%', height: '100%', display: 'block' }}
-                gl={{ preserveDrawingBuffer: true }}
-              >
-                <XR store={xrStore}>
-                  <Suspense fallback={null}>
-                    <Scene />
-                    <Controls />
-                  </Suspense>
-                </XR>
-              </Canvas>
-            </div>
+      {/* 3D Canvas - Full Screen */}
+      <div className="absolute inset-0 w-full h-full" style={{ width: '100vw', height: '100vh' }}>
+        <Canvas
+          camera={{ fov: 75, position: [0, 0, 0.1] }}
+          style={{ width: '100%', height: '100%', display: 'block' }}
+          gl={{ preserveDrawingBuffer: true }}
+        >
+          <XR store={xrStore}>
+            <Suspense fallback={null}>
+              <Scene />
+              <Controls />
+            </Suspense>
+          </XR>
+        </Canvas>
+      </div>
 
-            {/* UI Layer */}
-            <Loader />
-            <TransitionOverlay />
-            <AmbientAudio />
-            <GameOverlay />
-            <HelpOverlay />
-            <TopBar />
-            <BottomControls />
-            <Compass />
-            <MapOverlay />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* UI Layer */}
+      <Loader />
+      <TransitionOverlay />
+      <AmbientAudio />
+      <GameOverlay />
+      <HelpOverlay />
+      <TopBar />
+      <BottomControls />
+      <Compass />
+      <MapOverlay />
     </div>
-  );
-}
-
-function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<TourView />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/campus" element={<Campus />} />
-      <Route path="/admissions" element={<Admissions />} />
-      <Route path="/contact" element={<Contact />} />
-    </Routes>
   );
 }
 
