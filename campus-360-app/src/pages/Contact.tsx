@@ -60,7 +60,7 @@ export const Contact = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#10b981',
+            color: '#0ea5e9',
             textDecoration: 'none',
             fontSize: '14px',
             fontWeight: 500,
@@ -132,7 +132,7 @@ export const Contact = () => {
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-4px)';
                     e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-                    e.currentTarget.style.borderColor = '#10b981';
+                    e.currentTarget.style.borderColor = '#0ea5e9';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
@@ -144,7 +144,7 @@ export const Contact = () => {
                     style={{
                       width: '48px',
                       height: '48px',
-                      backgroundColor: '#ecfdf5',
+                      backgroundColor: '#f0f9ff',
                       borderRadius: '12px',
                       display: 'flex',
                       alignItems: 'center',
@@ -152,7 +152,7 @@ export const Contact = () => {
                       marginBottom: '16px',
                     }}
                   >
-                    <Icon size={24} color="#10b981" />
+                    <Icon size={24} color="#0ea5e9" />
                   </div>
 
                   <h3
@@ -242,7 +242,7 @@ export const Contact = () => {
                       outline: 'none',
                       transition: 'border-color 0.2s',
                     }}
-                    onFocus={(e) => (e.target.style.borderColor = '#10b981')}
+                    onFocus={(e) => (e.target.style.borderColor = '#0ea5e9')}
                     onBlur={(e) => (e.target.style.borderColor = '#e2e8f0')}
                   />
                 </div>
@@ -273,7 +273,7 @@ export const Contact = () => {
                       outline: 'none',
                       transition: 'border-color 0.2s',
                     }}
-                    onFocus={(e) => (e.target.style.borderColor = '#10b981')}
+                    onFocus={(e) => (e.target.style.borderColor = '#0ea5e9')}
                     onBlur={(e) => (e.target.style.borderColor = '#e2e8f0')}
                   />
                 </div>
@@ -306,7 +306,7 @@ export const Contact = () => {
                       fontFamily: 'inherit',
                       resize: 'vertical',
                     }}
-                    onFocus={(e) => (e.target.style.borderColor = '#10b981')}
+                    onFocus={(e) => (e.target.style.borderColor = '#0ea5e9')}
                     onBlur={(e) => (e.target.style.borderColor = '#e2e8f0')}
                   />
                 </div>
@@ -315,7 +315,7 @@ export const Contact = () => {
                   type="submit"
                   style={{
                     padding: '14px 32px',
-                    backgroundColor: '#10b981',
+                    backgroundColor: '#0ea5e9',
                     color: 'white',
                     border: 'none',
                     borderRadius: '8px',
@@ -324,8 +324,8 @@ export const Contact = () => {
                     cursor: 'pointer',
                     transition: 'background-color 0.2s',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#059669')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#10b981')}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0284c7')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0ea5e9')}
                 >
                   Send Message
                 </button>
@@ -389,7 +389,7 @@ export const Contact = () => {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
-                    color: '#10b981',
+                    color: '#0ea5e9',
                     textDecoration: 'none',
                     fontSize: '14px',
                     fontWeight: 500,
@@ -402,10 +402,10 @@ export const Contact = () => {
 
               <div
                 style={{
-                  backgroundColor: '#ecfdf5',
+                  backgroundColor: '#f0f9ff',
                   padding: '24px',
                   borderRadius: '12px',
-                  borderLeft: '4px solid #10b981',
+                  borderLeft: '4px solid #0ea5e9',
                 }}
               >
                 <h4
@@ -544,8 +544,8 @@ export const Contact = () => {
                   transition: 'all 0.2s',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#10b981';
-                  e.currentTarget.style.color = '#10b981';
+                  e.currentTarget.style.borderColor = '#0ea5e9';
+                  e.currentTarget.style.color = '#0ea5e9';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = '#e2e8f0';

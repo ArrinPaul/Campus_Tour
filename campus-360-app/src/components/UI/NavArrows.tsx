@@ -47,32 +47,38 @@ export const NavArrows: React.FC = () => {
   }, [handleKeyDown]);
 
   return (
-    <>
-      <motion.button
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        whileHover={{ scale: 1.1, x: -2 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={previousImage}
-        className="fixed left-6 top-1/2 -translate-y-1/2 z-40 p-4 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-black/50 transition-all shadow-lg"
-        title="Previous (P or Page Up)"
-      >
-        <ChevronLeft size={24} />
-      </motion.button>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.5, duration: 0.5 }}
+      style={{ left: '50%', x: '-50%' }}
+      className="fixed bottom-24 z-40"
+    >
+      <div className="flex items-center gap-1 p-1 rounded-full bg-black/30 backdrop-blur-md border border-white/10">
+        <motion.button
+          onClick={previousImage}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-1 px-2 py-1 rounded-full text-white/70 hover:text-sky-400 hover:bg-sky-500/10 transition-all"
+          title="Previous (P or Page Up)"
+        >
+          <ChevronLeft size={14} />
+          <span className="text-[10px] font-semibold uppercase tracking-wider">Backward</span>
+        </motion.button>
 
-      <motion.button
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        whileHover={{ scale: 1.1, x: 2 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={nextImage}
-        className="fixed right-6 top-1/2 -translate-y-1/2 z-40 p-4 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white/70 hover:text-white hover:bg-black/50 transition-all shadow-lg"
-        title="Next (N or Space)"
-      >
-        <ChevronRight size={24} />
-      </motion.button>
-    </>
+        <div className="w-px h-4 bg-white/10" />
+
+        <motion.button
+          onClick={nextImage}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-1 px-2 py-1 rounded-full text-white/70 hover:text-sky-400 hover:bg-sky-500/10 transition-all"
+          title="Next (N or Space)"
+        >
+          <span className="text-[10px] font-semibold uppercase tracking-wider">Forward</span>
+          <ChevronRight size={14} />
+        </motion.button>
+      </div>
+    </motion.div>
   );
 };

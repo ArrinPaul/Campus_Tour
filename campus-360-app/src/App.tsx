@@ -6,10 +6,8 @@ import { Controls } from './components/Viewer/Controls';
 import { Loader } from './components/UI/Loader';
 import { TopBar } from './components/UI/TopBar';
 import { BottomControls } from './components/UI/BottomControls';
-import { NavArrows } from './components/UI/NavArrows';
 import { Compass } from './components/UI/Compass';
 import { MapOverlay } from './components/UI/MapOverlay';
-import { Sidebar } from './components/UI/Sidebar';
 import { Landing } from './components/UI/Landing';
 import { TransitionOverlay } from './components/UI/TransitionOverlay';
 import { AmbientAudio } from './components/UI/AmbientAudio';
@@ -142,10 +140,8 @@ function TourView() {
             <AmbientAudio />
             <GameOverlay />
             <HelpOverlay />
-            <Sidebar />
             <TopBar />
             <BottomControls />
-            <NavArrows />
             <Compass />
             <MapOverlay />
           </motion.div>

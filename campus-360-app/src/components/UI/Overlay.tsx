@@ -53,7 +53,7 @@ export const Overlay: React.FC = () => {
             {/* Current Location Badge */}
             <div className="px-5 py-3 rounded-xl bg-slate-900/70 backdrop-blur-xl border border-white/10">
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                <div className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
                 <div>
                   <p className="text-white font-medium text-sm">{currentBlock.name}</p>
                   {currentImage && (

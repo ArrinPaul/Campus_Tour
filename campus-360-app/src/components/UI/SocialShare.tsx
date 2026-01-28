@@ -56,7 +56,7 @@ export const SocialShare: React.FC<SocialShareProps> = ({ shareUrl, shareTitle }
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={shareOnFacebook}
-        className="p-1.5 rounded-full bg-white/10 hover:bg-blue-600 text-white transition-all"
+        className="p-1.5 rounded-full bg-white/10 hover:bg-sky-600 text-white transition-all"
         aria-label="Share on Facebook"
       >
         <Facebook size={16} />
@@ -74,7 +74,7 @@ export const SocialShare: React.FC<SocialShareProps> = ({ shareUrl, shareTitle }
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={shareOnLinkedin}
-        className="p-1.5 rounded-full bg-white/10 hover:bg-blue-700 text-white transition-all"
+        className="p-1.5 rounded-full bg-white/10 hover:bg-sky-700 text-white transition-all"
         aria-label="Share on LinkedIn"
       >
         <Linkedin size={16} />

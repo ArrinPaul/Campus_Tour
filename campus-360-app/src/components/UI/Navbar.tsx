@@ -69,7 +69,7 @@ export const Navbar = () => {
                       }`}
                     >
                       <span
-                        className={`w-1.5 h-1.5 rounded-full ${currentBlockId === block.id ? 'bg-blue-400' : 'bg-white/20'}`}
+                        className={`w-1.5 h-1.5 rounded-full ${currentBlockId === block.id ? 'bg-sky-400' : 'bg-white/20'}`}
                       />
                       {block.name}
                     </button>
@@ -127,7 +127,7 @@ export const Navbar = () => {
                   >
                     <MapPin
                       size={16}
-                      className={currentBlockId === block.id ? 'text-blue-400' : 'text-white/30'}
+                      className={currentBlockId === block.id ? 'text-sky-400' : 'text-white/30'}
                     />
                     {block.name}
                   </button>

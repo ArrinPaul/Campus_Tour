@@ -1,4 +1,4 @@
-﻿import { motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowLeft, FileText, Calendar, Users, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -18,7 +18,7 @@ export const Admissions = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#10b981',
+            color: '#0ea5e9',
             textDecoration: 'none',
             fontSize: '14px',
             fontWeight: 500,
@@ -62,7 +62,7 @@ export const Admissions = () => {
           <p
             style={{
               fontSize: '16px',
-              color: '#10b981',
+              color: '#0ea5e9',
               marginBottom: '48px',
               fontWeight: 500,
             }}
@@ -126,7 +126,7 @@ export const Admissions = () => {
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-4px)';
                     e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-                    e.currentTarget.style.borderColor = '#10b981';
+                    e.currentTarget.style.borderColor = '#0ea5e9';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
@@ -138,7 +138,7 @@ export const Admissions = () => {
                     style={{
                       width: '48px',
                       height: '48px',
-                      backgroundColor: '#ecfdf5',
+                      backgroundColor: '#f0f9ff',
                       borderRadius: '12px',
                       display: 'flex',
                       alignItems: 'center',
@@ -146,7 +146,7 @@ export const Admissions = () => {
                       marginBottom: '20px',
                     }}
                   >
-                    <Icon size={24} color="#10b981" />
+                    <Icon size={24} color="#0ea5e9" />
                   </div>
 
                   <h3
@@ -176,7 +176,7 @@ export const Admissions = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
-                      color: '#10b981',
+                      color: '#0ea5e9',
                       textDecoration: 'none',
                       fontSize: '14px',
                       fontWeight: 500,
@@ -185,7 +185,7 @@ export const Admissions = () => {
                       gap: '6px',
                     }}
                   >
-                    {item.action} →
+                    {item.action} ?
                   </a>
                 </motion.div>
               );
@@ -226,7 +226,7 @@ export const Admissions = () => {
                   href="https://christuniversity.in/apply-online"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ color: '#10b981', textDecoration: 'none' }}
+                  style={{ color: '#0ea5e9', textDecoration: 'none' }}
                 >
                   christuniversity.in/apply-online
                 </a>{' '}
@@ -265,10 +265,10 @@ export const Admissions = () => {
           >
             <div
               style={{
-                backgroundColor: '#ecfdf5',
+                backgroundColor: '#f0f9ff',
                 padding: '32px',
                 borderRadius: '12px',
-                borderLeft: '4px solid #10b981',
+                borderLeft: '4px solid #0ea5e9',
               }}
             >
               <h3
@@ -327,9 +327,9 @@ export const Admissions = () => {
                     href="https://christuniversity.in/apply-online"
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: '#10b981', textDecoration: 'none', fontWeight: 500 }}
+                    style={{ color: '#0ea5e9', textDecoration: 'none', fontWeight: 500 }}
                   >
-                    → Online Application Portal
+                    ? Online Application Portal
                   </a>
                 </li>
                 <li style={{ marginBottom: '12px' }}>
@@ -337,9 +337,9 @@ export const Admissions = () => {
                     href="https://christuniversity.in/application-status"
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: '#10b981', textDecoration: 'none', fontWeight: 500 }}
+                    style={{ color: '#0ea5e9', textDecoration: 'none', fontWeight: 500 }}
                   >
-                    → Check Application Status
+                    ? Check Application Status
                   </a>
                 </li>
                 <li style={{ marginBottom: '12px' }}>
@@ -347,9 +347,9 @@ export const Admissions = () => {
                     href="https://christuniversity.in/faq"
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: '#10b981', textDecoration: 'none', fontWeight: 500 }}
+                    style={{ color: '#0ea5e9', textDecoration: 'none', fontWeight: 500 }}
                   >
-                    → FAQs
+                    ? FAQs
                   </a>
                 </li>
                 <li>
@@ -357,9 +357,9 @@ export const Admissions = () => {
                     href="https://christuniversity.in/student-accommodation"
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: '#10b981', textDecoration: 'none', fontWeight: 500 }}
+                    style={{ color: '#0ea5e9', textDecoration: 'none', fontWeight: 500 }}
                   >
-                    → Student Accommodation
+                    ? Student Accommodation
                   </a>
                 </li>
               </ul>
@@ -401,7 +401,7 @@ export const Admissions = () => {
                 href="mailto:admissions.kengeri@christuniversity.in"
                 style={{
                   padding: '12px 24px',
-                  backgroundColor: '#10b981',
+                  backgroundColor: '#0ea5e9',
                   color: 'white',
                   borderRadius: '8px',
                   textDecoration: 'none',
@@ -409,8 +409,8 @@ export const Admissions = () => {
                   fontWeight: 500,
                   transition: 'background-color 0.2s',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#059669')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#10b981')}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0284c7')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0ea5e9')}
               >
                 Email Us
               </a>
@@ -419,8 +419,8 @@ export const Admissions = () => {
                 style={{
                   padding: '12px 24px',
                   backgroundColor: 'white',
-                  color: '#10b981',
-                  border: '1px solid #10b981',
+                  color: '#0ea5e9',
+                  border: '1px solid #0ea5e9',
                   borderRadius: '8px',
                   textDecoration: 'none',
                   fontSize: '15px',
@@ -428,12 +428,12 @@ export const Admissions = () => {
                   transition: 'all 0.2s',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#10b981';
+                  e.currentTarget.style.backgroundColor = '#0ea5e9';
                   e.currentTarget.style.color = 'white';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'white';
-                  e.currentTarget.style.color = '#10b981';
+                  e.currentTarget.style.color = '#0ea5e9';
                 }}
               >
                 Call Us
@@ -491,7 +491,7 @@ export const Admissions = () => {
                   style={{
                     fontSize: '18px',
                     fontWeight: 600,
-                    color: '#10b981',
+                    color: '#0ea5e9',
                     marginBottom: '12px',
                   }}
                 >
@@ -534,14 +534,14 @@ export const Admissions = () => {
             }}
           >
             {[
-              { icon: '🎓', text: 'NAAC A++ Accredited University' },
-              { icon: '🏆', text: 'NBA Accredited Engineering Programs' },
-              { icon: '🌿', text: '78.5 Acres Lush Green Campus' },
-              { icon: '💼', text: 'Strong Industry Connections & Placements' },
-              { icon: '🔬', text: 'State-of-the-art Research Facilities' },
-              { icon: '🌍', text: 'International Exchange Programs' },
-              { icon: '🏠', text: 'On-campus Hostel Accommodation' },
-              { icon: '🚌', text: 'Transport Facilities from City' },
+              { icon: '??', text: 'NAAC A++ Accredited University' },
+              { icon: '??', text: 'NBA Accredited Engineering Programs' },
+              { icon: '??', text: '78.5 Acres Lush Green Campus' },
+              { icon: '??', text: 'Strong Industry Connections & Placements' },
+              { icon: '??', text: 'State-of-the-art Research Facilities' },
+              { icon: '??', text: 'International Exchange Programs' },
+              { icon: '??', text: 'On-campus Hostel Accommodation' },
+              { icon: '??', text: 'Transport Facilities from City' },
             ].map((item, i) => (
               <div
                 key={i}
@@ -550,7 +550,7 @@ export const Admissions = () => {
                   alignItems: 'center',
                   gap: '12px',
                   padding: '16px',
-                  backgroundColor: '#f0fdf4',
+                  backgroundColor: '#f0f9ff',
                   borderRadius: '8px',
                 }}
               >

@@ -3,8 +3,8 @@
   "blocks": [
     {
       "id": "gatetologo",
-      "label": "Gate to Logo",
-      "short": "Gate to Logo",
+      "label": "Entrance",
+      "short": "Entrance",
       "svgAnchor": {
         "x": 150,
         "y": 130
@@ -21,9 +21,6 @@
             "filename": "img1.jpg",
             "directory": "Gate_to_Logo"
           },
-          "hotspots": [
-            { "id": "gatetologo-2", "x": 0, "y": -10, "z": -40, "text": "Move Forward" }
-          ],
           "pois": [
             {
               "id": "poi-gate-1",
@@ -45,8 +42,7 @@
           "meta": {
             "filename": "img2.jpg",
             "directory": "Gate_to_Logo"
-          },
-          "hotspots": [{ "id": "gatetologo-1", "x": 0, "y": -10, "z": 40, "text": "Go Back" }]
+          }
         },
         {
           "id": "gatetologo-3",
@@ -1163,62 +1159,6 @@
           "meta": {
             "filename": "img109.jpg",
             "directory": "Block5"
-          }
-        }
-      ]
-    },
-    {
-      "id": "out",
-      "label": "Outdoor Areas",
-      "short": "Outdoor Areas",
-      "svgAnchor": {
-        "x": 500,
-        "y": 340
-      },
-      "svgPath": "M 240 240 L 320 240 L 320 320 L 240 320 Z",
-      "labs": [
-        {
-          "id": "out-105",
-          "label": "img105.jpg",
-          "thumbnail": "exported/thumbnails/img105.jpg",
-          "panorama": "exported/OUT/img105.jpg",
-          "type": "equirectangular",
-          "meta": {
-            "filename": "img105.jpg",
-            "directory": "OUT"
-          }
-        },
-        {
-          "id": "out-116",
-          "label": "img116.jpg",
-          "thumbnail": "exported/thumbnails/img116.jpg",
-          "panorama": "exported/OUT/img116.jpg",
-          "type": "equirectangular",
-          "meta": {
-            "filename": "img116.jpg",
-            "directory": "OUT"
-          }
-        },
-        {
-          "id": "out-127",
-          "label": "img127.jpg",
-          "thumbnail": "exported/thumbnails/img127.jpg",
-          "panorama": "exported/OUT/img127.jpg",
-          "type": "equirectangular",
-          "meta": {
-            "filename": "img127.jpg",
-            "directory": "OUT"
-          }
-        },
-        {
-          "id": "out-138",
-          "label": "img138.jpg",
-          "thumbnail": "exported/thumbnails/img138.jpg",
-          "panorama": "exported/OUT/img138.jpg",
-          "type": "equirectangular",
-          "meta": {
-            "filename": "img138.jpg",
-            "directory": "OUT"
           }
         }
       ]

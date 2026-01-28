@@ -48,9 +48,7 @@ export const Menu: React.FC = () => {
         ) || false;
       return matchesBlockName || matchesLab;
     })
-    .sort((a: Block, b: Block) =>
-      (a.name || a.label || '').localeCompare(b.name || b.label || '')
-    );
+    .sort((a: Block, b: Block) => (a.name || a.label || '').localeCompare(b.name || b.label || ''));
 
   const historyItems: HistoryItem[] = history
     .map((imageId: string) => {

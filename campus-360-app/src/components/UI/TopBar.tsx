@@ -11,9 +11,17 @@ export const TopBar: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const sortedBlocks = React.useMemo(() => {
-    return [...(manifest?.blocks || [])].sort((a, b) =>
-      (a.name || a.label || '').localeCompare(b.name || b.label || '')
-    );
+    const blocks = [...(manifest?.blocks || [])];
+    // Put Entrance first, then sort the rest alphabetically
+    return blocks.sort((a, b) => {
+      const aLabel = (a.name || a.label || '').toLowerCase();
+      const bLabel = (b.name || b.label || '').toLowerCase();
+
+      if (aLabel === 'entrance') return -1;
+      if (bLabel === 'entrance') return 1;
+
+      return aLabel.localeCompare(bLabel);
+    });
   }, [manifest?.blocks]);
 
   const toggleFullscreen = () => {
@@ -54,7 +62,7 @@ export const TopBar: React.FC = () => {
           onClick={() => setShowLocations(true)}
           className="flex items-center gap-2 mt-1 text-white/60 hover:text-white transition-colors group"
         >
-          <MapPin size={14} className="text-blue-400" />
+          <MapPin size={14} className="text-sky-400" />
           <span className="text-sm">
             {currentBlock?.name || currentBlock?.label || 'Select Location'}
           </span>
@@ -131,19 +139,19 @@ export const TopBar: React.FC = () => {
                     onClick={() => handleBlockClick(block.id)}
                     className={`relative p-4 rounded-xl text-left transition-all ${
                       currentBlockId === block.id
-                        ? 'bg-blue-500/20 border-2 border-blue-500/50 text-white'
+                        ? 'bg-sky-500/20 border-2 border-sky-500/50 text-white'
                         : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white'
                     }`}
                   >
                     <MapPin
                       size={16}
-                      className={currentBlockId === block.id ? 'text-blue-400' : 'text-white/40'}
+                      className={currentBlockId === block.id ? 'text-sky-400' : 'text-white/40'}
                     />
                     <span className="block mt-2 text-sm font-medium">
                       {block.name || block.label}
                     </span>
                     {currentBlockId === block.id && (
-                      <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-blue-400" />
+                      <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-sky-400" />
                     )}
                   </button>
                 ))}

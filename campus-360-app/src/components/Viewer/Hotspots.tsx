@@ -20,43 +20,8 @@ export const Hotspots: React.FC = () => {
 
   // Generate automatic navigation hotspots for all images
   const navigationHotspots = useMemo(() => {
-    if (!manifest || !currentBlockId || !currentImageId) return [];
-
-    const currentBlock = manifest.blocks.find((b) => b.id === currentBlockId);
-    if (!currentBlock?.labs) return [];
-
-    const currentIndex = currentBlock.labs.findIndex((l) => l.id === currentImageId);
-    if (currentIndex === -1) return [];
-
-    const hotspots: Array<Hotspot & { action: 'next' | 'prev' }> = [];
-
-    // Add "Move Forward" hotspot if there's a next image
-    const nextIndex = currentIndex + 1;
-    if (nextIndex < currentBlock.labs.length) {
-      hotspots.push({
-        id: currentBlock.labs[nextIndex].id,
-        x: 0,
-        y: -15,
-        z: -45,
-        text: 'Move Forward',
-        action: 'next',
-      });
-    }
-
-    // Add "Go Back" hotspot if there's a previous image
-    const prevIndex = currentIndex - 1;
-    if (prevIndex >= 0) {
-      hotspots.push({
-        id: currentBlock.labs[prevIndex].id,
-        x: 0,
-        y: -15,
-        z: 45,
-        text: 'Go Back',
-        action: 'prev',
-      });
-    }
-
-    return hotspots;
+    // Disabled as requested: Navigation moved to bottom controls
+    return [];
   }, [manifest, currentBlockId, currentImageId]);
 
   // Don't show hotspots when map is open
@@ -152,7 +117,7 @@ const HotspotMarker = ({
         <mesh>
           <circleGeometry args={[5, 32]} />
           <meshBasicMaterial
-            color={hovered ? '#34d399' : '#10b981'}
+            color={hovered ? '#38bdf8' : '#0ea5e9'}
             transparent
             opacity={hovered ? 0.9 : 0.6}
             side={THREE.DoubleSide}
@@ -179,15 +144,15 @@ const HotspotMarker = ({
               hovered ? 'scale-110 opacity-100' : 'scale-100 opacity-90'
             }`}
           >
-            <div className="p-2 bg-emerald-500/30 rounded-full border border-emerald-400/60 backdrop-blur-md animate-bounce shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+            <div className="p-2 bg-sky-500/30 rounded-full border border-sky-400/60 backdrop-blur-md animate-bounce shadow-[0_0_15px_rgba(14,165,233,0.5)]">
               {isBackward ? (
-                <ChevronDown className="w-5 h-5 text-emerald-300" />
+                <ChevronDown className="w-5 h-5 text-sky-300" />
               ) : (
-                <ChevronUp className="w-5 h-5 text-emerald-300" />
+                <ChevronUp className="w-5 h-5 text-sky-300" />
               )}
             </div>
             {hotspot.text && (
-              <div className="bg-black/80 text-white px-3 py-1 rounded-full backdrop-blur-md text-sm font-semibold border border-emerald-500/30 shadow-lg whitespace-nowrap tracking-wide">
+              <div className="bg-black/80 text-white px-3 py-1 rounded-full backdrop-blur-md text-sm font-semibold border border-sky-500/30 shadow-lg whitespace-nowrap tracking-wide">
                 {hotspot.text}
               </div>
             )}

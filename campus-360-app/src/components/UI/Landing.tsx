@@ -38,7 +38,7 @@ export const Landing = ({ onStartTour }: LandingProps) => {
               width: '40px',
               height: '40px',
               borderRadius: '8px',
-              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -75,7 +75,7 @@ export const Landing = ({ onStartTour }: LandingProps) => {
                 textDecoration: 'none',
                 transition: 'color 0.2s',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#10b981')}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#0ea5e9')}
               onMouseLeave={(e) => (e.currentTarget.style.color = '#525252')}
             >
               {item.name}
@@ -127,7 +127,7 @@ export const Landing = ({ onStartTour }: LandingProps) => {
               alignItems: 'center',
               gap: '8px',
               padding: '6px 12px',
-              backgroundColor: '#ecfdf5',
+              backgroundColor: '#f0f9ff',
               borderRadius: '6px',
               marginBottom: '24px',
             }}
@@ -137,14 +137,14 @@ export const Landing = ({ onStartTour }: LandingProps) => {
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                backgroundColor: '#10b981',
+                backgroundColor: '#0ea5e9',
               }}
             />
             <span
               style={{
                 fontSize: '13px',
                 fontWeight: 500,
-                color: '#059669',
+                color: '#0284c7',
                 letterSpacing: '0.3px',
               }}
             >
@@ -163,7 +163,7 @@ export const Landing = ({ onStartTour }: LandingProps) => {
               marginBottom: '20px',
             }}
           >
-            Explore Kengeri Campus, <span style={{ color: '#10b981' }}>from anywhere</span>
+            Explore Kengeri Campus, <span style={{ color: '#0ea5e9' }}>from anywhere</span>
           </h1>
 
           {/* Description */}
@@ -198,18 +198,18 @@ export const Landing = ({ onStartTour }: LandingProps) => {
                 alignItems: 'center',
                 gap: '10px',
                 padding: '16px 28px',
-                backgroundColor: '#10b981',
+                backgroundColor: '#0ea5e9',
                 color: 'white',
                 fontSize: '15px',
                 fontWeight: 600,
                 border: 'none',
                 borderRadius: '10px',
                 cursor: 'pointer',
-                boxShadow: '0 4px 14px rgba(16, 185, 129, 0.25)',
+                boxShadow: '0 4px 14px rgba(14, 165, 233, 0.25)',
                 transition: 'all 0.2s',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#059669')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#10b981')}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0284c7')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0ea5e9')}
             >
               <Play size={18} fill="white" />
               Start Virtual Tour
@@ -228,7 +228,7 @@ export const Landing = ({ onStartTour }: LandingProps) => {
                 padding: '16px 8px',
                 transition: 'color 0.2s',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#10b981')}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#0ea5e9')}
               onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}
             >
               View all locations
@@ -255,7 +255,7 @@ export const Landing = ({ onStartTour }: LandingProps) => {
                   style={{
                     fontSize: '28px',
                     fontWeight: 700,
-                    color: '#10b981',
+                    color: '#0ea5e9',
                     marginBottom: '4px',
                   }}
                 >
@@ -285,7 +285,7 @@ export const Landing = ({ onStartTour }: LandingProps) => {
             style={{
               width: '100%',
               height: '100%',
-              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -350,7 +350,7 @@ export const Landing = ({ onStartTour }: LandingProps) => {
                 zIndex: 10,
               }}
             >
-              <Play size={32} fill="#10b981" color="#10b981" style={{ marginLeft: '4px' }} />
+              <Play size={32} fill="#0ea5e9" color="#0ea5e9" style={{ marginLeft: '4px' }} />
             </motion.button>
           </div>
 
@@ -386,7 +386,7 @@ export const Landing = ({ onStartTour }: LandingProps) => {
                     backdropFilter: 'blur(10px)',
                   }}
                 >
-                  <Icon size={16} color="#10b981" />
+                  <Icon size={16} color="#0ea5e9" />
                   {badge.text}
                 </div>
               );
@@ -403,7 +403,7 @@ export const Landing = ({ onStartTour }: LandingProps) => {
           left: 0,
           right: 0,
           height: '4px',
-          background: 'linear-gradient(90deg, #10b981 0%, #059669 100%)',
+          background: 'linear-gradient(90deg, #0ea5e9 0%, #0284c7 100%)',
         }}
       />
     </div>

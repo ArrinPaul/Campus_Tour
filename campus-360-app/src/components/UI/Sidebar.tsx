@@ -1,20 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Search,
-  MapPin,
-  X,
-  ChevronRight,
-  Compass,
-  Share2,
-  Check,
-  Gamepad2,
-  Info,
-} from 'lucide-react';
+import { Search, MapPin, X, ChevronRight, Compass, Share2, Check, Gamepad2 } from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
 import { useGameStore } from '../../hooks/useGameStore';
 import { SocialShare } from './SocialShare';
-import { RequestInfoModal } from './RequestInfoModal';
 import type { Block } from '../../hooks/useTourDataStore';
 
 export const Sidebar: React.FC = () => {
@@ -22,7 +11,6 @@ export const Sidebar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [copied, setCopied] = useState(false);
   const [showSocial, setShowSocial] = useState(false);
-  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
   const { manifest, currentBlockId, setBlock, setImage } = useTourState();
   const { isGameActive, setGameActive, resetGame } = useGameStore();
 
@@ -52,8 +40,6 @@ export const Sidebar: React.FC = () => {
 
   return (
     <>
-      <RequestInfoModal isOpen={isRequestModalOpen} onClose={() => setIsRequestModalOpen(false)} />
-
       {/* Sidebar Toggle Button */}
       <motion.button
         className="fixed top-20 left-4 z-40 p-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white hover:bg-white/20 transition-all shadow-lg"
@@ -109,14 +95,10 @@ export const Sidebar: React.FC = () => {
                         e.preventDefault();
                         handleShare();
                       }}
-                      className={`p-2 rounded-full transition-colors relative group ${showSocial ? 'bg-emerald-500 text-white' : 'text-white/50 hover:bg-white/10 hover:text-white'}`}
+                      className={`p-2 rounded-full transition-colors relative group ${showSocial ? 'bg-sky-500 text-white' : 'text-white/50 hover:bg-white/10 hover:text-white'}`}
                       title="Share options (Right-click to copy link)"
                     >
-                      {copied ? (
-                        <Check size={20} className="text-emerald-400" />
-                      ) : (
-                        <Share2 size={20} />
-                      )}
+                      {copied ? <Check size={20} className="text-sky-400" /> : <Share2 size={20} />}
                       {copied && (
                         <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-black text-white px-2 py-1 rounded whitespace-nowrap">
                           Copied!
@@ -164,7 +146,7 @@ export const Sidebar: React.FC = () => {
                     placeholder="Search locations..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all"
                   />
                 </div>
               </div>
@@ -179,12 +161,12 @@ export const Sidebar: React.FC = () => {
                       onClick={() => handleBlockClick(block)}
                       className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all group ${
                         isActive
-                          ? 'bg-emerald-500/20 border border-emerald-500/50'
+                          ? 'bg-sky-500/20 border border-sky-500/50'
                           : 'hover:bg-white/5 border border-transparent'
                       }`}
                     >
                       <div
-                        className={`p-2 rounded-lg ${isActive ? 'bg-emerald-500 text-white' : 'bg-white/5 text-white/40 group-hover:text-white'}`}
+                        className={`p-2 rounded-lg ${isActive ? 'bg-sky-500 text-white' : 'bg-white/5 text-white/40 group-hover:text-white'}`}
                       >
                         <MapPin size={20} />
                       </div>
@@ -200,7 +182,7 @@ export const Sidebar: React.FC = () => {
                       </div>
                       <ChevronRight
                         size={16}
-                        className={`transition-transform ${isActive ? 'text-emerald-400 rotate-90' : 'text-white/20 group-hover:translate-x-1'}`}
+                        className={`transition-transform ${isActive ? 'text-sky-400 rotate-90' : 'text-white/20 group-hover:translate-x-1'}`}
                       />
                     </button>
                   );
@@ -210,14 +192,7 @@ export const Sidebar: React.FC = () => {
               {/* CTA at Bottom */}
               <div className="p-6 border-t border-white/10 space-y-3">
                 <button
-                  className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-xl transition-all border border-white/10 flex items-center justify-center gap-2"
-                  onClick={() => setIsRequestModalOpen(true)}
-                >
-                  <Info size={18} />
-                  Request Info
-                </button>
-                <button
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-emerald-900/20 active:scale-95"
+                  className="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-sky-900/20 active:scale-95"
                   onClick={() => window.open('https://christuniversity.in/apply-online', '_blank')}
                 >
                   Apply Now

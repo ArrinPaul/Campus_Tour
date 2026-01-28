@@ -36,7 +36,7 @@ export const Compass: React.FC = () => {
           className="w-full h-full flex items-center justify-center transition-transform duration-100 ease-out"
           style={{ transform: `rotate(${rotationDegrees}deg)` }}
         >
-          <Navigation size={24} className="text-emerald-400 fill-emerald-400/20" />
+          <Navigation size={24} className="text-sky-400 fill-blue-400/20" />
         </div>
       </div>
     </motion.div>

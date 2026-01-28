@@ -39,6 +39,8 @@ export type Block = {
   short?: string;
   svgPath?: string;
   svgAnchor?: { x: number; y: number };
+  labelOffset?: { x: number; y: number };
+  labelAnchor?: 'start' | 'end' | 'middle';
   labs: Lab[];
 };
 

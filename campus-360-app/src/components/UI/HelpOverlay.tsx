@@ -57,7 +57,7 @@ export const HelpOverlay: React.FC = () => {
             <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Desktop Controls */}
               <div className="space-y-6">
-                <h3 className="text-emerald-400 font-semibold uppercase tracking-wider text-sm flex items-center gap-2">
+                <h3 className="text-sky-400 font-semibold uppercase tracking-wider text-sm flex items-center gap-2">
                   <Mouse size={16} /> Desktop
                 </h3>
                 <div className="space-y-4">
@@ -81,7 +81,7 @@ export const HelpOverlay: React.FC = () => {
 
               {/* Mobile Controls */}
               <div className="space-y-6">
-                <h3 className="text-emerald-400 font-semibold uppercase tracking-wider text-sm flex items-center gap-2">
+                <h3 className="text-sky-400 font-semibold uppercase tracking-wider text-sm flex items-center gap-2">
                   <Smartphone size={16} /> Mobile
                 </h3>
                 <div className="space-y-4">
@@ -108,7 +108,7 @@ export const HelpOverlay: React.FC = () => {
             <div className="p-6 border-t border-white/10 bg-white/5 text-center">
               <button
                 onClick={() => setIsOpen(false)}
-                className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-8 rounded-full transition-all"
+                className="bg-sky-600 hover:bg-sky-500 text-white font-semibold py-3 px-8 rounded-full transition-all"
               >
                 Start Exploring
               </button>

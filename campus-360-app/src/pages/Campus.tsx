@@ -55,7 +55,7 @@ export const Campus = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#10b981',
+            color: '#0ea5e9',
             textDecoration: 'none',
             fontSize: '14px',
             fontWeight: 500,
@@ -98,7 +98,7 @@ export const Campus = () => {
           <p
             style={{
               fontSize: '16px',
-              color: '#10b981',
+              color: '#0ea5e9',
               marginBottom: '48px',
               fontWeight: 500,
             }}
@@ -131,7 +131,7 @@ export const Campus = () => {
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-4px)';
                   e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-                  e.currentTarget.style.borderColor = '#10b981';
+                  e.currentTarget.style.borderColor = '#0ea5e9';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
@@ -143,7 +143,7 @@ export const Campus = () => {
                   style={{
                     width: '48px',
                     height: '48px',
-                    backgroundColor: '#ecfdf5',
+                    backgroundColor: '#f0f9ff',
                     borderRadius: '12px',
                     display: 'flex',
                     alignItems: 'center',
@@ -151,7 +151,7 @@ export const Campus = () => {
                     marginBottom: '20px',
                   }}
                 >
-                  <MapPin size={24} color="#10b981" />
+                  <MapPin size={24} color="#0ea5e9" />
                 </div>
 
                 <h3
@@ -168,7 +168,7 @@ export const Campus = () => {
                 <p
                   style={{
                     fontSize: '14px',
-                    color: '#10b981',
+                    color: '#0ea5e9',
                     marginBottom: '12px',
                     fontWeight: 500,
                   }}
@@ -193,9 +193,9 @@ export const Campus = () => {
             style={{
               marginTop: '60px',
               padding: '32px',
-              backgroundColor: '#ecfdf5',
+              backgroundColor: '#f0f9ff',
               borderRadius: '12px',
-              borderLeft: '4px solid #10b981',
+              borderLeft: '4px solid #0ea5e9',
             }}
           >
             <h3
@@ -231,7 +231,7 @@ export const Campus = () => {
                 href="https://bkc.christuniversity.in/"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: '#10b981', textDecoration: 'none', fontWeight: 500 }}
+                style={{ color: '#0ea5e9', textDecoration: 'none', fontWeight: 500 }}
               >
                 bkc.christuniversity.in
               </a>
@@ -358,7 +358,7 @@ export const Campus = () => {
                 style={{
                   fontSize: '16px',
                   fontWeight: 600,
-                  color: '#10b981',
+                  color: '#0ea5e9',
                   marginBottom: '12px',
                 }}
               >
@@ -385,7 +385,7 @@ export const Campus = () => {
                 style={{
                   fontSize: '16px',
                   fontWeight: 600,
-                  color: '#10b981',
+                  color: '#0ea5e9',
                   marginBottom: '12px',
                 }}
               >

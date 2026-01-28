@@ -18,7 +18,7 @@ export const About = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#10b981',
+            color: '#0ea5e9',
             textDecoration: 'none',
             fontSize: '14px',
             fontWeight: 500,
@@ -76,7 +76,7 @@ export const About = () => {
                 marginBottom: '20px',
                 fontSize: '20px',
                 fontWeight: 600,
-                color: '#10b981',
+                color: '#0ea5e9',
               }}
             >
               EXCELLENCE AND SERVICE
@@ -144,8 +144,8 @@ export const About = () => {
               style={{
                 marginTop: '40px',
                 padding: '20px',
-                backgroundColor: '#ecfdf5',
-                borderLeft: '4px solid #10b981',
+                backgroundColor: '#f0f9ff',
+                borderLeft: '4px solid #0ea5e9',
                 borderRadius: '8px',
                 fontStyle: 'italic',
               }}
@@ -205,7 +205,7 @@ export const About = () => {
                     style={{
                       fontSize: '16px',
                       fontWeight: 600,
-                      color: '#10b981',
+                      color: '#0ea5e9',
                       marginBottom: '8px',
                     }}
                   >
@@ -247,7 +247,7 @@ export const About = () => {
                   key={i}
                   style={{
                     padding: '20px',
-                    backgroundColor: '#f0fdf4',
+                    backgroundColor: '#f0f9ff',
                     borderRadius: '12px',
                     textAlign: 'center',
                   }}
@@ -256,7 +256,7 @@ export const About = () => {
                     style={{
                       fontSize: '24px',
                       fontWeight: 700,
-                      color: '#10b981',
+                      color: '#0ea5e9',
                       marginBottom: '4px',
                     }}
                   >
@@ -312,7 +312,7 @@ export const About = () => {
                     style={{
                       fontSize: '32px',
                       fontWeight: 700,
-                      color: '#10b981',
+                      color: '#0ea5e9',
                       marginBottom: '8px',
                     }}
                   >

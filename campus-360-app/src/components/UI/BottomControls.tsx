@@ -9,6 +9,8 @@ import {
   Play,
   ZoomOut,
   ZoomIn,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTourState } from '../../hooks/useTourState';
@@ -24,17 +26,19 @@ export const BottomControls: React.FC = () => {
     isAudioEnabled,
     setAudioEnabled,
     setMapOpen,
+    nextImage,
+    previousImage,
   } = useTourState();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4, duration: 0.5 }}
-      style={{ left: '50%', x: '-50%' }}
-      className="fixed bottom-6 z-40"
-    >
-      <div className="flex items-center gap-2 p-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/10">
+    <div className="fixed bottom-6 left-0 right-0 z-40 flex items-center justify-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+        className="flex items-center gap-3"
+      >
+        <div className="flex items-center gap-2 p-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/10">
         <button
           onClick={() => setMapOpen(true)}
           className="p-3 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all"
@@ -105,6 +109,25 @@ export const BottomControls: React.FC = () => {
           <ZoomIn size={20} />
         </button>
       </div>
-    </motion.div>
+
+      <div className="flex items-center gap-2 p-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/10">
+        <button
+          onClick={previousImage}
+          className="p-3 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all"
+          title="Backward"
+        >
+          <ChevronLeft size={20} />
+        </button>
+
+        <button
+          onClick={nextImage}
+          className="p-3 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all"
+          title="Forward"
+        >
+          <ChevronRight size={20} />
+        </button>
+      </div>
+      </motion.div>
+    </div>
   );
 };
