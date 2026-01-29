@@ -1,0 +1,11 @@
+# Development files
+.env.local
+node_modules/
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Scripts and secrets
+scripts/

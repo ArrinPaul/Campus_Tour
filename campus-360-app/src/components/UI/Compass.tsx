@@ -14,20 +14,20 @@ export const Compass: React.FC = () => {
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="fixed bottom-44 right-6 z-30 hidden md:block"
+      className="fixed bottom-28 sm:bottom-36 md:bottom-40 lg:bottom-44 right-2 xs:right-3 sm:right-4 md:right-6 lg:right-8 z-30 hidden md:block"
     >
-      <div className="relative w-16 h-16 rounded-full bg-black/40 backdrop-blur-md border border-white/20 shadow-xl flex items-center justify-center">
+      <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full bg-black/40 backdrop-blur-md border border-white/20 shadow-xl flex items-center justify-center">
         {/* Cardinal Directions */}
-        <div className="absolute top-1 left-1/2 -translate-x-1/2 text-[10px] font-bold text-white/80">
+        <div className="absolute top-0.5 sm:top-1 left-1/2 -translate-x-1/2 text-[8px] sm:text-[10px] font-bold text-white/80">
           N
         </div>
-        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[10px] font-bold text-white/40">
+        <div className="absolute bottom-0.5 sm:bottom-1 left-1/2 -translate-x-1/2 text-[8px] sm:text-[10px] font-bold text-white/40">
           S
         </div>
-        <div className="absolute left-1 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/40">
+        <div className="absolute left-0.5 sm:left-1 top-1/2 -translate-y-1/2 text-[8px] sm:text-[10px] font-bold text-white/40">
           W
         </div>
-        <div className="absolute right-1 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/40">
+        <div className="absolute right-0.5 sm:right-1 top-1/2 -translate-y-1/2 text-[8px] sm:text-[10px] font-bold text-white/40">
           E
         </div>
 
@@ -36,7 +36,7 @@ export const Compass: React.FC = () => {
           className="w-full h-full flex items-center justify-center transition-transform duration-100 ease-out"
           style={{ transform: `rotate(${rotationDegrees}deg)` }}
         >
-          <Navigation size={24} className="text-sky-400 fill-blue-400/20" />
+          <Navigation className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-sky-400 fill-blue-400/20" />
         </div>
       </div>
     </motion.div>

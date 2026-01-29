@@ -8,6 +8,7 @@ import { Hotspots } from './Hotspots';
 import { SceneGameItems } from './SceneGameItems';
 import { FPSTracker } from '../UI/FPSCounter';
 import { setRenderer, getTextureQualitySettings } from '../../utils/textureCompression';
+import { getStorageImageUrl } from '../../lib/assets';
 
 const SceneContent: React.FC<{ panoramaUrl: string }> = ({ panoramaUrl }) => {
   const texture = useLoader(THREE.TextureLoader, panoramaUrl);
@@ -72,9 +73,12 @@ export const Scene: React.FC = () => {
 
   if (!currentImage || !currentImage.panorama) return null;
 
+  // Get panorama URL from Firebase Storage or local fallback
+  const panoramaUrl = getStorageImageUrl(currentImage.panorama);
+
   return (
     <Suspense fallback={null}>
-      <SceneContent panoramaUrl={currentImage.panorama} />
+      <SceneContent panoramaUrl={panoramaUrl} />
     </Suspense>
   );
 };

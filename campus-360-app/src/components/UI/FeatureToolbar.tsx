@@ -142,7 +142,7 @@ export const FeatureToolbar: React.FC<FeatureToolbarProps> = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="fixed bottom-24 right-6 z-40"
+        className="fixed bottom-16 xs:bottom-18 sm:bottom-20 md:bottom-24 lg:bottom-28 right-2 xs:right-3 sm:right-4 md:right-6 lg:right-8 z-40"
       >
         <div className="flex flex-col items-center gap-2">
           {/* Expanded Feature Buttons */}

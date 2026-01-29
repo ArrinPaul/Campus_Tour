@@ -360,3 +360,239 @@ h6 {
 .skip-link:focus {
   top: 0;
 }
+
+/* ================================
+   Device-Adaptive Responsive System
+   ================================ */
+
+/* Safe area padding for devices with notches/home bars */
+@supports (padding: max(0px)) {
+  .safe-area-inset-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  .safe-area-inset-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+  .safe-area-inset-left {
+    padding-left: max(0.5rem, env(safe-area-inset-left));
+  }
+  .safe-area-inset-right {
+    padding-right: max(0.5rem, env(safe-area-inset-right));
+  }
+}
+
+/* Prevent text selection on UI elements for touch */
+.touch-none {
+  touch-action: none;
+}
+
+/* ================================
+   Extra Small Devices (< 375px)
+   ================================ */
+@media (max-width: 374px) {
+  html {
+    font-size: 14px;
+  }
+  
+  button, a {
+    min-height: 40px;
+    min-width: 40px;
+  }
+}
+
+/* ================================
+   Small Phones (375px - 639px)
+   ================================ */
+@media (min-width: 375px) and (max-width: 639px) {
+  html {
+    font-size: 15px;
+  }
+  
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  button {
+    touch-action: manipulation;
+  }
+}
+
+/* ================================
+   Large Phones / Small Tablets (640px - 767px)
+   ================================ */
+@media (min-width: 640px) and (max-width: 767px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* ================================
+   Tablets (768px - 1023px)
+   ================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* ================================
+   Laptops / Small Desktops (1024px - 1279px)
+   ================================ */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* ================================
+   Desktops (1280px - 1535px)
+   ================================ */
+@media (min-width: 1280px) and (max-width: 1535px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* ================================
+   Large Desktops (1536px - 1919px)
+   ================================ */
+@media (min-width: 1536px) and (max-width: 1919px) {
+  html {
+    font-size: 17px;
+  }
+}
+
+/* ================================
+   Full HD Monitors (1920px - 2559px)
+   ================================ */
+@media (min-width: 1920px) and (max-width: 2559px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+/* ================================
+   QHD / 4K Monitors (2560px+)
+   ================================ */
+@media (min-width: 2560px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+/* ================================
+   Landscape Mode Adjustments
+   ================================ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .landscape-compact {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  
+  /* Reduce fixed element sizes in landscape */
+  .landscape-small {
+    transform: scale(0.85);
+    transform-origin: bottom center;
+  }
+}
+
+/* Tablet landscape */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  .tablet-landscape-adjust {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* ================================
+   Touch Device Optimizations
+   ================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Hide scrollbars on touch devices */
+  .scrollbar-hide-touch::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide-touch {
+    scrollbar-width: none;
+  }
+  
+  /* Disable hover effects that can cause sticky states on touch */
+  .no-hover-touch:hover {
+    background: inherit;
+    color: inherit;
+  }
+}
+
+/* ================================
+   Mouse/Pointer Device Optimizations
+   ================================ */
+@media (hover: hover) and (pointer: fine) {
+  /* Enable hover effects */
+  .hover-enabled:hover {
+    transform: scale(1.02);
+  }
+  
+  /* Smooth cursor transitions */
+  button, a {
+    cursor: pointer;
+  }
+}
+
+/* ================================
+   High DPI / Retina Displays
+   ================================ */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Thinner borders on retina */
+  .retina-border {
+    border-width: 0.5px;
+  }
+}
+
+/* ================================
+   Reduced Motion Preference
+   ================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ================================
+   Dark/Light Mode Support
+   ================================ */
+@media (prefers-color-scheme: light) {
+  .auto-theme {
+    --color-surface: rgba(255, 255, 255, 0.9);
+    --color-text: rgba(0, 0, 0, 0.9);
+  }
+}
+
+/* ================================
+   Print Styles
+   ================================ */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Prevent overscroll bounce on iOS */
+html, body {
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Prevent horizontal scroll */
+body {
+  overflow-x: hidden;
+}
