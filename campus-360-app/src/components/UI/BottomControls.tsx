@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   Layers,
   Smartphone,
@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTourState } from '../../hooks/useTourState';
-import { xrStore } from '../../utils/xr';
+// VR store not available in @react-three/xr v5
 
 export const BottomControls: React.FC = () => {
   const {
@@ -60,7 +60,7 @@ export const BottomControls: React.FC = () => {
           </button>
 
           <button
-            onClick={() => xrStore.enterVR()}
+            onClick={() => console.log('VR not supported in this version')}
             className="p-3 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all"
             title="Enter VR Mode"
           >

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useTourState } from '../../hooks/useTourState';
 
 export const AmbientAudio: React.FC = () => {
-  const { isAudioEnabled, isTourStarted } = useTourState();
+  const { isAudioEnabled } = useTourState();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -21,14 +21,14 @@ export const AmbientAudio: React.FC = () => {
   useEffect(() => {
     if (!audioRef.current) return;
 
-    if (isTourStarted && isAudioEnabled) {
+    if (isAudioEnabled) {
       audioRef.current.play().catch((e) => {
         console.warn('Audio play failed (user interaction required):', e);
       });
     } else {
       audioRef.current.pause();
     }
-  }, [isAudioEnabled, isTourStarted]);
+  }, [isAudioEnabled]);
 
   return null;
 };

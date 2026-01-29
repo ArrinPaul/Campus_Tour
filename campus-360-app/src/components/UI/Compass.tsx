@@ -14,7 +14,7 @@ export const Compass: React.FC = () => {
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="fixed bottom-24 right-6 z-30 hidden md:block"
+      className="fixed bottom-44 right-6 z-30 hidden md:block"
     >
       <div className="relative w-16 h-16 rounded-full bg-black/40 backdrop-blur-md border border-white/20 shadow-xl flex items-center justify-center">
         {/* Cardinal Directions */}

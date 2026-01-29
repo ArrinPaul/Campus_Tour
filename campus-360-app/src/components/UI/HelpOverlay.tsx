@@ -1,28 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mouse, Smartphone, Move, ZoomIn } from 'lucide-react';
-import { useTourState } from '../../hooks/useTourState';
+import { X, Mouse, Smartphone, Move, ZoomIn, Keyboard } from 'lucide-react';
+import { KEYBOARD_SHORTCUTS } from '../../hooks/useKeyboardShortcuts';
 
 export const HelpOverlay: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isTourStarted } = useTourState();
 
-  // Show help automatically on first visit after tour starts
+  // Show help automatically on first visit
   useEffect(() => {
-    if (isTourStarted) {
-      const hasSeenHelp = localStorage.getItem('hasSeenHelp');
-      if (!hasSeenHelp) {
-        setTimeout(() => setIsOpen(true), 0);
-        localStorage.setItem('hasSeenHelp', 'true');
-      }
+    const hasSeenHelp = localStorage.getItem('hasSeenHelp');
+    if (!hasSeenHelp) {
+      setTimeout(() => setIsOpen(true), 2000);
+      localStorage.setItem('hasSeenHelp', 'true');
     }
-  }, [isTourStarted]);
+  }, []);
 
   // Listen for custom event to open help manually
   useEffect(() => {
     const handleOpenHelp = () => setIsOpen(true);
+    const handleCloseOverlays = () => setIsOpen(false);
     window.addEventListener('open-help-modal', handleOpenHelp);
-    return () => window.removeEventListener('open-help-modal', handleOpenHelp);
+    window.addEventListener('close-all-overlays', handleCloseOverlays);
+    return () => {
+      window.removeEventListener('open-help-modal', handleOpenHelp);
+      window.removeEventListener('close-all-overlays', handleCloseOverlays);
+    };
   }, []);
 
   return (
@@ -54,7 +56,7 @@ export const HelpOverlay: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="p-8 grid grid-cols-1 md:grid-cols-3 gap-8 max-h-[60vh] overflow-y-auto">
               {/* Desktop Controls */}
               <div className="space-y-6">
                 <h3 className="text-sky-400 font-semibold uppercase tracking-wider text-sm flex items-center gap-2">
@@ -102,6 +104,23 @@ export const HelpOverlay: React.FC = () => {
                   />
                 </div>
               </div>
+
+              {/* Keyboard Shortcuts */}
+              <div className="space-y-6">
+                <h3 className="text-sky-400 font-semibold uppercase tracking-wider text-sm flex items-center gap-2">
+                  <Keyboard size={16} /> Keyboard Shortcuts
+                </h3>
+                <div className="space-y-2">
+                  {KEYBOARD_SHORTCUTS.map((shortcut, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                      <kbd className="px-2 py-1 bg-white/10 rounded text-xs font-mono text-white min-w-[70px] text-center">
+                        {shortcut.key}
+                      </kbd>
+                      <span className="text-white/70 text-sm">{shortcut.action}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Footer */}
@@ -139,3 +158,5 @@ const ControlItem = ({
     </div>
   </div>
 );
+
+export default HelpOverlay;

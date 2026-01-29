@@ -5,6 +5,15 @@ import { OrbitControls, DeviceOrientationControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useTourState } from '../../hooks/useTourState';
 
+// Smooth interpolation helper (lerp)
+const lerp = (start: number, end: number, factor: number) => {
+  return start + (end - start) * factor;
+};
+
+// Damping factor for smooth camera movement (0-1, lower = smoother but slower)
+const DAMPING_FACTOR = 0.08;
+const SMOOTH_ROTATION_SPEED = 0.025; // Reduced for smoother/slower rotation
+
 export const Controls: React.FC = () => {
   const { camera, gl } = useThree();
   const controlsRef = useRef<OrbitControlsImpl>(null);
@@ -20,9 +29,26 @@ export const Controls: React.FC = () => {
     cameraFov,
   } = useTourState();
 
+  // Target rotation values for smooth interpolation
+  const targetRotation = useRef({ x: 0, y: 0 });
+  const currentRotation = useRef({ x: 0, y: 0 });
+  const isInitialized = useRef(false);
+
   const fovChanged = useRef(false);
+  const targetFov = useRef(75);
+
+  // Initialize rotation tracking
+  useEffect(() => {
+    if (!isInitialized.current) {
+      currentRotation.current = { x: camera.rotation.x, y: camera.rotation.y };
+      targetRotation.current = { x: camera.rotation.x, y: camera.rotation.y };
+      isInitialized.current = true;
+    }
+  }, [camera]);
+
   useEffect(() => {
     fovChanged.current = true;
+    targetFov.current = cameraFov;
   }, [cameraFov]);
 
   // Listen to camera rotation triggers from UI buttons
@@ -104,67 +130,115 @@ export const Controls: React.FC = () => {
     };
   }, []);
 
-  // Auto-rotate, Manual Continuous Rotation, and Keyboard logic
-  useFrame((state) => {
+  // Auto-rotate, Manual Continuous Rotation, Keyboard logic with SMOOTH TRANSITIONS
+  useFrame((state, delta) => {
     // Sync Yaw to Store for Map Radar
     setCameraYaw(camera.rotation.y);
 
+    // Smooth FOV interpolation for zoom
     if (fovChanged.current) {
-      if ((state.camera as THREE.PerspectiveCamera).fov !== cameraFov) {
-        (state.camera as THREE.PerspectiveCamera).fov = cameraFov;
+      const currentFov = (state.camera as THREE.PerspectiveCamera).fov;
+      const newFov = lerp(currentFov, targetFov.current, DAMPING_FACTOR * 2);
+
+      if (Math.abs(newFov - targetFov.current) > 0.1) {
+        (state.camera as THREE.PerspectiveCamera).fov = newFov;
         state.camera.updateProjectionMatrix();
+      } else {
+        (state.camera as THREE.PerspectiveCamera).fov = targetFov.current;
+        state.camera.updateProjectionMatrix();
+        fovChanged.current = false;
       }
-      fovChanged.current = false;
     }
 
-    const rotationSpeed = 0.02;
-
+    // Calculate target rotation based on input
     let rotated = false;
+    const smoothSpeed = SMOOTH_ROTATION_SPEED * Math.min(delta * 60, 2); // Frame-rate independent
 
     if (activeRotation) {
       switch (activeRotation) {
         case 'up':
-          camera.rotateX(rotationSpeed);
+          targetRotation.current.x += smoothSpeed;
           break;
         case 'down':
-          camera.rotateX(-rotationSpeed);
+          targetRotation.current.x -= smoothSpeed;
           break;
         case 'left':
-          camera.rotateY(rotationSpeed);
+          targetRotation.current.y += smoothSpeed;
           break;
         case 'right':
-          camera.rotateY(-rotationSpeed);
+          targetRotation.current.y -= smoothSpeed;
           break;
       }
       rotated = true;
     }
 
     const keys = keysPressed.current;
-    if (keys.has('arrowup') || keys.has('w')) {
-      camera.rotateX(rotationSpeed);
+    if (keys.has('arrowup')) {
+      targetRotation.current.x += smoothSpeed;
       rotated = true;
     }
-    if (keys.has('arrowdown') || keys.has('s')) {
-      camera.rotateX(-rotationSpeed);
+    if (keys.has('arrowdown')) {
+      targetRotation.current.x -= smoothSpeed;
       rotated = true;
     }
-    if (keys.has('arrowleft') || keys.has('a')) {
-      camera.rotateY(rotationSpeed);
+    if (keys.has('arrowleft')) {
+      targetRotation.current.y += smoothSpeed;
       rotated = true;
     }
-    if (keys.has('arrowright') || keys.has('d')) {
-      camera.rotateY(-rotationSpeed);
+    if (keys.has('arrowright')) {
+      targetRotation.current.y -= smoothSpeed;
       rotated = true;
     }
 
+    // Apply smooth interpolation to rotation
+    if (rotated) {
+      // Clamp vertical rotation to prevent flipping
+      targetRotation.current.x = Math.max(
+        -Math.PI / 2 + 0.1,
+        Math.min(Math.PI / 2 - 0.1, targetRotation.current.x)
+      );
+
+      // Smooth interpolation
+      currentRotation.current.x = lerp(
+        currentRotation.current.x,
+        targetRotation.current.x,
+        DAMPING_FACTOR
+      );
+      currentRotation.current.y = lerp(
+        currentRotation.current.y,
+        targetRotation.current.y,
+        DAMPING_FACTOR
+      );
+
+      // Apply rotation to camera
+      camera.rotation.x = currentRotation.current.x;
+      camera.rotation.y = currentRotation.current.y;
+    } else {
+      // Sync current rotation with actual camera rotation (for OrbitControls interaction)
+      currentRotation.current.x = camera.rotation.x;
+      currentRotation.current.y = camera.rotation.y;
+      targetRotation.current.x = camera.rotation.x;
+      targetRotation.current.y = camera.rotation.y;
+    }
+
+    // Auto-rotate with smooth easing
     if (!rotated && isAutoRotating) {
-      camera.rotateY(-0.005);
+      const autoRotateSpeed = 0.003 * Math.min(delta * 60, 2);
+      targetRotation.current.y -= autoRotateSpeed;
+      currentRotation.current.y = lerp(
+        currentRotation.current.y,
+        targetRotation.current.y,
+        DAMPING_FACTOR
+      );
+      camera.rotation.y = currentRotation.current.y;
     }
 
     if (controlsRef.current) {
       controlsRef.current.autoRotate =
         isIdle && !isAutoRotating && !rotated && !activeRotation && !isGyroEnabled;
       controlsRef.current.autoRotateSpeed = 0.5;
+      controlsRef.current.enableDamping = true;
+      controlsRef.current.dampingFactor = 0.05;
       controlsRef.current.update();
     }
   });
@@ -180,7 +254,9 @@ export const Controls: React.FC = () => {
       minDistance={10}
       maxDistance={200}
       enablePan={false}
-      rotateSpeed={-0.5}
+      rotateSpeed={-0.3}
+      enableDamping={true}
+      dampingFactor={0.05}
     />
   );
 };

@@ -19,10 +19,10 @@ export const Hotspots: React.FC = () => {
   } = useTourState();
 
   // Generate automatic navigation hotspots for all images
-  const navigationHotspots = useMemo(() => {
+  const navigationHotspots = useMemo((): Hotspot[] => {
     // Disabled as requested: Navigation moved to bottom controls
     return [];
-  }, [manifest, currentBlockId, currentImageId]);
+  }, []);
 
   // Don't show hotspots when map is open
   if (isMapOpen) return null;
