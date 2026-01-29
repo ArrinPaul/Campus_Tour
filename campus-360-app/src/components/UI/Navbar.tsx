@@ -3,12 +3,15 @@ import { Menu, X, MapPin, ChevronDown } from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
 import type { Block } from '../../hooks/useTourDataStore';
 import { AnimatePresence, motion } from 'framer-motion';
+import { sortBlocks } from '../../utils/blockOrder';
 
 export const Navbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLocationsOpen, setLocationsOpen] = useState(false);
   const { manifest, currentBlockId, setBlock, setIdle } = useTourState();
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const sortedBlocks = manifest?.blocks ? sortBlocks(manifest.blocks) : [];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,7 +61,7 @@ export const Navbar = () => {
                   transition={{ duration: 0.15 }}
                   className="absolute top-full right-0 mt-2 w-52 p-1.5 rounded-lg bg-[#141414] border border-white/10 shadow-xl"
                 >
-                  {manifest?.blocks?.map((block: Block) => (
+                  {sortedBlocks.map((block: Block) => (
                     <button
                       key={block.id}
                       onClick={() => handleLocationClick(block.id)}
@@ -115,7 +118,7 @@ export const Navbar = () => {
                 </button>
               </div>
               <div className="p-3">
-                {manifest?.blocks?.map((block: Block) => (
+                {sortedBlocks.map((block: Block) => (
                   <button
                     key={block.id}
                     onClick={() => handleLocationClick(block.id)}

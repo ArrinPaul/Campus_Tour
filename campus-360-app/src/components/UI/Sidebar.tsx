@@ -5,6 +5,7 @@ import { useTourState } from '../../hooks/useTourState';
 import { useGameStore } from '../../hooks/useGameStore';
 import { SocialShare } from './SocialShare';
 import type { Block } from '../../hooks/useTourDataStore';
+import { sortBlocks } from '../../utils/blockOrder';
 
 export const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,12 +23,13 @@ export const Sidebar: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const filteredBlocks = manifest.blocks
-    .filter(
+  const filteredBlocks = sortBlocks(
+    manifest.blocks.filter(
       (block) =>
         (block.name || block.label || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
         block.labs.some((lab) => lab.name.toLowerCase().includes(searchQuery.toLowerCase()))
     )
+  )
     .sort((a, b) => (a.name || a.label || '').localeCompare(b.name || b.label || ''));
 
   const handleBlockClick = (block: Block) => {

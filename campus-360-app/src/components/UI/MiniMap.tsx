@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Navigation } from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
+import { sortBlocks } from '../../utils/blockOrder';
 
 // Compact campus layout for mini-map
 const MINI_LAYOUT: Record<string, { x: number; y: number }> = {
@@ -24,12 +25,12 @@ export const MiniMap: React.FC = () => {
 
   const processedBlocks = useMemo(() => {
     if (!manifest) return [];
-    return manifest.blocks
-      .filter((block) => !HIDDEN_BLOCKS.includes(block.id))
-      .map((block) => ({
-        ...block,
-        pos: MINI_LAYOUT[block.id] || { x: 50, y: 50 },
-      }));
+    const filtered = manifest.blocks.filter((block) => !HIDDEN_BLOCKS.includes(block.id));
+    const sorted = sortBlocks(filtered);
+    return sorted.map((block) => ({
+      ...block,
+      pos: MINI_LAYOUT[block.id] || { x: 50, y: 50 },
+    }));
   }, [manifest]);
 
   const currentPos = useMemo(() => {

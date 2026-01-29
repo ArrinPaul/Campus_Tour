@@ -3,6 +3,7 @@ import { useTourState } from '../../hooks/useTourState';
 import type { Block, Lab } from '../../hooks/useTourDataStore';
 import { motion } from 'framer-motion';
 import { Search, Clock } from 'lucide-react';
+import { sortBlocks } from '../../utils/blockOrder';
 
 interface HistoryItem {
   imageId: string;
@@ -36,8 +37,8 @@ export const Menu: React.FC = () => {
     }
   };
 
-  const filteredBlocks: Block[] = manifest.blocks
-    .filter((block: Block) => {
+  const filteredBlocks: Block[] = sortBlocks(
+    manifest.blocks.filter((block: Block) => {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
       const matchesBlockName = block.name?.toLowerCase().includes(lowerCaseSearchTerm) || false;
       const matchesLab =
@@ -48,7 +49,7 @@ export const Menu: React.FC = () => {
         ) || false;
       return matchesBlockName || matchesLab;
     })
-    .sort((a: Block, b: Block) => (a.name || a.label || '').localeCompare(b.name || b.label || ''));
+  );
 
   const historyItems: HistoryItem[] = history
     .map((imageId: string) => {

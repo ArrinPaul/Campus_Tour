@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MapPin } from 'lucide-react';
 import { useTourState } from '../../hooks/useTourState';
+import { sortBlocks } from '../../utils/blockOrder';
 
 // Clean campus grid layout
 interface BuildingLayout {
@@ -30,15 +31,16 @@ export const MapOverlay: React.FC = () => {
   const processedBlocks = useMemo(() => {
     if (!manifest) return [];
 
-    return manifest.blocks
-      .filter((block) => !HIDDEN_BLOCKS.includes(block.id))
-      .map((block) => {
-        const layout = CAMPUS_LAYOUT[block.id];
-        return {
-          ...block,
-          displayLabel: layout?.label || block.name || block.id,
-        };
-      });
+    const filtered = manifest.blocks.filter((block) => !HIDDEN_BLOCKS.includes(block.id));
+    const sorted = sortBlocks(filtered);
+    
+    return sorted.map((block) => {
+      const layout = CAMPUS_LAYOUT[block.id];
+      return {
+        ...block,
+        displayLabel: layout?.label || block.name || block.id,
+      };
+    });
   }, [manifest]);
 
   if (!manifest) return null;

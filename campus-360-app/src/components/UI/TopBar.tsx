@@ -5,6 +5,7 @@ import { useTourState } from '../../hooks/useTourState';
 import type { Block } from '../../hooks/useTourDataStore';
 import { X } from 'lucide-react';
 import { SharePanel } from './SharePanel';
+import { sortBlocks } from '../../utils/blockOrder';
 
 export const TopBar: React.FC = () => {
   const { manifest, currentBlockId, currentImageId, setBlock, setImage, setIdle } = useTourState();
@@ -13,17 +14,7 @@ export const TopBar: React.FC = () => {
   const [showSharePanel, setShowSharePanel] = useState(false);
 
   const sortedBlocks = React.useMemo(() => {
-    const blocks = [...(manifest?.blocks || [])];
-    // Put Entrance first, then sort the rest alphabetically
-    return blocks.sort((a, b) => {
-      const aLabel = (a.name || a.label || '').toLowerCase();
-      const bLabel = (b.name || b.label || '').toLowerCase();
-
-      if (aLabel === 'entrance') return -1;
-      if (bLabel === 'entrance') return 1;
-
-      return aLabel.localeCompare(bLabel);
-    });
+    return sortBlocks(manifest?.blocks || []);
   }, [manifest?.blocks]);
 
   const toggleFullscreen = () => {
